@@ -35,7 +35,7 @@ export default function SignUp() {
     }
 
     try {
-      const res = await fetch('/api/auth/register', {
+      const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export default function SignUp() {
         }),
       })
 
-      if (res.ok) {
+      if (response.ok) {
         // Auto sign in after successful registration
         const result = await signIn('credentials', {
           email: formData.email,
@@ -61,7 +61,7 @@ export default function SignUp() {
           router.push('/auth/signin')
         }
       } else {
-        const data = await res.json()
+        const data = await response.json()
         setError(data.error || 'An error occurred')
       }
     } catch (error) {
