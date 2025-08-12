@@ -1,3 +1,7 @@
+'use client'
+
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import { CryptoTicker } from '@/components/CryptoTicker'
 import { HeroSection } from '@/components/HeroSection'
 import { TrustSignals } from '@/components/TrustSignals'

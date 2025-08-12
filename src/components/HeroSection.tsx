@@ -1,11 +1,70 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRightIcon, CurrencyDollarIcon, ShieldCheckIcon, ClockIcon } from '@heroicons/react/24/outline'
+import { ArrowRightIcon, UserIcon, CurrencyDollarIcon, ShieldCheckIcon, ClockIcon } from '@heroicons/react/24/outline'
+import { useSession, signOut } from 'next-auth/react'
+import Link from 'next/link'
 
 export function HeroSection() {
+  const { data: session, status } = useSession()
   return (
-    <div className="relative overflow-hidden bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 px-6 py-24 sm:px-12 sm:py-32 lg:px-16">
+    <div className="relative overflow-hidden bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900">
+      {/* Navigation */}
+      <nav className="relative z-10 bg-black/20 backdrop-blur-sm border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-16">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo */}
+            <div className="flex items-center space-x-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-emerald-500">
+                <span className="text-sm font-bold text-white">N</span>
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+                NOHVEX
+              </span>
+            </div>
+            
+            {/* Auth buttons */}
+            <div className="flex items-center space-x-4">
+              {status === 'loading' ? (
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+              ) : session ? (
+                <>
+                  <Link
+                    href="/dashboard"
+                    className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-emerald-500 text-white rounded-lg hover:from-blue-600 hover:to-emerald-600 transition-all duration-200"
+                  >
+                    <UserIcon className="w-4 h-4" />
+                    <span>Dashboard</span>
+                  </Link>
+                  <button
+                    onClick={() => signOut({ callbackUrl: '/' })}
+                    className="px-4 py-2 text-gray-300 hover:text-white transition-colors"
+                  >
+                    Sign out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/auth/signin"
+                    className="px-4 py-2 text-gray-300 hover:text-white transition-colors"
+                  >
+                    Sign in
+                  </Link>
+                  <Link
+                    href="/auth/signup"
+                    className="px-4 py-2 bg-gradient-to-r from-blue-500 to-emerald-500 text-white rounded-lg hover:from-blue-600 hover:to-emerald-600 transition-all duration-200"
+                  >
+                    Sign up
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </nav>
+      
+      <div className="px-6 py-24 sm:px-12 sm:py-32 lg:px-16">
       {/* Background pattern */}
       <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
       
@@ -88,6 +147,7 @@ export function HeroSection() {
             </div>
           </dl>
         </motion.div>
+      </div>
       </div>
     </div>
   )
