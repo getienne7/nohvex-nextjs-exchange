@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowsUpDownIcon, CurrencyDollarIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { ArrowsUpDownIcon } from '@heroicons/react/24/outline'
 
 const popularPairs = [
   { from: 'BTC', to: 'USDT', rate: '97,434' },

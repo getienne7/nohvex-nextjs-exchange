@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { TrendingUpIcon, TrendingDownIcon } from '@heroicons/react/24/outline'
+import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@heroicons/react/24/outline'
 import { clsx } from 'clsx'
 
 interface CryptoPrice {
@@ -150,9 +150,9 @@ export function CryptoTicker() {
                     crypto.change24h >= 0 ? 'text-emerald-400' : 'text-red-400'
                   )}>
                     {crypto.change24h >= 0 ? (
-                      <TrendingUpIcon className="mr-1 h-4 w-4" />
+                      <ArrowTrendingUpIcon className="mr-1 h-4 w-4" />
                     ) : (
-                      <TrendingDownIcon className="mr-1 h-4 w-4" />
+                      <ArrowTrendingDownIcon className="mr-1 h-4 w-4" />
                     )}
                     {formatChange(crypto.change24h)}
                   </div>
