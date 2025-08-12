@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/db'
+import { demoDb } from '@/lib/demo-db'
 
 export async function GET(req: NextRequest) {
   try {
@@ -14,14 +14,7 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    const portfolio = await prisma.portfolio.findMany({
-      where: {
-        userId: session.user.id
-      },
-      orderBy: {
-        totalValue: 'desc'
-      }
-    })
+    const portfolio = await demoDb.getPortfolio(session.user.id)
 
     const totalValue = portfolio.reduce((sum, asset) => sum + asset.totalValue, 0)
 
@@ -51,49 +44,16 @@ export async function POST(req: NextRequest) {
 
     const { symbol, name, amount, price } = await req.json()
 
-    // Check if user already has this asset
-    const existingAsset = await prisma.portfolio.findUnique({
-      where: {
-        userId_symbol: {
-          userId: session.user.id,
-          symbol
-        }
-      }
-    })
+    // Add to portfolio using demo database
+    const portfolioItem = await demoDb.addToPortfolio(
+      session.user.id,
+      symbol,
+      name,
+      amount,
+      price
+    )
 
-    if (existingAsset) {
-      // Update existing asset
-      const newAmount = existingAsset.amount + amount
-      const newTotalValue = newAmount * price
-      const newAveragePrice = ((existingAsset.averagePrice * existingAsset.amount) + (price * amount)) / newAmount
-
-      const updatedAsset = await prisma.portfolio.update({
-        where: {
-          id: existingAsset.id
-        },
-        data: {
-          amount: newAmount,
-          averagePrice: newAveragePrice,
-          totalValue: newTotalValue
-        }
-      })
-
-      return NextResponse.json(updatedAsset)
-    } else {
-      // Create new asset
-      const newAsset = await prisma.portfolio.create({
-        data: {
-          userId: session.user.id,
-          symbol,
-          name,
-          amount,
-          averagePrice: price,
-          totalValue: amount * price
-        }
-      })
-
-      return NextResponse.json(newAsset)
-    }
+    return NextResponse.json(portfolioItem)
   } catch (error) {
     console.error('Portfolio update error:', error)
     return NextResponse.json(

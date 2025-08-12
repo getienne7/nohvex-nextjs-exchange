@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/db'
+import { demoDb } from '@/lib/demo-db'
 
 export async function GET(req: NextRequest) {
   try {
@@ -14,15 +14,7 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    const transactions = await prisma.transaction.findMany({
-      where: {
-        userId: session.user.id
-      },
-      orderBy: {
-        createdAt: 'desc'
-      },
-      take: 50 // Limit to last 50 transactions
-    })
+    const transactions = await demoDb.getTransactions(session.user.id)
 
     return NextResponse.json(transactions)
   } catch (error) {
@@ -46,21 +38,16 @@ export async function POST(req: NextRequest) {
     }
 
     const { type, symbol, amount, price, fee = 0 } = await req.json()
-    const totalValue = amount * price
 
-    // Create transaction
-    const transaction = await prisma.transaction.create({
-      data: {
-        userId: session.user.id,
-        type,
-        symbol,
-        amount,
-        price,
-        totalValue,
-        fee,
-        status: 'COMPLETED'
-      }
-    })
+    // Create transaction using demo database
+    const transaction = await demoDb.createTransaction(
+      session.user.id,
+      type,
+      symbol,
+      amount,
+      price,
+      fee
+    )
 
     return NextResponse.json(transaction)
   } catch (error) {
