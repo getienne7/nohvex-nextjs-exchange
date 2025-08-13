@@ -12,7 +12,8 @@
     "db:deploy": "node scripts/deploy-db.js",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "db:generate": "prisma generate"
+    "db:generate": "prisma generate",
+    "verify-account": "node scripts/verify-account.js"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
@@ -27,6 +28,7 @@
     "chart.js": "^4.5.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.2.1",
     "framer-motion": "^12.23.12",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.539.0",

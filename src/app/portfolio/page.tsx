@@ -5,11 +5,15 @@ import { SimplePortfolio } from '@/components/SimplePortfolio'
 import { RealTimePortfolio } from '@/components/RealTimePortfolio'
 import { WebSocketProvider } from '@/hooks/useWebSocket'
 import { GlobalNavigation } from '@/components/GlobalNavigation'
+import { ErrorBoundary, useErrorHandler } from '@/components/ErrorBoundary'
 import { useState } from 'react'
 import { ChartBarIcon, Cog6ToothIcon, WifiIcon } from '@heroicons/react/24/outline'
 
 export default function PortfolioPage() {
   const [portfolioMode, setPortfolioMode] = useState<'simple' | 'advanced' | 'realtime'>('realtime')
+  
+  // Handle unhandled promise rejections
+  useErrorHandler()
 
   return (
     <WebSocketProvider>
@@ -57,9 +61,11 @@ export default function PortfolioPage() {
           </div>
           
           {/* Render appropriate component */}
-          {portfolioMode === 'simple' && <SimplePortfolio />}
-          {portfolioMode === 'advanced' && <AdvancedPortfolio />}
-          {portfolioMode === 'realtime' && <RealTimePortfolio />}
+          <ErrorBoundary>
+            {portfolioMode === 'simple' && <SimplePortfolio />}
+            {portfolioMode === 'advanced' && <AdvancedPortfolio />}
+            {portfolioMode === 'realtime' && <RealTimePortfolio />}
+          </ErrorBoundary>
         </div>
       </div>
     </WebSocketProvider>

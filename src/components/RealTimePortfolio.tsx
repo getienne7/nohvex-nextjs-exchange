@@ -256,9 +256,13 @@ export function RealTimePortfolio({ className = "" }: RealTimePortfolioProps) {
       if (response.ok) {
         const data = await response.json()
         setPortfolio(data.portfolio || [])
+      } else {
+        console.error('Portfolio fetch failed:', response.status, response.statusText)
+        throw new Error(`Failed to fetch portfolio: ${response.status}`)
       }
     } catch (error) {
-      console.error('Error fetching portfolio:', error)
+      console.error('Error fetching portfolio:', error instanceof Error ? error.message : String(error))
+      setPortfolio([]) // Set empty portfolio on error
     } finally {
       setIsLoading(false)
     }
@@ -271,13 +275,19 @@ export function RealTimePortfolio({ className = "" }: RealTimePortfolioProps) {
       if (response.ok) {
         const { data } = await response.json()
         const priceMap: {[key: string]: CryptoPrice} = {}
-        data.forEach((item: CryptoPrice) => {
-          priceMap[item.symbol] = item
-        })
-        setStaticPrices(priceMap)
+        if (Array.isArray(data)) {
+          data.forEach((item: CryptoPrice) => {
+            priceMap[item.symbol] = item
+          })
+          setStaticPrices(priceMap)
+        } else {
+          console.error('Invalid price data format:', data)
+        }
+      } else {
+        console.error('Price fetch failed:', response.status, response.statusText)
       }
     } catch (error) {
-      console.error('Error fetching prices:', error)
+      console.error('Error fetching prices:', error instanceof Error ? error.message : String(error))
     }
   }
 
