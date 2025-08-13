@@ -9,6 +9,7 @@ declare global {
 // Database connection with fallback
 let prisma: PrismaClient | null = null
 let isDbConnected = false
+let schemaDeployAttempted = false
 
 // In-memory fallback storage
 const memoryStore = {

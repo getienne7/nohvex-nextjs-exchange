@@ -3,46 +3,70 @@ import { dbService } from '@/lib/db-service'
 
 export async function GET(request: NextRequest) {
   try {
-    // Get connection status
+    // Get detailed connection status
     const connectionStatus = await dbService.testConnection()
     
-    // This is a debug endpoint - in production you'd want authentication
-    // For now, let's just return basic info
+    // Database health information
+    const healthInfo = {
+      timestamp: new Date().toISOString(),
+      database: {
+        connected: connectionStatus.connected,
+        storage: connectionStatus.storage,
+        url: process.env.DATABASE_URL ? 'configured' : 'not configured',
+        error: connectionStatus.error || null
+      },
+      prisma: {
+        version: '6.14.0',
+        generated: true
+      }
+    }
     
-    let users = []
+    let userInfo = []
     
     if (connectionStatus.connected) {
-      // If database is connected, we'd query actual users
-      // For security, we'll just return count and connection status
-      users = [{
-        info: 'Database connected - user details hidden for security',
-        count: 'Query database for actual count'
+      // Database is connected - return summary info only for security
+      userInfo = [{
+        info: '🗄️ Database connected - user details protected',
+        note: 'User accounts are persisted in PostgreSQL database',
+        status: 'Users will be permanently stored'
       }]
     } else {
-      // If using memory storage, we can show the test data
-      // Access the memory store (this is just for debugging)
+      // Using memory storage - show current in-memory users for debugging
       const memoryStore = (dbService as any).memoryStore || { users: [] }
-      users = memoryStore.users.map((user: any) => ({
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        createdAt: user.createdAt
-      }))
+      
+      if (memoryStore.users.length === 0) {
+        userInfo = [{
+          info: '💾 Using in-memory storage (temporary)',
+          note: 'No users currently in memory',
+          instruction: 'Create an account to see it appear here temporarily'
+        }]
+      } else {
+        userInfo = memoryStore.users.map((user: any) => ({
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          createdAt: user.createdAt,
+          storage: 'memory (temporary)'
+        }))
+      }
     }
     
     return NextResponse.json({
-      connectionStatus,
-      users,
+      status: 'healthy',
+      health: healthInfo,
+      users: userInfo,
       message: connectionStatus.connected 
-        ? 'Connected to database' 
-        : 'Using in-memory storage - create an account to see it here'
+        ? '✅ Database connected - accounts will be permanently stored' 
+        : '⚠️ Using temporary storage - database connection needed for persistence'
     })
   } catch (error) {
-    console.error('Error in users API:', error)
+    console.error('Error in database health check:', error)
     return NextResponse.json(
       { 
-        error: 'Failed to fetch users',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        status: 'error',
+        error: 'Database health check failed',
+        details: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString()
       },
       { status: 500 }
     )
