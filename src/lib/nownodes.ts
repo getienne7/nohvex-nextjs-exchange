@@ -30,8 +30,8 @@ class NOWNodesService {
   private retryDelay = 5000 // 5 seconds between retries
 
   constructor() {
-    this.apiKey = process.env.NOWNODES_API_KEY || ''
-    this.baseUrl = 'https://bsc.nownodes.io'
+    this.apiKey = process.env.NOWNODES_API_KEY || 'build-fallback-key'
+    this.baseUrl = process.env.NOWNODES_BASE_URL || 'https://bsc.nownodes.io'
   }
 
   private checkApiKey(): boolean {

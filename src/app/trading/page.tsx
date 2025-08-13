@@ -81,8 +81,8 @@ export default function TradingPage() {
           ) : (
             <div>
               <ChangeNowWidget 
-                apiKey={process.env.NEXT_PUBLIC_CHANGENOW_API_KEY}
-                referralCode={process.env.NEXT_PUBLIC_CHANGENOW_REFERRAL}
+                apiKey={process.env.NEXT_PUBLIC_CHANGENOW_API_KEY || 'demo-api-key'}
+                referralCode={process.env.NEXT_PUBLIC_CHANGENOW_REFERRAL || 'demo-referral'}
               />
               <div className="mt-6 text-center">
                 <p className="text-sm text-gray-500">

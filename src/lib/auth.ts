@@ -3,7 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { dbService } from '@/lib/db-service'
 import bcrypt from 'bcryptjs'
 export const authOptions: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || 'fallback-secret-for-build',
   providers: [
     CredentialsProvider({
       name: 'credentials',
