@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { GlobalNavigation } from '@/components/GlobalNavigation'
+import { TwoFactorSetup } from '@/components/auth/TwoFactorSetup'
 import { 
   Cog6ToothIcon,
   BellIcon,
@@ -30,6 +31,8 @@ export default function SettingsPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  const [showTwoFactorSetup, setShowTwoFactorSetup] = useState(false)
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false)
   
   const [notifications, setNotifications] = useState<NotificationPreferences>({
     email: true,
@@ -79,6 +82,65 @@ export default function SettingsPage() {
       router.push('/auth/signin')
     }
   }, [session, status, router])
+
+  // Check 2FA status on component mount
+  useEffect(() => {
+    const check2FAStatus = async () => {
+      try {
+        const response = await fetch('/api/auth/2fa/status')
+        const data = await response.json()
+        if (data.success) {
+          setTwoFactorEnabled(data.enabled)
+        }
+      } catch (error) {
+        console.error('Error checking 2FA status:', error)
+      }
+    }
+
+    if (session) {
+      check2FAStatus()
+    }
+  }, [session])
+
+  const handleTwoFactorComplete = () => {
+    setTwoFactorEnabled(true)
+    setShowTwoFactorSetup(false)
+    setSuccessMessage('Two-factor authentication has been successfully enabled!')
+    setTimeout(() => setSuccessMessage(''), 5000)
+  }
+
+  const handleTwoFactorCancel = () => {
+    setShowTwoFactorSetup(false)
+  }
+
+  const handleDisable2FA = async () => {
+    if (!confirm('Are you sure you want to disable two-factor authentication? This will make your account less secure.')) {
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const response = await fetch('/api/auth/2fa/disable', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      
+      const data = await response.json()
+      if (data.success) {
+        setTwoFactorEnabled(false)
+        setSuccessMessage('Two-factor authentication has been disabled.')
+        setTimeout(() => setSuccessMessage(''), 5000)
+      } else {
+        setErrorMessage(data.error || 'Failed to disable two-factor authentication')
+        setTimeout(() => setErrorMessage(''), 5000)
+      }
+    } catch (error) {
+      setErrorMessage('Network error occurred. Please try again.')
+      setTimeout(() => setErrorMessage(''), 5000)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   if (status === 'loading') {
     return (
@@ -256,15 +318,60 @@ export default function SettingsPage() {
 
                 <div className="border-t border-white/10 pt-6">
                   <h3 className="text-white font-medium mb-4">Security Actions</h3>
+                  
+                  {/* Success/Error Messages */}
+                  {successMessage && (
+                    <div className="mb-4 p-3 bg-green-500/20 border border-green-500/30 rounded-lg">
+                      <div className="flex items-center space-x-2">
+                        <CheckIcon className="w-5 h-5 text-green-400" />
+                        <span className="text-green-300">{successMessage}</span>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {errorMessage && (
+                    <div className="mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg">
+                      <div className="flex items-center space-x-2">
+                        <ExclamationTriangleIcon className="w-5 h-5 text-red-400" />
+                        <span className="text-red-300">{errorMessage}</span>
+                      </div>
+                    </div>
+                  )}
+                  
                   <div className="space-y-3">
                     <button className="flex items-center space-x-3 w-full px-4 py-3 bg-white/5 hover:bg-white/10 rounded-lg text-gray-300 hover:text-white transition-colors">
                       <KeyIcon className="w-5 h-5" />
                       <span>Change Password</span>
                     </button>
-                    <button className="flex items-center space-x-3 w-full px-4 py-3 bg-white/5 hover:bg-white/10 rounded-lg text-gray-300 hover:text-white transition-colors">
-                      <ShieldCheckIcon className="w-5 h-5" />
-                      <span>Enable Two-Factor Authentication (Coming Soon)</span>
-                    </button>
+                    
+                    {!twoFactorEnabled ? (
+                      <button 
+                        onClick={() => setShowTwoFactorSetup(true)}
+                        className="flex items-center space-x-3 w-full px-4 py-3 bg-white/5 hover:bg-white/10 rounded-lg text-gray-300 hover:text-white transition-colors"
+                      >
+                        <ShieldCheckIcon className="w-5 h-5" />
+                        <span>Enable Two-Factor Authentication</span>
+                      </button>
+                    ) : (
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-3 px-4 py-3 bg-green-500/10 border border-green-500/30 rounded-lg">
+                          <CheckIcon className="w-5 h-5 text-green-400" />
+                          <span className="text-green-300">Two-Factor Authentication Enabled</span>
+                        </div>
+                        <button 
+                          onClick={handleDisable2FA}
+                          disabled={isLoading}
+                          className="flex items-center space-x-3 w-full px-4 py-3 bg-red-500/10 hover:bg-red-500/20 rounded-lg text-red-300 hover:text-red-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {isLoading ? (
+                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-red-300" />
+                          ) : (
+                            <ExclamationTriangleIcon className="w-5 h-5" />
+                          )}
+                          <span>{isLoading ? 'Disabling...' : 'Disable Two-Factor Authentication'}</span>
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -328,6 +435,30 @@ export default function SettingsPage() {
           </div>
         </div>
       </div>
+      
+      {/* Two Factor Setup Modal */}
+      <AnimatePresence>
+        {showTwoFactorSetup && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 rounded-xl p-6 border border-white/10 w-full max-w-4xl max-h-[90vh] overflow-y-auto"
+            >
+              <TwoFactorSetup 
+                onComplete={handleTwoFactorComplete}
+                onCancel={handleTwoFactorCancel}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }
