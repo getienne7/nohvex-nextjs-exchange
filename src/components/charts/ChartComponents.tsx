@@ -17,6 +17,30 @@ import {
 import { Line, Bar, Doughnut } from 'react-chartjs-2'
 import { format, subDays, startOfDay } from 'date-fns'
 
+// Chart wrapper component with proper cleanup
+function ChartWrapper({ children, chartKey }: { children: React.ReactNode, chartKey: string }) {
+  const chartRef = useRef<any>(null)
+  
+  useEffect(() => {
+    return () => {
+      // Cleanup chart instance on unmount
+      if (chartRef.current) {
+        try {
+          chartRef.current.destroy()
+        } catch (error) {
+          console.warn('Chart cleanup error:', error)
+        }
+      }
+    }
+  }, [])
+  
+  return (
+    <div key={chartKey}>
+      {children}
+    </div>
+  )
+}
+
 // Register Chart.js components
 ChartJS.register(
   CategoryScale,
@@ -182,10 +206,14 @@ export function PriceHistoryChart({
     }
   }
 
+  const chartKey = `price-${symbol}-${timeRange}-${JSON.stringify(data.slice(0, 3))}`
+  
   return (
-    <div className="h-64 w-full">
-      <Line data={chartData} options={options} />
-    </div>
+    <ChartWrapper chartKey={chartKey}>
+      <div className="h-64 w-full">
+        <Line data={chartData} options={options} key={chartKey} />
+      </div>
+    </ChartWrapper>
   )
 }
 
@@ -363,10 +391,14 @@ export function PortfolioTimelineChart({
     }
   }
 
+  const chartKey = `portfolio-timeline-${timeRange}-${data.length}-${Date.now()}`
+  
   return (
-    <div className="h-80 w-full">
-      <Line data={chartData} options={options} />
-    </div>
+    <ChartWrapper chartKey={chartKey}>
+      <div className="h-80 w-full">
+        <Line data={chartData} options={options} key={chartKey} />
+      </div>
+    </ChartWrapper>
   )
 }
 
@@ -463,10 +495,14 @@ export function PortfolioDistributionChart({
     }
   }
 
+  const chartKey = `portfolio-distribution-${data.length}-${JSON.stringify(data.slice(0, 2))}`
+  
   return (
-    <div className="h-64 w-full">
-      <Doughnut data={chartData} options={options} />
-    </div>
+    <ChartWrapper chartKey={chartKey}>
+      <div className="h-64 w-full">
+        <Doughnut data={chartData} options={options} key={chartKey} />
+      </div>
+    </ChartWrapper>
   )
 }
 
@@ -562,9 +598,13 @@ export function VolumeChart({
     }
   }
 
+  const chartKey = `volume-${data.length}-${JSON.stringify(data.slice(0, 2))}`
+  
   return (
-    <div className="h-32 w-full">
-      <Bar data={chartData} options={options} />
-    </div>
+    <ChartWrapper chartKey={chartKey}>
+      <div className="h-32 w-full">
+        <Bar data={chartData} options={options} key={chartKey} />
+      </div>
+    </ChartWrapper>
   )
 }
