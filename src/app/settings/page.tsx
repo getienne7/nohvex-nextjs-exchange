@@ -91,9 +91,18 @@ export default function SettingsPage() {
         const data = await response.json()
         if (data.success) {
           setTwoFactorEnabled(data.enabled)
+          // Also save to localStorage for persistence
+          localStorage.setItem(`2fa_enabled_${session?.user?.email}`, data.enabled.toString())
         }
       } catch (error) {
         console.error('Error checking 2FA status:', error)
+        // Fallback to localStorage if API fails
+        if (session?.user?.email) {
+          const stored = localStorage.getItem(`2fa_enabled_${session.user.email}`)
+          if (stored !== null) {
+            setTwoFactorEnabled(stored === 'true')
+          }
+        }
       }
     }
 
@@ -107,6 +116,10 @@ export default function SettingsPage() {
     setShowTwoFactorSetup(false)
     setSuccessMessage('Two-factor authentication has been successfully enabled!')
     setTimeout(() => setSuccessMessage(''), 5000)
+    // Save to localStorage for persistence
+    if (session?.user?.email) {
+      localStorage.setItem(`2fa_enabled_${session.user.email}`, 'true')
+    }
   }
 
   const handleTwoFactorCancel = () => {
@@ -130,6 +143,10 @@ export default function SettingsPage() {
         setTwoFactorEnabled(false)
         setSuccessMessage('Two-factor authentication has been disabled.')
         setTimeout(() => setSuccessMessage(''), 5000)
+        // Clear from localStorage
+        if (session?.user?.email) {
+          localStorage.setItem(`2fa_enabled_${session.user.email}`, 'false')
+        }
       } else {
         setErrorMessage(data.error || 'Failed to disable two-factor authentication')
         setTimeout(() => setErrorMessage(''), 5000)
