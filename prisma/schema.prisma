@@ -20,6 +20,10 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   
+  // Password reset fields
+  resetToken    String?   @unique
+  resetExpires  DateTime?
+  
   accounts      Account[]
   sessions      Session[]
   portfolio     Portfolio[]

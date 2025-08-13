@@ -358,6 +358,57 @@ export class DatabaseService {
     }
   }
 
+  async updateUser(userId: string, data: {
+    password?: string
+    resetToken?: string | null
+    resetExpires?: Date | null
+    name?: string
+    emailVerified?: Date | null
+  }) {
+    if (!this.isConnected || !this.prisma) {
+      // Fallback to in-memory storage
+      const userIndex = memoryStore.users.findIndex(u => u.id === userId)
+      if (userIndex === -1) {
+        return null
+      }
+      
+      const user = memoryStore.users[userIndex]
+      memoryStore.users[userIndex] = {
+        ...user,
+        ...data,
+        updatedAt: new Date()
+      }
+      return memoryStore.users[userIndex]
+    }
+
+    try {
+      return await this.prisma.user.update({
+        where: { id: userId },
+        data: {
+          ...data,
+          updatedAt: new Date()
+        }
+      })
+    } catch (error) {
+      console.error('Error updating user, falling back to memory:', error)
+      this.isConnected = false
+      
+      // Fallback to memory update
+      const userIndex = memoryStore.users.findIndex(u => u.id === userId)
+      if (userIndex === -1) {
+        return null
+      }
+      
+      const user = memoryStore.users[userIndex]
+      memoryStore.users[userIndex] = {
+        ...user,
+        ...data,
+        updatedAt: new Date()
+      }
+      return memoryStore.users[userIndex]
+    }
+  }
+
   async createTransaction(
     userId: string,
     type: 'BUY' | 'SELL' | 'DEPOSIT' | 'WITHDRAWAL',

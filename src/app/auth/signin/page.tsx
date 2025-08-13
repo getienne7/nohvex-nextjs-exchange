@@ -171,6 +171,17 @@ export default function SignIn() {
                 </motion.div>
               )}
 
+              <div className="flex items-center justify-between">
+                <div className="text-sm">
+                  <Link
+                    href="/auth/forgot-password"
+                    className="font-medium text-blue-400 hover:text-blue-300 transition-colors"
+                  >
+                    Forgot your password?
+                  </Link>
+                </div>
+              </div>
+
               <div>
                 <button
                   type="submit"
