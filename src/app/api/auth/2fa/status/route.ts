@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import speakeasy from 'speakeasy'
-import { dbService } from '@/lib/db-service'
 import { twoFactorStore } from '../setup/route'
+import speakeasy from 'speakeasy'
 
 export async function GET(req: NextRequest) {
   try {
@@ -16,14 +15,6 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    const user = await dbService.findUserByEmail(session.user.email)
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
-      )
-    }
-
     const user2FA = twoFactorStore.get(session.user.email)
     const backupCodesRemaining = user2FA?.backupCodes 
       ? user2FA.backupCodes.filter(code => !code.used).length 
@@ -31,12 +22,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      status: {
-        isEnabled: !!user2FA?.isEnabled,
-        lastUsed: user2FA?.lastUsed,
-        backupCodesRemaining,
-        setupAt: user2FA?.enabledAt
-      }
+      enabled: !!user2FA?.isEnabled
     })
 
   } catch (error) {
@@ -65,14 +51,6 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json(
         { success: false, error: 'Verification code and password are required' },
         { status: 400 }
-      )
-    }
-
-    const user = await dbService.findUserByEmail(session.user.email)
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
       )
     }
 

@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import speakeasy from 'speakeasy'
-import qrcode from 'qrcode'
-import { dbService } from '@/lib/db-service'
+import QRCode from 'qrcode'
+import { Setup2FAResponse } from '@/types/auth'
 
-// In-memory storage for 2FA setup data
+// In-memory storage for 2FA setup data (replace with database in production)
 const twoFactorSetupStore = new Map<string, {
   secret: string
   backupCodes: string[]
@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
     })
 
     // Generate QR code
-    const qrCodeUrl = await qrcode.toDataURL(secret.otpauth_url!)
+    const qrCodeUrl = await QRCode.toDataURL(secret.otpauth_url!)
 
     // Generate backup codes (8 codes, 8 characters each)
     const backupCodes: string[] = []
@@ -102,15 +102,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { success: false, error: 'Verification code and password are required' },
         { status: 400 }
-      )
-    }
-
-    // Verify user exists
-    const user = await dbService.findUserByEmail(session.user.email)
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
       )
     }
 

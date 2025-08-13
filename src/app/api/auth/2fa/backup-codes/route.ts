@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import speakeasy from 'speakeasy'
-import { dbService } from '@/lib/db-service'
 import { twoFactorStore } from '../setup/route'
 
 export async function GET(req: NextRequest) {
@@ -13,14 +12,6 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(
         { success: false, error: 'Authentication required' },
         { status: 401 }
-      )
-    }
-
-    const user = await dbService.findUserByEmail(session.user.email)
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
       )
     }
 
@@ -69,14 +60,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { success: false, error: 'Verification code is required to regenerate backup codes' },
         { status: 400 }
-      )
-    }
-
-    const user = await dbService.findUserByEmail(session.user.email)
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
       )
     }
 
