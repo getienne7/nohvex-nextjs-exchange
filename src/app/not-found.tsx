@@ -1,14 +1,7 @@
-'use client'
-
 import Link from 'next/link'
-import { useEffect } from 'react'
 
+// Dynamic 404 page to avoid build issues
 export default function NotFound() {
-  // Prevent any potential SSR issues
-  useEffect(() => {
-    // This ensures the component only runs on client side
-  }, [])
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center px-4">
       <div className="max-w-md w-full text-center">
@@ -27,3 +20,6 @@ export default function NotFound() {
     </div>
   )
 }
+
+// Force dynamic rendering to skip pre-rendering
+export const dynamic = 'force-dynamic'

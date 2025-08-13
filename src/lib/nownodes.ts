@@ -441,5 +441,24 @@ class NOWNodesService {
   }
 }
 
-export const nowNodesService = new NOWNodesService()
+// Lazy instantiation to prevent build-time issues
+let _nowNodesService: NOWNodesService | null = null
+
+export const getNowNodesService = () => {
+  if (!_nowNodesService) {
+    _nowNodesService = new NOWNodesService()
+  }
+  return _nowNodesService
+}
+
+// For backward compatibility
+export const nowNodesService = {
+  getCryptoPrices: (...args: Parameters<NOWNodesService['getCryptoPrices']>) => 
+    getNowNodesService().getCryptoPrices(...args),
+  getSinglePrice: (...args: Parameters<NOWNodesService['getSinglePrice']>) => 
+    getNowNodesService().getSinglePrice(...args),
+  getBlockchainData: (...args: Parameters<NOWNodesService['getBlockchainData']>) => 
+    getNowNodesService().getBlockchainData(...args)
+}
+
 export type { CryptoPrice }
