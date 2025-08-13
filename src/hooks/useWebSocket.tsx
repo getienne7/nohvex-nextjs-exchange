@@ -131,7 +131,7 @@ interface WebSocketProviderProps {
 
 export function WebSocketProvider({ 
   children, 
-  url = process.env.NODE_ENV === 'production' 
+  url = typeof window !== 'undefined' && process.env.NODE_ENV === 'production' 
     ? 'wss://your-domain.com/ws' 
     : 'ws://localhost:3001/ws' 
 }: WebSocketProviderProps) {

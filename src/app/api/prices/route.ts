@@ -3,7 +3,16 @@ import { nowNodesService } from '@/lib/nownodes'
 
 export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url)
+    // Handle potential empty URL during build/prerender
+    let searchParams: URLSearchParams
+    try {
+      const url = new URL(req.url || 'http://localhost:3000')
+      searchParams = url.searchParams
+    } catch (urlError) {
+      // Fallback if URL construction fails
+      searchParams = new URLSearchParams()
+    }
+    
     const symbolsParam = searchParams.get('symbols')
     
     if (!symbolsParam) {
