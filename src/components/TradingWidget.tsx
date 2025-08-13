@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowsUpDownIcon } from '@heroicons/react/24/outline'
 
@@ -15,10 +15,89 @@ export function TradingWidget() {
   const [fromCurrency, setFromCurrency] = useState('BTC')
   const [toCurrency, setToCurrency] = useState('USDT')
   const [amount, setAmount] = useState('')
+  const [rates, setRates] = useState<{[key: string]: number}>({})  
+  const [receivedAmount, setReceivedAmount] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    fetchRates()
+    const interval = setInterval(fetchRates, 300000) // Update every 5 minutes
+    return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    calculateReceiveAmount()
+  }, [amount, fromCurrency, toCurrency, rates])
+
+  const fetchRates = async () => {
+    try {
+      const symbols = 'BTC,ETH,BNB,USDT,ADA'
+      const response = await fetch(`/api/prices?symbols=${symbols}`)
+      if (response.ok) {
+        const { data } = await response.json()
+        const priceMap: {[key: string]: number} = {}
+        data.forEach((item: any) => {
+          priceMap[item.symbol] = item.current_price
+        })
+        setRates(priceMap)
+      }
+    } catch (error) {
+      console.error('Error fetching rates:', error)
+    }
+  }
+
+  const calculateReceiveAmount = () => {
+    if (!amount || !rates[fromCurrency] || !rates[toCurrency]) {
+      setReceivedAmount('')
+      return
+    }
+
+    const fromPrice = rates[fromCurrency] || 0
+    const toPrice = rates[toCurrency] || 0
+    
+    if (fromPrice === 0 || toPrice === 0) {
+      setReceivedAmount('')
+      return
+    }
+
+    const usdValue = parseFloat(amount) * fromPrice
+    const receivedValue = usdValue / toPrice
+    setReceivedAmount(receivedValue.toFixed(8))
+  }
+
+  const getExchangeRate = () => {
+    if (!rates[fromCurrency] || !rates[toCurrency]) {
+      return 'Loading...'
+    }
+    
+    const fromPrice = rates[fromCurrency] || 0
+    const toPrice = rates[toCurrency] || 0
+    
+    if (fromPrice === 0 || toPrice === 0) {
+      return 'Rate unavailable'
+    }
+
+    const rate = fromPrice / toPrice
+    return rate.toLocaleString(undefined, { maximumFractionDigits: 8 })
+  }
 
   const handleSwap = () => {
     setFromCurrency(toCurrency)
     setToCurrency(fromCurrency)
+    setAmount(receivedAmount)
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!amount || !receivedAmount) return
+    
+    setIsLoading(true)
+    // Here you would integrate with your trading API
+    // For now, we'll just simulate a delay
+    setTimeout(() => {
+      alert(`Exchange submitted: ${amount} ${fromCurrency} → ${receivedAmount} ${toCurrency}`)
+      setIsLoading(false)
+    }, 2000)
   }
 
   return (
@@ -49,7 +128,7 @@ export function TradingWidget() {
         className="mx-auto mt-16 max-w-lg"
       >
         <div className="rounded-2xl bg-white/10 p-8 backdrop-blur-sm ring-1 ring-white/20">
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             {/* From Currency */}
             <div>
               <label className="block text-sm font-medium text-gray-300">You Send</label>
@@ -92,6 +171,7 @@ export function TradingWidget() {
               <div className="mt-1 flex rounded-xl bg-white/5 ring-1 ring-white/10">
                 <input
                   type="text"
+                  value={receivedAmount}
                   placeholder="0.00"
                   readOnly
                   className="block w-full bg-transparent px-4 py-3 text-white placeholder:text-gray-500 focus:outline-none rounded-l-xl"
@@ -114,16 +194,24 @@ export function TradingWidget() {
             <div className="rounded-lg bg-white/5 p-3">
               <div className="flex items-center justify-between text-sm text-gray-400">
                 <span>Exchange Rate</span>
-                <span className="font-medium text-white">1 {fromCurrency} = 97,434 {toCurrency}</span>
+                <span className="font-medium text-white">1 {fromCurrency} = {getExchangeRate()} {toCurrency}</span>
               </div>
             </div>
 
             {/* Exchange Button */}
             <button
               type="submit"
-              className="w-full rounded-xl bg-gradient-to-r from-blue-500 to-emerald-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:from-blue-400 hover:to-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-all duration-200"
+              disabled={isLoading || !amount || !receivedAmount}
+              className="w-full rounded-xl bg-gradient-to-r from-blue-500 to-emerald-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:from-blue-400 hover:to-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Exchange Now
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Processing...
+                </div>
+              ) : (
+                'Exchange Now'
+              )}
             </button>
           </form>
         </div>

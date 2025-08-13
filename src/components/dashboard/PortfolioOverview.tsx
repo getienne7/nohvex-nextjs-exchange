@@ -55,30 +55,19 @@ export default function PortfolioOverview() {
 
   const fetchCryptoPrices = async () => {
     try {
-      const response = await fetch(
-        'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,tether&vs_currencies=usd&include_24hr_change=true'
-      )
+      const symbols = 'BTC,ETH,BNB,USDT'
+      const response = await fetch(`/api/prices?symbols=${symbols}`)
+      
       if (response.ok) {
-        const data = await response.json()
+        const { data } = await response.json()
         const prices: { [key: string]: CryptoPrice } = {}
         
-        // Map API response to our format
-        const mapping = {
-          bitcoin: 'BTC',
-          ethereum: 'ETH',
-          binancecoin: 'BNB',
-          tether: 'USDT'
-        }
-        
-        Object.entries(data).forEach(([id, priceData]: [string, { usd: number, usd_24h_change?: number }]) => {
-          const symbol = mapping[id as keyof typeof mapping]
-          if (symbol) {
-            prices[symbol] = {
-              id,
-              symbol,
-              current_price: priceData.usd,
-              price_change_percentage_24h: priceData.usd_24h_change || 0
-            }
+        data.forEach((priceData: any) => {
+          prices[priceData.symbol] = {
+            id: priceData.symbol.toLowerCase(),
+            symbol: priceData.symbol,
+            current_price: priceData.current_price,
+            price_change_percentage_24h: priceData.price_change_percentage_24h
           }
         })
         

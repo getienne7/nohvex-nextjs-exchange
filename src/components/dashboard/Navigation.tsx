@@ -2,7 +2,7 @@
 
 import { signOut } from 'next-auth/react'
 import Link from 'next/link'
-import { ChartBarIcon, HomeIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline'
+import { ChartBarIcon, HomeIcon, ArrowRightOnRectangleIcon, ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
 
 export default function Navigation() {
   return (
@@ -35,6 +35,14 @@ export default function Navigation() {
             >
               <ChartBarIcon className="w-4 h-4" />
               <span>Dashboard</span>
+            </Link>
+            
+            <Link
+              href="/trading"
+              className="flex items-center space-x-2 px-3 py-2 rounded-md text-gray-300 hover:text-white hover:bg-slate-700 transition-colors"
+            >
+              <ArrowsRightLeftIcon className="w-4 h-4" />
+              <span>Trading</span>
             </Link>
 
             <button

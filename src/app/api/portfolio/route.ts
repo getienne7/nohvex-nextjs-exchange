@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { demoDb } from '@/lib/demo-db'
+import { dbService } from '@/lib/db-service'
 
 export async function GET(req: NextRequest) {
   try {
@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    const portfolio = await demoDb.getPortfolio(session.user.id)
+    const portfolio = await dbService.getPortfolio(session.user.id)
 
     const totalValue = portfolio.reduce((sum, asset) => sum + asset.totalValue, 0)
 
@@ -44,8 +44,8 @@ export async function POST(req: NextRequest) {
 
     const { symbol, name, amount, price } = await req.json()
 
-    // Add to portfolio using demo database
-    const portfolioItem = await demoDb.addToPortfolio(
+    // Add to portfolio using database service
+    const portfolioItem = await dbService.addToPortfolio(
       session.user.id,
       symbol,
       name,

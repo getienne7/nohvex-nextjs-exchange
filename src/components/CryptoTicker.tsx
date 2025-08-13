@@ -6,42 +6,43 @@ import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@heroicons/react/24/
 import { clsx } from 'clsx'
 
 interface CryptoPrice {
-  id: string
   symbol: string
   name: string
-  price: number
-  change24h: number
+  current_price: number
+  price_change_percentage_24h: number
   isLoading: boolean
 }
 
 export function CryptoTicker() {
   const [cryptoPrices, setCryptoPrices] = useState<CryptoPrice[]>([
-    { id: 'bitcoin', symbol: 'BTC', name: 'Bitcoin', price: 0, change24h: 0, isLoading: true },
-    { id: 'ethereum', symbol: 'ETH', name: 'Ethereum', price: 0, change24h: 0, isLoading: true },
-    { id: 'binancecoin', symbol: 'BNB', name: 'BNB', price: 0, change24h: 0, isLoading: true },
-    { id: 'tether', symbol: 'USDT', name: 'Tether', price: 0, change24h: 0, isLoading: true },
+    { symbol: 'BTC', name: 'Bitcoin', current_price: 0, price_change_percentage_24h: 0, isLoading: true },
+    { symbol: 'ETH', name: 'Ethereum', current_price: 0, price_change_percentage_24h: 0, isLoading: true },
+    { symbol: 'BNB', name: 'BNB', current_price: 0, price_change_percentage_24h: 0, isLoading: true },
+    { symbol: 'USDT', name: 'Tether', current_price: 0, price_change_percentage_24h: 0, isLoading: true },
   ])
 
   const [lastUpdated, setLastUpdated] = useState<string>('')
 
   const fetchCryptoPrices = async () => {
     try {
-      const response = await fetch(
-        'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,tether&vs_currencies=usd&include_24hr_change=true'
-      )
+      const symbols = cryptoPrices.map(crypto => crypto.symbol).join(',')
+      const response = await fetch(`/api/prices?symbols=${symbols}`)
       
       if (!response.ok) {
         throw new Error('Failed to fetch crypto prices')
       }
       
-      const data = await response.json()
+      const { data } = await response.json()
       
-      setCryptoPrices(prev => prev.map(crypto => ({
-        ...crypto,
-        price: data[crypto.id]?.usd || 0,
-        change24h: data[crypto.id]?.usd_24h_change || 0,
-        isLoading: false
-      })))
+      setCryptoPrices(prev => prev.map(crypto => {
+        const priceData = data.find((p: any) => p.symbol === crypto.symbol)
+        return {
+          ...crypto,
+          current_price: priceData?.current_price || 0,
+          price_change_percentage_24h: priceData?.price_change_percentage_24h || 0,
+          isLoading: false
+        }
+      }))
       
       setLastUpdated(new Date().toLocaleTimeString())
     } catch (error) {
@@ -57,8 +58,8 @@ export function CryptoTicker() {
     // Initial fetch
     fetchCryptoPrices()
     
-    // Update every 30 seconds
-    const interval = setInterval(fetchCryptoPrices, 30000)
+    // Update every 5 minutes to drastically reduce API calls
+    const interval = setInterval(fetchCryptoPrices, 300000)
     
     // Cleanup interval on unmount
     return () => clearInterval(interval)
@@ -96,7 +97,7 @@ export function CryptoTicker() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="mt-2 text-lg leading-8 text-gray-400"
         >
-          Real-time cryptocurrency prices updated every 30 seconds
+          Cryptocurrency prices updated every 5 minutes
         </motion.p>
       </div>
 
@@ -108,7 +109,7 @@ export function CryptoTicker() {
       >
         {cryptoPrices.map((crypto, index) => (
           <motion.div
-            key={crypto.id}
+            key={crypto.symbol}
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -143,18 +144,18 @@ export function CryptoTicker() {
                 
                 <div className="mt-4">
                   <p className="text-2xl font-bold text-white">
-                    {formatPrice(crypto.price)}
+                    {formatPrice(crypto.current_price)}
                   </p>
                   <div className={clsx(
                     'mt-1 flex items-center text-sm font-medium',
-                    crypto.change24h >= 0 ? 'text-emerald-400' : 'text-red-400'
+                    crypto.price_change_percentage_24h >= 0 ? 'text-emerald-400' : 'text-red-400'
                   )}>
-                    {crypto.change24h >= 0 ? (
+                    {crypto.price_change_percentage_24h >= 0 ? (
                       <ArrowTrendingUpIcon className="mr-1 h-4 w-4" />
                     ) : (
                       <ArrowTrendingDownIcon className="mr-1 h-4 w-4" />
                     )}
-                    {formatChange(crypto.change24h)}
+                    {formatChange(crypto.price_change_percentage_24h)}
                   </div>
                 </div>
               </>

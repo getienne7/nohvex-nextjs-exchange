@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { demoDb } from '@/lib/demo-db'
+import { dbService } from '@/lib/db-service'
 
 export async function GET(req: NextRequest) {
   try {
@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    const transactions = await demoDb.getTransactions(session.user.id)
+    const transactions = await dbService.getTransactions(session.user.id)
 
     return NextResponse.json(transactions)
   } catch (error) {
@@ -39,8 +39,8 @@ export async function POST(req: NextRequest) {
 
     const { type, symbol, amount, price, fee = 0 } = await req.json()
 
-    // Create transaction using demo database
-    const transaction = await demoDb.createTransaction(
+    // Create transaction using database service
+    const transaction = await dbService.createTransaction(
       session.user.id,
       type,
       symbol,

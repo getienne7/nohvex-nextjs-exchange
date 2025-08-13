@@ -23,6 +23,15 @@ export function HeroSection() {
               </span>
             </div>
             
+            {/* Navigation Links */}
+            <div className="hidden md:flex items-center space-x-6">
+              <Link href="/" className="text-gray-300 hover:text-white transition-colors">Home</Link>
+              <Link href="/trading" className="text-gray-300 hover:text-white transition-colors">Trading</Link>
+              {session && (
+                <Link href="/portfolio" className="text-gray-300 hover:text-white transition-colors">Portfolio</Link>
+              )}
+            </div>
+            
             {/* Auth buttons */}
             <div className="flex items-center space-x-4">
               {status === 'loading' ? (

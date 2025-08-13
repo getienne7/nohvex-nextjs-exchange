@@ -1,8 +1,9 @@
 import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { demoDb } from '@/lib/demo-db'
+import { dbService } from '@/lib/db-service'
 import bcrypt from 'bcryptjs'
 export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -15,7 +16,7 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        const user = await demoDb.findUserByEmail(credentials.email)
+        const user = await dbService.findUserByEmail(credentials.email)
 
         if (!user) {
           return null
