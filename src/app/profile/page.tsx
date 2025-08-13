@@ -11,12 +11,39 @@ import {
   CalendarDaysIcon,
   ChartBarIcon,
   CurrencyDollarIcon,
-  TrophyIcon
+  TrophyIcon,
+  PencilIcon,
+  CheckIcon,
+  XMarkIcon,
+  MapPinIcon,
+  ClockIcon,
+  PhoneIcon,
+  ExclamationTriangleIcon
 } from '@heroicons/react/24/outline'
+import { UserProfile, ProfileFormErrors } from '@/types/user-preferences'
 
 export default function ProfilePage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const [profile, setProfile] = useState<UserProfile | null>(null)
+  const [isEditing, setIsEditing] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [errors, setErrors] = useState<ProfileFormErrors>({})
+  const [successMessage, setSuccessMessage] = useState('')
+  const [formData, setFormData] = useState({
+    name: '',
+    bio: '',
+    location: '',
+    timezone: '',
+    phone: ''
+  })
+
+  // Load profile data
+  useEffect(() => {
+    if (session?.user) {
+      loadProfile()
+    }
+  }, [session])
 
   useEffect(() => {
     if (status === 'loading') return
@@ -24,6 +51,77 @@ export default function ProfilePage() {
       router.push('/auth/signin')
     }
   }, [session, status, router])
+
+  const loadProfile = async () => {
+    try {
+      const response = await fetch('/api/profile')
+      if (response.ok) {
+        const data = await response.json()
+        setProfile(data.profile)
+        setFormData({
+          name: data.profile.name || '',
+          bio: data.profile.bio || '',
+          location: data.profile.location || '',
+          timezone: data.profile.timezone || '',
+          phone: data.profile.phone || ''
+        })
+      }
+    } catch (error) {
+      console.error('Failed to load profile:', error)
+    }
+  }
+
+  const handleSave = async () => {
+    setIsLoading(true)
+    setErrors({})
+    setSuccessMessage('')
+
+    try {
+      const response = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setProfile(data.profile)
+        setIsEditing(false)
+        setSuccessMessage(data.message)
+        setTimeout(() => setSuccessMessage(''), 5000)
+      } else {
+        setErrors(data.errors || {})
+      }
+    } catch (error) {
+      console.error('Failed to update profile:', error)
+      setErrors({ general: 'Failed to update profile. Please try again.' })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleCancel = () => {
+    if (profile) {
+      setFormData({
+        name: profile.name || '',
+        bio: profile.bio || '',
+        location: profile.location || '',
+        timezone: profile.timezone || '',
+        phone: profile.phone || ''
+      })
+    }
+    setIsEditing(false)
+    setErrors({})
+    setSuccessMessage('')
+  }
+
+  const handleInputChange = (field: keyof typeof formData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: undefined }))
+    }
+  }
 
   if (status === 'loading') {
     return (
@@ -53,6 +151,30 @@ export default function ProfilePage() {
             </p>
           </motion.div>
 
+          {/* Success Message */}
+          {successMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 p-4 bg-green-500/20 border border-green-500/30 rounded-lg flex items-center text-green-400"
+            >
+              <CheckIcon className="w-5 h-5 mr-2" />
+              {successMessage}
+            </motion.div>
+          )}
+
+          {/* General Error */}
+          {errors.general && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 p-4 bg-red-500/20 border border-red-500/30 rounded-lg flex items-center text-red-400"
+            >
+              <ExclamationTriangleIcon className="w-5 h-5 mr-2" />
+              {errors.general}
+            </motion.div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Profile Card */}
             <motion.div
@@ -65,18 +187,27 @@ export default function ProfilePage() {
                 <div className="text-center">
                   <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="text-2xl font-bold text-white">
-                      {session.user?.name?.[0]?.toUpperCase() || session.user?.email?.[0]?.toUpperCase() || 'U'}
+                      {(profile?.name || session.user?.name)?.[0]?.toUpperCase() || session.user?.email?.[0]?.toUpperCase() || 'U'}
                     </span>
                   </div>
                   <h2 className="text-xl font-bold text-white">
-                    {session.user?.name || 'User'}
+                    {profile?.name || session.user?.name || 'User'}
                   </h2>
-                  <p className="text-gray-400">{session.user?.email}</p>
+                  <p className="text-gray-400">{profile?.email || session.user?.email}</p>
+                  {profile?.bio && (
+                    <p className="text-gray-300 text-sm mt-2 italic">"{profile.bio}"</p>
+                  )}
                   <div className="mt-4">
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30">
                       ✅ Verified Account
                     </span>
                   </div>
+                  {profile?.location && (
+                    <div className="flex items-center justify-center mt-2 text-gray-400 text-sm">
+                      <MapPinIcon className="w-4 h-4 mr-1" />
+                      {profile.location}
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -89,10 +220,45 @@ export default function ProfilePage() {
               className="lg:col-span-2"
             >
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                <h3 className="text-lg font-semibold text-white mb-6">Account Information</h3>
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-lg font-semibold text-white">Profile Information</h3>
+                  {!isEditing ? (
+                    <button
+                      onClick={() => setIsEditing(true)}
+                      className="flex items-center space-x-2 px-3 py-2 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white rounded-lg transition-colors"
+                    >
+                      <PencilIcon className="w-4 h-4" />
+                      <span>Edit</span>
+                    </button>
+                  ) : (
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={handleSave}
+                        disabled={isLoading}
+                        className="flex items-center space-x-2 px-3 py-2 bg-green-500 hover:bg-green-600 disabled:bg-green-500/50 text-white rounded-lg transition-colors"
+                      >
+                        {isLoading ? (
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+                        ) : (
+                          <CheckIcon className="w-4 h-4" />
+                        )}
+                        <span>Save</span>
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        disabled={isLoading}
+                        className="flex items-center space-x-2 px-3 py-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-600/50 text-white rounded-lg transition-colors"
+                      >
+                        <XMarkIcon className="w-4 h-4" />
+                        <span>Cancel</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
                 
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Name Field */}
                     <div>
                       <label className="block text-sm font-medium text-gray-400 mb-2">
                         <UserIcon className="w-4 h-4 inline mr-2" />
@@ -100,13 +266,20 @@ export default function ProfilePage() {
                       </label>
                       <input
                         type="text"
-                        value={session.user?.name || ''}
-                        className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        value={isEditing ? formData.name : (profile?.name || session.user?.name || '')}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        className={`w-full px-3 py-2 bg-white/5 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          isEditing ? 'border-white/20' : 'border-white/10'
+                        } ${errors.name ? 'border-red-500 ring-red-500' : ''}`}
                         placeholder="Enter your full name"
-                        readOnly
+                        readOnly={!isEditing}
                       />
+                      {errors.name && (
+                        <p className="text-red-400 text-sm mt-1">{errors.name}</p>
+                      )}
                     </div>
 
+                    {/* Email Field (Read-only) */}
                     <div>
                       <label className="block text-sm font-medium text-gray-400 mb-2">
                         <EnvelopeIcon className="w-4 h-4 inline mr-2" />
@@ -114,14 +287,104 @@ export default function ProfilePage() {
                       </label>
                       <input
                         type="email"
-                        value={session.user?.email || ''}
-                        className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Enter your email"
+                        value={profile?.email || session.user?.email || ''}
+                        className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none"
                         readOnly
                       />
+                      <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
                     </div>
                   </div>
 
+                  {/* Bio Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                      Bio
+                    </label>
+                    <textarea
+                      value={isEditing ? formData.bio : (profile?.bio || '')}
+                      onChange={(e) => handleInputChange('bio', e.target.value)}
+                      rows={3}
+                      className={`w-full px-3 py-2 bg-white/5 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none ${
+                        isEditing ? 'border-white/20' : 'border-white/10'
+                      } ${errors.bio ? 'border-red-500 ring-red-500' : ''}`}
+                      placeholder="Tell us about yourself..."
+                      readOnly={!isEditing}
+                    />
+                    {errors.bio && (
+                      <p className="text-red-400 text-sm mt-1">{errors.bio}</p>
+                    )}
+                    <p className="text-xs text-gray-500 mt-1">{formData.bio.length}/500 characters</p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Location Field */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-400 mb-2">
+                        <MapPinIcon className="w-4 h-4 inline mr-2" />
+                        Location
+                      </label>
+                      <input
+                        type="text"
+                        value={isEditing ? formData.location : (profile?.location || '')}
+                        onChange={(e) => handleInputChange('location', e.target.value)}
+                        className={`w-full px-3 py-2 bg-white/5 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          isEditing ? 'border-white/20' : 'border-white/10'
+                        }`}
+                        placeholder="City, Country"
+                        readOnly={!isEditing}
+                      />
+                    </div>
+
+                    {/* Phone Field */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-400 mb-2">
+                        <PhoneIcon className="w-4 h-4 inline mr-2" />
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        value={isEditing ? formData.phone : (profile?.phone || '')}
+                        onChange={(e) => handleInputChange('phone', e.target.value)}
+                        className={`w-full px-3 py-2 bg-white/5 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          isEditing ? 'border-white/20' : 'border-white/10'
+                        } ${errors.phone ? 'border-red-500 ring-red-500' : ''}`}
+                        placeholder="+1 (555) 123-4567"
+                        readOnly={!isEditing}
+                      />
+                      {errors.phone && (
+                        <p className="text-red-400 text-sm mt-1">{errors.phone}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Timezone Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                      <ClockIcon className="w-4 h-4 inline mr-2" />
+                      Timezone
+                    </label>
+                    <select
+                      value={isEditing ? formData.timezone : (profile?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone)}
+                      onChange={(e) => handleInputChange('timezone', e.target.value)}
+                      className={`w-full px-3 py-2 bg-white/5 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        isEditing ? 'border-white/20' : 'border-white/10'
+                      }`}
+                      disabled={!isEditing}
+                    >
+                      <option value="America/New_York">Eastern Time (EST/EDT)</option>
+                      <option value="America/Chicago">Central Time (CST/CDT)</option>
+                      <option value="America/Denver">Mountain Time (MST/MDT)</option>
+                      <option value="America/Los_Angeles">Pacific Time (PST/PDT)</option>
+                      <option value="UTC">UTC</option>
+                      <option value="Europe/London">London (GMT/BST)</option>
+                      <option value="Europe/Paris">Paris (CET/CEST)</option>
+                      <option value="Asia/Tokyo">Tokyo (JST)</option>
+                      <option value="Asia/Shanghai">Shanghai (CST)</option>
+                      <option value="Australia/Sydney">Sydney (AEST/AEDT)</option>
+                    </select>
+                  </div>
+
+                  {/* Member Since (Read-only) */}
                   <div>
                     <label className="block text-sm font-medium text-gray-400 mb-2">
                       <CalendarDaysIcon className="w-4 h-4 inline mr-2" />
@@ -129,17 +392,11 @@ export default function ProfilePage() {
                     </label>
                     <input
                       type="text"
-                      value={new Date().toLocaleDateString()}
-                      className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      value={profile?.memberSince ? new Date(profile.memberSince).toLocaleDateString() : new Date().toLocaleDateString()}
+                      className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none"
                       readOnly
                     />
                   </div>
-                </div>
-
-                <div className="mt-6 pt-6 border-t border-white/10">
-                  <button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-emerald-500 text-white rounded-lg hover:from-blue-600 hover:to-emerald-600 transition-all duration-200">
-                    Update Profile
-                  </button>
                 </div>
               </div>
             </motion.div>

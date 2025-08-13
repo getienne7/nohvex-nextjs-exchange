@@ -13,21 +13,64 @@ import {
   EyeSlashIcon,
   KeyIcon,
   GlobeAltIcon,
-  PaintBrushIcon
+  PaintBrushIcon,
+  CheckIcon,
+  ExclamationTriangleIcon,
+  CurrencyDollarIcon,
+  ChartBarIcon,
+  ClockIcon,
+  DevicePhoneMobileIcon,
+  ComputerDesktopIcon
 } from '@heroicons/react/24/outline'
+import { NotificationPreferences, PrivacySettings, TradingPreferences } from '@/types/user-preferences'
 
 export default function SettingsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const [notifications, setNotifications] = useState({
+  const [isLoading, setIsLoading] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+  
+  const [notifications, setNotifications] = useState<NotificationPreferences>({
     email: true,
-    price: true,
-    trades: false,
-    news: true
+    push: false,
+    sms: false,
+    priceAlerts: true,
+    tradeConfirmations: true,
+    marketNews: false,
+    portfolioUpdates: true,
+    systemAnnouncements: true,
+    weeklyReports: false
   })
-  const [privacy, setPrivacy] = useState({
+  
+  const [privacy, setPrivacy] = useState<PrivacySettings>({
     showPortfolio: false,
-    showTrades: true
+    showTrades: true,
+    showProfile: true,
+    allowMessages: true,
+    allowFollowers: false,
+    shareAnalytics: false
+  })
+  
+  const [trading, setTrading] = useState<TradingPreferences>({
+    defaultCurrency: 'USD',
+    riskLevel: 'moderate',
+    autoConfirmTrades: false,
+    slippageTolerance: 1.0,
+    gasPreference: 'standard',
+    favoriteTokens: ['BTC', 'ETH'],
+    tradingPairs: ['BTC/USD', 'ETH/USD'],
+    chartTimeframe: '1h',
+    chartType: 'line'
+  })
+  
+  const [appearance, setAppearance] = useState({
+    theme: 'dark' as const,
+    language: 'en',
+    currency: 'USD',
+    dateFormat: 'MM/DD/YYYY' as const,
+    timeFormat: '12h' as const,
+    compactMode: false
   })
 
   useEffect(() => {
@@ -107,14 +150,14 @@ export default function SettingsPage() {
                     <p className="text-gray-400 text-sm">Get notified when crypto prices hit your targets</p>
                   </div>
                   <button
-                    onClick={() => setNotifications({...notifications, price: !notifications.price})}
+                    onClick={() => setNotifications({...notifications, priceAlerts: !notifications.priceAlerts})}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      notifications.price ? 'bg-blue-500' : 'bg-gray-600'
+                      notifications.priceAlerts ? 'bg-blue-500' : 'bg-gray-600'
                     }`}
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        notifications.price ? 'translate-x-6' : 'translate-x-1'
+                        notifications.priceAlerts ? 'translate-x-6' : 'translate-x-1'
                       }`}
                     />
                   </button>
@@ -126,14 +169,14 @@ export default function SettingsPage() {
                     <p className="text-gray-400 text-sm">Confirm each trade before execution</p>
                   </div>
                   <button
-                    onClick={() => setNotifications({...notifications, trades: !notifications.trades})}
+                    onClick={() => setNotifications({...notifications, tradeConfirmations: !notifications.tradeConfirmations})}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      notifications.trades ? 'bg-blue-500' : 'bg-gray-600'
+                      notifications.tradeConfirmations ? 'bg-blue-500' : 'bg-gray-600'
                     }`}
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        notifications.trades ? 'translate-x-6' : 'translate-x-1'
+                        notifications.tradeConfirmations ? 'translate-x-6' : 'translate-x-1'
                       }`}
                     />
                   </button>
@@ -145,14 +188,14 @@ export default function SettingsPage() {
                     <p className="text-gray-400 text-sm">Stay updated with crypto market news</p>
                   </div>
                   <button
-                    onClick={() => setNotifications({...notifications, news: !notifications.news})}
+                    onClick={() => setNotifications({...notifications, marketNews: !notifications.marketNews})}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      notifications.news ? 'bg-blue-500' : 'bg-gray-600'
+                      notifications.marketNews ? 'bg-blue-500' : 'bg-gray-600'
                     }`}
                   >
                     <span
                       className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        notifications.news ? 'translate-x-6' : 'translate-x-1'
+                        notifications.marketNews ? 'translate-x-6' : 'translate-x-1'
                       }`}
                     />
                   </button>
