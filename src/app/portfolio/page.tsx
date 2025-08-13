@@ -4,6 +4,7 @@ import { AdvancedPortfolio } from '@/components/AdvancedPortfolio'
 import { SimplePortfolio } from '@/components/SimplePortfolio'
 import { RealTimePortfolio } from '@/components/RealTimePortfolio'
 import { WebSocketProvider } from '@/hooks/useWebSocket'
+import { GlobalNavigation } from '@/components/GlobalNavigation'
 import { useState } from 'react'
 import { ChartBarIcon, Cog6ToothIcon, WifiIcon } from '@heroicons/react/24/outline'
 
@@ -12,7 +13,8 @@ export default function PortfolioPage() {
 
   return (
     <WebSocketProvider>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-20">
+      <GlobalNavigation />
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12">
           {/* Portfolio Mode Toggle */}
           <div className="flex justify-end mb-6">

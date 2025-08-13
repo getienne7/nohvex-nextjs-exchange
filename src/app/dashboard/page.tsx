@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import PortfolioOverview from '@/components/dashboard/PortfolioOverview'
 import CryptoChart from '@/components/dashboard/CryptoChart'
 import TransactionHistory from '@/components/dashboard/TransactionHistory'
-import Navigation from '@/components/dashboard/Navigation'
+import { GlobalNavigation } from '@/components/GlobalNavigation'
 
 export default function Dashboard() {
   const { data: session, status } = useSession()
@@ -35,7 +35,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      <Navigation />
+      <GlobalNavigation />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <motion.div

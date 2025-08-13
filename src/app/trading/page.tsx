@@ -4,12 +4,15 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ChangeNowWidget } from '@/components/ChangeNowWidget'
 import { PortfolioTrading } from '@/components/PortfolioTrading'
+import { GlobalNavigation } from '@/components/GlobalNavigation'
 
 export default function TradingPage() {
   const [activeTab, setActiveTab] = useState<'portfolio' | 'exchange'>('portfolio')
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-20">
+    <>
+      <GlobalNavigation />
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-16">
       <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12">
         <div className="mx-auto max-w-2xl text-center mb-12">
           <motion.h1
@@ -127,5 +130,6 @@ export default function TradingPage() {
         </motion.div>
       </div>
     </div>
+    </>
   )
 }
