@@ -17,19 +17,19 @@ import {
   XMarkIcon,
   MapPinIcon,
   ClockIcon,
-  PhoneIcon,
-  ExclamationTriangleIcon
+  PhoneIcon
 } from '@heroicons/react/24/outline'
 import { UserProfile, ProfileFormErrors } from '@/types/user-preferences'
+import { useNotify } from '@/components/notifications'
 
 export default function ProfilePage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const notify = useNotify()
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<ProfileFormErrors>({})
-  const [successMessage, setSuccessMessage] = useState('')
   const [formData, setFormData] = useState({
     name: '',
     bio: '',
@@ -65,16 +65,18 @@ export default function ProfilePage() {
           timezone: data.profile.timezone || '',
           phone: data.profile.phone || ''
         })
+      } else {
+        notify.error('Failed to Load Profile', 'Unable to load your profile information. Please refresh the page.')
       }
     } catch (error) {
       console.error('Failed to load profile:', error)
+      notify.error('Network Error', 'Unable to connect to server. Please check your internet connection.')
     }
   }
 
   const handleSave = async () => {
     setIsLoading(true)
     setErrors({})
-    setSuccessMessage('')
 
     try {
       const response = await fetch('/api/profile', {
@@ -88,14 +90,22 @@ export default function ProfilePage() {
       if (response.ok) {
         setProfile(data.profile)
         setIsEditing(false)
-        setSuccessMessage(data.message)
-        setTimeout(() => setSuccessMessage(''), 5000)
+        notify.success('Profile Updated', 'Your profile has been successfully updated.')
       } else {
         setErrors(data.errors || {})
+        // Show individual field errors as notifications
+        if (data.errors) {
+          const errorMessages = Object.entries(data.errors)
+            .map(([field, message]) => `${field}: ${message}`)
+            .join(', ')
+          notify.error('Validation Error', errorMessages)
+        } else {
+          notify.error('Update Failed', 'Unable to update your profile. Please try again.')
+        }
       }
     } catch (error) {
       console.error('Failed to update profile:', error)
-      setErrors({ general: 'Failed to update profile. Please try again.' })
+      notify.error('Network Error', 'Unable to connect to server. Please check your internet connection.')
     } finally {
       setIsLoading(false)
     }
@@ -113,7 +123,6 @@ export default function ProfilePage() {
     }
     setIsEditing(false)
     setErrors({})
-    setSuccessMessage('')
   }
 
   const handleInputChange = (field: keyof typeof formData, value: string) => {
@@ -151,29 +160,6 @@ export default function ProfilePage() {
             </p>
           </motion.div>
 
-          {/* Success Message */}
-          {successMessage && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-6 p-4 bg-green-500/20 border border-green-500/30 rounded-lg flex items-center text-green-400"
-            >
-              <CheckIcon className="w-5 h-5 mr-2" />
-              {successMessage}
-            </motion.div>
-          )}
-
-          {/* General Error */}
-          {errors.general && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-6 p-4 bg-red-500/20 border border-red-500/30 rounded-lg flex items-center text-red-400"
-            >
-              <ExclamationTriangleIcon className="w-5 h-5 mr-2" />
-              {errors.general}
-            </motion.div>
-          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Profile Card */}
