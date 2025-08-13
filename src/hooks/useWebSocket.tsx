@@ -148,8 +148,15 @@ export function WebSocketProvider({
   const maxReconnectAttempts = 5
   const subscriptionsRef = useRef<Set<string>>(new Set())
 
-  // Simulate WebSocket connection (since we don't have a real WebSocket server)
-  const simulateConnection = useCallback(() => {
+  // Initialize intervals refs
+  const intervalsRef = useRef<{
+    price?: NodeJS.Timeout
+    portfolio?: NodeJS.Timeout
+    alerts?: NodeJS.Timeout
+  }>({})
+
+  // Start simulated connection
+  const startSimulation = useCallback(() => {
     setConnectionStatus('connecting')
     
     // Simulate connection delay
@@ -158,7 +165,7 @@ export function WebSocketProvider({
       setConnectionStatus('connected')
       
       // Start simulating price updates
-      const priceUpdateInterval = setInterval(() => {
+      intervalsRef.current.price = setInterval(() => {
         const symbols = ['BTC', 'ETH', 'ADA', 'SOL', 'DOT', 'AVAX']
         const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)]
         
@@ -178,38 +185,36 @@ export function WebSocketProvider({
           ...prev,
           [randomSymbol]: priceUpdate
         }))
-      }, 2000) // Update every 2 seconds
+      }, 3000) // Update every 3 seconds
 
       // Start simulating portfolio updates
-      const portfolioUpdateInterval = setInterval(() => {
-        if (session) {
-          const portfolioUpdate: PortfolioUpdate = {
-            user_id: session.user?.id || 'demo',
-            total_value: 50000 * (1 + (Math.random() - 0.5) * 0.01),
-            total_pnl: (Math.random() - 0.3) * 5000,
-            holdings: [
-              {
-                symbol: 'BTC',
-                amount: 1.2,
-                current_value: 45000 * 1.2 * (1 + (Math.random() - 0.5) * 0.02),
-                pnl: (Math.random() - 0.3) * 2000
-              },
-              {
-                symbol: 'ETH',
-                amount: 10,
-                current_value: 3000 * 10 * (1 + (Math.random() - 0.5) * 0.02),
-                pnl: (Math.random() - 0.3) * 1500
-              }
-            ],
-            timestamp: new Date().toISOString()
-          }
-          setPortfolioUpdates(portfolioUpdate)
+      intervalsRef.current.portfolio = setInterval(() => {
+        const portfolioUpdate: PortfolioUpdate = {
+          user_id: 'demo-user',
+          total_value: 50000 * (1 + (Math.random() - 0.5) * 0.01),
+          total_pnl: (Math.random() - 0.3) * 5000,
+          holdings: [
+            {
+              symbol: 'BTC',
+              amount: 1.2,
+              current_value: 45000 * 1.2 * (1 + (Math.random() - 0.5) * 0.02),
+              pnl: (Math.random() - 0.3) * 2000
+            },
+            {
+              symbol: 'ETH',
+              amount: 10,
+              current_value: 3000 * 10 * (1 + (Math.random() - 0.5) * 0.02),
+              pnl: (Math.random() - 0.3) * 1500
+            }
+          ],
+          timestamp: new Date().toISOString()
         }
-      }, 5000) // Update every 5 seconds
+        setPortfolioUpdates(portfolioUpdate)
+      }, 6000) // Update every 6 seconds
 
       // Simulate random market alerts
-      const alertInterval = setInterval(() => {
-        if (Math.random() > 0.7) { // 30% chance of alert
+      intervalsRef.current.alerts = setInterval(() => {
+        if (Math.random() > 0.8) { // 20% chance of alert
           const alerts = [
             'BTC price crossed $45,000!',
             'High volatility detected in ETH',
@@ -228,15 +233,19 @@ export function WebSocketProvider({
           
           setMarketAlerts(prev => [alert, ...prev.slice(0, 9)]) // Keep last 10 alerts
         }
-      }, 8000) // Check every 8 seconds
-
-      return () => {
-        clearInterval(priceUpdateInterval)
-        clearInterval(portfolioUpdateInterval)
-        clearInterval(alertInterval)
-      }
+      }, 10000) // Check every 10 seconds
     }, 1000)
-  }, [session])
+  }, [])
+
+  // Stop simulation
+  const stopSimulation = useCallback(() => {
+    Object.values(intervalsRef.current).forEach(interval => {
+      if (interval) clearInterval(interval)
+    })
+    intervalsRef.current = {}
+    setIsConnected(false)
+    setConnectionStatus('disconnected')
+  }, [])
 
   const connect = useCallback(() => {
     if (socket?.readyState === WebSocket.OPEN) {
@@ -244,7 +253,7 @@ export function WebSocketProvider({
     }
 
     // For now, we'll simulate the connection
-    simulateConnection()
+    startSimulation()
 
     /* Real WebSocket implementation would look like this:
     try {
@@ -299,7 +308,7 @@ export function WebSocketProvider({
       console.error('WebSocket connection failed:', error)
     }
     */
-  }, [url, session, simulateConnection])
+  }, [url, session, startSimulation])
 
   const disconnect = useCallback(() => {
     if (reconnectTimeoutRef.current) {
@@ -310,10 +319,9 @@ export function WebSocketProvider({
       socket.close()
     }
     
+    stopSimulation()
     setSocket(null)
-    setIsConnected(false)
-    setConnectionStatus('disconnected')
-  }, [socket])
+  }, [socket, stopSimulation])
 
   const subscribe = useCallback((channel: string) => {
     subscriptionsRef.current.add(channel)
@@ -343,24 +351,17 @@ export function WebSocketProvider({
     }
   }, [socket])
 
-  // Auto-connect when session is available
+  // Auto-connect when component mounts
   useEffect(() => {
-    connect()
+    startSimulation()
     
-    return () => {
-      disconnect()
-    }
-  }, [connect, disconnect])
-
-  // Cleanup on unmount
-  useEffect(() => {
     return () => {
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current)
       }
-      disconnect()
+      stopSimulation()
     }
-  }, [disconnect])
+  }, [startSimulation, stopSimulation]) // Only run on mount/unmount
 
   const value: WebSocketContextType = {
     isConnected,
