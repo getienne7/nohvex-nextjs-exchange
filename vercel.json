@@ -4,14 +4,6 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "outputDirectory": ".next",
-  "env": {
-    "NEXTAUTH_URL": "@nextauth_url",
-    "NEXTAUTH_SECRET": "@nextauth_secret",
-    "DATABASE_URL": "@database_url",
-    "NOWNODES_API_KEY": "@nownodes_api_key",
-    "NEXT_PUBLIC_CHANGENOW_API_KEY": "@changenow_api_key",
-    "NEXT_PUBLIC_CHANGENOW_REFERRAL": "@changenow_referral"
-  },
   "functions": {
     "src/app/api/**/*.ts": {
       "maxDuration": 30
