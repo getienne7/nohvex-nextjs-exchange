@@ -1,9 +1,20 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowsUpDownIcon } from '@heroicons/react/24/outline'
+import { 
+  ArrowsUpDownIcon,
+  ChartBarIcon,
+  BanknotesIcon,
+  ArrowTrendingUpIcon,
+  ArrowTrendingDownIcon,
+  ClockIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  InformationCircleIcon
+} from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
+import { useNotify } from '@/components/notifications'
 
 interface PortfolioTradingProps {
   className?: string
@@ -11,19 +22,43 @@ interface PortfolioTradingProps {
 
 export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
   const { data: session } = useSession()
+  const notify = useNotify()
+  const priceUpdateInterval = useRef<NodeJS.Timeout | null>(null)
+  
+  // Trading state
   const [fromCurrency, setFromCurrency] = useState('BTC')
   const [toCurrency, setToCurrency] = useState('USDT')
   const [amount, setAmount] = useState('')
   const [portfolio, setPortfolio] = useState<any[]>([])
   const [rates, setRates] = useState<{[key: string]: number}>({})
+  const [prevRates, setPrevRates] = useState<{[key: string]: number}>({})
   const [receivedAmount, setReceivedAmount] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [tradeType, setTradeType] = useState<'buy' | 'sell'>('buy')
+  
+  // Enhanced features
+  const [orderType, setOrderType] = useState<'market' | 'limit'>('market')
+  const [limitPrice, setLimitPrice] = useState('')
+  const [recentTrades, setRecentTrades] = useState<any[]>([])
+  const [priceChangeAlert, setPriceChangeAlert] = useState<{[key: string]: 'up' | 'down' | null}>({})
+  const [lastPriceUpdate, setLastPriceUpdate] = useState<Date | null>(null)
 
+  // Initialize and start real-time price updates
   useEffect(() => {
     if (session) {
       fetchPortfolio()
       fetchRates()
+      
+      // Start real-time price updates every 30 seconds
+      priceUpdateInterval.current = setInterval(() => {
+        fetchRatesWithComparison()
+      }, 30000)
+    }
+    
+    return () => {
+      if (priceUpdateInterval.current) {
+        clearInterval(priceUpdateInterval.current)
+      }
     }
   }, [session])
 
@@ -55,6 +90,55 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
           priceMap[item.symbol] = item.current_price
         })
         setRates(priceMap)
+        setLastPriceUpdate(new Date())
+      }
+    } catch (error) {
+      console.error('Error fetching rates:', error)
+      notify.error('Price Update Failed', 'Unable to fetch latest cryptocurrency prices')
+    }
+  }
+
+  // Fetch rates with price change comparison for live updates
+  const fetchRatesWithComparison = async () => {
+    try {
+      const symbols = 'BTC,ETH,BNB,USDT,ADA,SOL,XRP,DOGE,DOT,AVAX,LINK,UNI,LTC,MATIC,ATOM'
+      const response = await fetch(`/api/prices?symbols=${symbols}`)
+      if (response.ok) {
+        const { data } = await response.json()
+        const newPriceMap: {[key: string]: number} = {}
+        const alerts: {[key: string]: 'up' | 'down' | null} = {}
+        
+        data.forEach((item: any) => {
+          const symbol = item.symbol
+          const newPrice = item.current_price
+          const oldPrice = rates[symbol]
+          
+          newPriceMap[symbol] = newPrice
+          
+          // Check for significant price changes (>2%)
+          if (oldPrice && Math.abs((newPrice - oldPrice) / oldPrice) > 0.02) {
+            const direction = newPrice > oldPrice ? 'up' : 'down'
+            alerts[symbol] = direction
+            
+            // Show price alert notification for key currencies
+            if ([fromCurrency, toCurrency].includes(symbol)) {
+              const changePercent = (((newPrice - oldPrice) / oldPrice) * 100).toFixed(2)
+              notify.info(
+                `${symbol} Price ${direction === 'up' ? 'Surge' : 'Drop'}`,
+                `${getCryptoName(symbol)} ${direction === 'up' ? 'increased' : 'decreased'} by ${Math.abs(parseFloat(changePercent))}%`,
+                { autoRemove: true, removeDelay: 8000 }
+              )
+            }
+          }
+        })
+        
+        setPrevRates(rates)
+        setRates(newPriceMap)
+        setPriceChangeAlert(alerts)
+        setLastPriceUpdate(new Date())
+        
+        // Clear alerts after animation
+        setTimeout(() => setPriceChangeAlert({}), 3000)
       }
     } catch (error) {
       console.error('Error fetching rates:', error)
@@ -92,6 +176,20 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
     e.preventDefault()
     if (!amount || !receivedAmount || !session) return
     
+    // Enhanced validation
+    const tradeAmount = parseFloat(amount)
+    const availableBalance = getAvailableBalance(fromCurrency)
+    
+    if (tradeAmount <= 0) {
+      notify.error('Invalid Amount', 'Please enter a valid trading amount greater than 0')
+      return
+    }
+    
+    if (tradeAmount > availableBalance) {
+      notify.error('Insufficient Balance', `You only have ${availableBalance.toFixed(8)} ${fromCurrency} available`)
+      return
+    }
+    
     setIsLoading(true)
     
     try {
@@ -120,13 +218,20 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
         setAmount('')
         setReceivedAmount('')
         
-        alert(`${tradeType === 'buy' ? 'Purchase' : 'Sale'} completed successfully!`)
+        // Success notification with trade details
+        const tradeSymbol = tradeType === 'buy' ? toCurrency : fromCurrency
+        const tradeAmountStr = (tradeType === 'buy' ? parseFloat(receivedAmount) : parseFloat(amount)).toFixed(6)
+        notify.success(
+          `${tradeType === 'buy' ? 'Purchase' : 'Sale'} Successful!`,
+          `${tradeType === 'buy' ? 'Bought' : 'Sold'} ${tradeAmountStr} ${tradeSymbol} at $${rates[tradeSymbol]?.toFixed(2)}`
+        )
       } else {
-        throw new Error('Transaction failed')
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.message || 'Transaction failed')
       }
     } catch (error) {
       console.error('Error executing trade:', error)
-      alert('Trade failed. Please try again.')
+      notify.error('Trade Failed', error instanceof Error ? error.message : 'Unable to execute trade. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -233,10 +338,51 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
       className={`rounded-2xl bg-white/10 p-6 backdrop-blur-sm ring-1 ring-white/20 ${className}`}
     >
       <div className="mb-4">
-        <h3 className="text-xl font-bold text-white mb-2">Portfolio Trading</h3>
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-xl font-bold text-white">Portfolio Trading</h3>
+          {lastPriceUpdate && (
+            <div className="flex items-center text-xs text-gray-400">
+              <ClockIcon className="w-3 h-3 mr-1" />
+              Updated {lastPriceUpdate.toLocaleTimeString()}
+            </div>
+          )}
+        </div>
         <p className="text-sm text-gray-400">
-          Trade with your internal portfolio balance
+          Trade with your internal portfolio balance • Live prices every 30s
         </p>
+        
+        {/* Current Price Display */}
+        {rates[fromCurrency] && rates[toCurrency] && (
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-3 p-3 bg-white/5 rounded-lg border border-white/10"
+          >
+            <div className="flex justify-between items-center text-sm">
+              <div className="flex items-center">
+                <span className="text-gray-400">Current Rate:</span>
+                <div className={`ml-2 flex items-center ${
+                  priceChangeAlert[fromCurrency] === 'up' ? 'text-green-400' :
+                  priceChangeAlert[fromCurrency] === 'down' ? 'text-red-400' : 'text-white'
+                }`}>
+                  {priceChangeAlert[fromCurrency] === 'up' && <ArrowTrendingUpIcon className="w-3 h-3 mr-1" />}
+                  {priceChangeAlert[fromCurrency] === 'down' && <ArrowTrendingDownIcon className="w-3 h-3 mr-1" />}
+                  1 {fromCurrency} = ${rates[fromCurrency]?.toFixed(fromCurrency === 'BTC' || fromCurrency === 'ETH' ? 2 : 6)}
+                </div>
+              </div>
+              <div className="flex items-center">
+                <div className={`flex items-center ${
+                  priceChangeAlert[toCurrency] === 'up' ? 'text-green-400' :
+                  priceChangeAlert[toCurrency] === 'down' ? 'text-red-400' : 'text-white'
+                }`}>
+                  {priceChangeAlert[toCurrency] === 'up' && <ArrowTrendingUpIcon className="w-3 h-3 mr-1" />}
+                  {priceChangeAlert[toCurrency] === 'down' && <ArrowTrendingDownIcon className="w-3 h-3 mr-1" />}
+                  1 {toCurrency} = ${rates[toCurrency]?.toFixed(toCurrency === 'BTC' || toCurrency === 'ETH' ? 2 : 6)}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
         
         {/* Trade Type Toggle */}
         <div className="flex mt-4 bg-white/5 rounded-lg p-1">
@@ -249,6 +395,7 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
                 : 'text-gray-400 hover:text-white'
             }`}
           >
+            <BanknotesIcon className="w-4 h-4 inline mr-1" />
             Buy
           </button>
           <button
@@ -260,6 +407,7 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
                 : 'text-gray-400 hover:text-white'
             }`}
           >
+            <ChartBarIcon className="w-4 h-4 inline mr-1" />
             Sell
           </button>
         </div>
