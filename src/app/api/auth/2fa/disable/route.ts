@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { twoFactorStore } from '../setup/route'
+import { dbService } from '@/lib/db-service'
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,17 +14,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if 2FA is currently enabled in memory store
-    const user2FA = twoFactorStore.get(session.user.email)
-    if (!user2FA || !user2FA.isEnabled) {
+    // Check if 2FA is currently enabled in DB
+    const user = await dbService.findUserByEmail(session.user.email)
+    if (!user || !user.twoFAEnabled) {
       return NextResponse.json(
         { success: false, error: 'Two-factor authentication is not enabled' },
         { status: 400 }
       )
     }
 
-    // Disable 2FA by removing from memory store
-    twoFactorStore.delete(session.user.email)
+    // Disable 2FA in DB
+    await dbService.set2FA(user.id, { enabled: false, secret: null, backupCodes: [] })
 
     return NextResponse.json({
       success: true,

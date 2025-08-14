@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
-import { twoFactorStore } from '../2fa/setup/route'
 import { dbService } from '@/lib/db-service'
 
 export async function POST(request: NextRequest) {
@@ -51,9 +50,8 @@ export async function POST(request: NextRequest) {
     
     console.log('✅ Password verification successful')
 
-    // Check if user has 2FA enabled
-    const user2FA = twoFactorStore.get(email)
-    const requires2FA = user2FA?.isEnabled || false
+    // Check if user has 2FA enabled (DB-backed)
+    const requires2FA = !!(user.twoFAEnabled && user.twoFASecret)
 
     return NextResponse.json({
       success: true,

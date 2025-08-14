@@ -23,6 +23,13 @@ model User {
   // Password reset fields
   resetToken    String?   @unique
   resetExpires  DateTime?
+
+  // 2FA fields (persisted)
+  twoFAEnabled     Boolean   @default(false)
+  twoFASecret      String?
+  twoFABackupCodes Json?
+  twoFAEnabledAt   DateTime?
+  twoFALastUsed    DateTime?
   
   accounts      Account[]
   sessions      Session[]

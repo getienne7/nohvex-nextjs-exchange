@@ -4,22 +4,14 @@ import { authOptions } from '@/lib/auth'
 import speakeasy from 'speakeasy'
 import QRCode from 'qrcode'
 import { Setup2FAResponse } from '@/types/auth'
+import { dbService } from '@/lib/db-service'
 
-// In-memory storage for 2FA setup data (replace with database in production)
+// Temporary setup store (in-memory) only for pending setup verification
 const twoFactorSetupStore = new Map<string, {
   secret: string
   backupCodes: string[]
   createdAt: Date
   expiresAt: Date
-}>()
-
-// In-memory storage for user 2FA data
-export const twoFactorStore = new Map<string, {
-  isEnabled: boolean
-  secret?: string
-  backupCodes?: Array<{ code: string; used: boolean; createdAt: Date; usedAt?: Date }>
-  enabledAt?: Date
-  lastUsed?: Date
 }>()
 
 export async function GET(req: NextRequest) {
@@ -33,9 +25,9 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    // Check if 2FA is already enabled
-    const user2FA = twoFactorStore.get(session.user.email)
-    if (user2FA?.isEnabled) {
+    // Check if 2FA is already enabled (via DB)
+    const user = await dbService.findUserByEmail(session.user.email)
+    if (user?.twoFAEnabled) {
       return NextResponse.json(
         { success: false, error: '2FA is already enabled' },
         { status: 400 }
@@ -105,6 +97,24 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // Get user and pending setup data
+    const user = await dbService.findUserByEmail(session.user.email)
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: 'User not found' },
+        { status: 404 }
+      )
+    }
+
+    // Verify password
+    const validPassword = await import('bcryptjs').then(m => m.compare(password, (user as any).password))
+    if (!validPassword) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid password' },
+        { status: 401 }
+      )
+    }
+
     // Get temporary setup data
     const setupData = twoFactorSetupStore.get(session.user.email)
     if (!setupData || setupData.expiresAt < new Date()) {
@@ -130,15 +140,12 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Enable 2FA for user in memory store
-    twoFactorStore.set(session.user.email, {
-      isEnabled: true,
+    // Persist 2FA for user in DB
+    const backupCodes = setupData.backupCodes.map(code => ({ code, used: false, createdAt: new Date() }))
+    await dbService.set2FA(user.id, {
+      enabled: true,
       secret: setupData.secret,
-      backupCodes: setupData.backupCodes.map(code => ({
-        code,
-        used: false,
-        createdAt: new Date()
-      })),
+      backupCodes,
       enabledAt: new Date()
     })
 

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import speakeasy from 'speakeasy'
-import { twoFactorStore } from '../setup/route'
+import { dbService } from '@/lib/db-service'
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,50 +24,34 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const user2FA = twoFactorStore.get(session.user.email)
-    // Quick-unblock guard: if 2FA state is missing in memory (serverless instance reset),
-    // bypass verification to avoid locking out the user. This will be replaced by
-    // DB-persisted 2FA in a future update.
-    if (!user2FA || !user2FA.isEnabled || !user2FA.secret) {
-      return NextResponse.json({
-        success: true,
-        message: '2FA temporarily unavailable on server. Verification bypassed.',
-        method: 'bypass'
-      })
+    const user = await dbService.findUserByEmail(session.user.email)
+    if (!user || !user.twoFAEnabled || !user.twoFASecret) {
+      return NextResponse.json(
+        { success: false, error: '2FA is not enabled' },
+        { status: 400 }
+      )
     }
 
     let verified = false
 
     if (useBackupCode) {
-      // Verify backup code
-      const backupCodeIndex = user2FA.backupCodes?.findIndex(
-        (backupCode) => backupCode.code === code.toUpperCase() && !backupCode.used
-      )
-
-      if (backupCodeIndex !== undefined && backupCodeIndex >= 0 && user2FA.backupCodes) {
+      const codes = (user as any).twoFABackupCodes as Array<{ code: string; used: boolean; createdAt: string | Date; usedAt?: string | Date }>|null
+      const found = codes?.find(c => c.code === String(code).toUpperCase() && !c.used)
+      if (found) {
         verified = true
-        
-        // Mark backup code as used
-        user2FA.backupCodes[backupCodeIndex].used = true
-        user2FA.backupCodes[backupCodeIndex].usedAt = new Date()
-        user2FA.lastUsed = new Date()
-        
-        // Update the store
-        twoFactorStore.set(session.user.email, user2FA)
+        await dbService.markBackupCodeUsed(user.id, found.code)
       }
     } else {
       // Verify TOTP code
       verified = speakeasy.totp.verify({
-        secret: user2FA.secret!,
+        secret: user.twoFASecret,
         encoding: 'base32',
         token: code,
         window: 2
       })
 
       if (verified) {
-        // Update last used timestamp
-        user2FA.lastUsed = new Date()
-        twoFactorStore.set(session.user.email, user2FA)
+        await dbService.set2FA(user.id, { enabled: true, secret: user.twoFASecret, backupCodes: (user as any).twoFABackupCodes ?? undefined, lastUsed: new Date() })
       }
     }
 

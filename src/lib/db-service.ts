@@ -364,6 +364,12 @@ export class DatabaseService {
     resetExpires?: Date | null
     name?: string
     emailVerified?: Date | null
+    // 2FA fields
+    twoFAEnabled?: boolean
+    twoFASecret?: string | null
+    twoFABackupCodes?: Array<{ code: string; used: boolean; createdAt: Date; usedAt?: Date }>
+    twoFAEnabledAt?: Date | null
+    twoFALastUsed?: Date | null
   }) {
     if (!this.isConnected || !this.prisma) {
       // Fallback to in-memory storage
@@ -459,7 +465,42 @@ export class DatabaseService {
   }
 
   async disconnect() {
-    await this.prisma.$disconnect()
+    await this.prisma?.$disconnect()
+  }
+
+  // Convenience helpers for 2FA
+  async set2FA(userId: string, data: {
+    enabled: boolean
+    secret?: string | null
+    backupCodes?: Array<{ code: string; used: boolean; createdAt: Date; usedAt?: Date }>
+    enabledAt?: Date | null
+    lastUsed?: Date | null
+  }) {
+    return this.updateUser(userId, {
+      twoFAEnabled: data.enabled,
+      twoFASecret: data.secret ?? null,
+      twoFABackupCodes: data.backupCodes,
+      twoFAEnabledAt: data.enabledAt ?? (data.enabled ? new Date() : null),
+      twoFALastUsed: data.lastUsed ?? null
+    })
+  }
+
+  async markBackupCodeUsed(userId: string, code: string) {
+    const user = await (this.isConnected && this.prisma
+      ? this.prisma.user.findUnique({ where: { id: userId } })
+      : Promise.resolve(memoryStore.users.find(u => u.id === userId)))
+
+    if (!user) return null
+
+    const codes = (user as any).twoFABackupCodes as Array<{ code: string; used: boolean; createdAt: string | Date; usedAt?: string | Date }>|null
+    if (!codes) return null
+
+    const updated = codes.map(c => c.code === code ? { ...c, used: true, usedAt: new Date() } : c)
+
+    return this.updateUser(userId, {
+      twoFABackupCodes: updated as any,
+      twoFALastUsed: new Date()
+    })
   }
 }
 
