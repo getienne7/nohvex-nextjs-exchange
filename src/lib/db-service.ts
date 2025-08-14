@@ -254,7 +254,7 @@ export class DatabaseService {
     }
   }
 
-  async addToPortfolio(userId: string, symbol: string, name: string, amount: number, price: number) {
+  async addToPortfolio(userId: string, symbol: string, name: string, amount: number, price: number): Promise<any> {
     if (!this.isConnected || !this.prisma) {
       // Fallback to in-memory storage
       const existingAsset = memoryStore.portfolios.find(p => p.userId === userId && p.symbol === symbol)

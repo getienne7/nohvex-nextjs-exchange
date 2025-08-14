@@ -30,7 +30,7 @@ jobs:
       - name: Install deps
         run: npm ci
       - name: Lint (with cache)
-        run: npx next lint -- --cache --cache-location .eslintcache
+        run: npx next lint --cache --cache-location .eslintcache
 
   typecheck:
     runs-on: ubuntu-latest
