@@ -32,7 +32,7 @@ async function deployDatabase() {
 
     // Step 3: Deploy database schema (creates tables if they don't exist)
     console.log('📋 Deploying database schema...')
-    const { stdout, stderr } = await execPromise('npx prisma db push --accept-data-loss')
+const { stderr } = await execPromise('npx prisma db push --accept-data-loss')
     
     if (stderr && !stderr.includes('warnings')) {
       console.log('⚠️  Prisma warnings:', stderr)

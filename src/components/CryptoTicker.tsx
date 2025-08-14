@@ -35,7 +35,7 @@ export function CryptoTicker() {
       const { data } = await response.json()
       
       setCryptoPrices(prev => prev.map(crypto => {
-        const priceData = data.find((p: any) => p.symbol === crypto.symbol)
+const priceData = data.find((p: { symbol: string; current_price: number; price_change_percentage_24h: number }) => p.symbol === crypto.symbol)
         return {
           ...crypto,
           current_price: priceData?.current_price || 0,

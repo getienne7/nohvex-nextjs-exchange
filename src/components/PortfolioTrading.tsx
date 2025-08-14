@@ -29,7 +29,8 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
   const [fromCurrency, setFromCurrency] = useState('BTC')
   const [toCurrency, setToCurrency] = useState('USDT')
   const [amount, setAmount] = useState('')
-  const [portfolio, setPortfolio] = useState<any[]>([])
+type Holding = { symbol: string; amount: number }
+const [portfolio, setPortfolio] = useState<Holding[]>([])
   const [rates, setRates] = useState<{[key: string]: number}>({})
   const [prevRates, setPrevRates] = useState<{[key: string]: number}>({})
   const [receivedAmount, setReceivedAmount] = useState('')
@@ -39,7 +40,8 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
   // Enhanced features
   const [orderType, setOrderType] = useState<'market' | 'limit'>('market')
   const [limitPrice, setLimitPrice] = useState('')
-  const [recentTrades, setRecentTrades] = useState<any[]>([])
+type RecentTrade = { symbol: string; amount: number; price: number; type: 'BUY' | 'SELL'; timestamp?: string }
+const [recentTrades, setRecentTrades] = useState<RecentTrade[]>([])
   const [priceChangeAlert, setPriceChangeAlert] = useState<{[key: string]: 'up' | 'down' | null}>({})
   const [lastPriceUpdate, setLastPriceUpdate] = useState<Date | null>(null)
 
@@ -86,7 +88,7 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
       if (response.ok) {
         const { data } = await response.json()
         const priceMap: {[key: string]: number} = {}
-        data.forEach((item: any) => {
+data.forEach((item: { symbol: string; current_price: number }) => {
           priceMap[item.symbol] = item.current_price
         })
         setRates(priceMap)
@@ -108,7 +110,7 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
         const newPriceMap: {[key: string]: number} = {}
         const alerts: {[key: string]: 'up' | 'down' | null} = {}
         
-        data.forEach((item: any) => {
+data.forEach((item: { symbol: string; current_price: number }) => {
           const symbol = item.symbol
           const newPrice = item.current_price
           const oldPrice = rates[symbol]

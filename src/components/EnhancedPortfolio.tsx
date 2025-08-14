@@ -303,7 +303,7 @@ export function EnhancedPortfolio({ className = "" }: EnhancedPortfolioProps) {
                     ))}
                   </Pie>
                   <Tooltip 
-                    formatter={(value: any) => [formatCurrency(value), 'Value']}
+formatter={(value: number) => [formatCurrency(Number(value)), 'Value']}
                     labelStyle={{ color: '#000' }}
                   />
                 </PieChart>
