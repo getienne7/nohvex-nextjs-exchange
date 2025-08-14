@@ -109,47 +109,63 @@ export class EmailService {
   // AWS SES Email Sending Method
   private async sendSESEmail(to: string, subject: string, htmlBody: string, textBody: string): Promise<boolean> {
     try {
-      // For AWS SES, we'll use the AWS SDK v3 approach
-      // This is a simplified version - you would typically use @aws-sdk/client-sesv2
-      const sesData = {
-        Source: this.config.from || 'noreply@nohvex.com',
+      // Dynamic import to avoid issues during build
+      const { SESv2Client, SendEmailCommand } = await import('@aws-sdk/client-sesv2')
+      
+      // Create SES client with credentials
+      const sesClient = new SESv2Client({
+        region: this.config.awsRegion,
+        credentials: {
+          accessKeyId: this.config.awsAccessKeyId!,
+          secretAccessKey: this.config.awsSecretAccessKey!
+        }
+      })
+
+      const emailCommand = new SendEmailCommand({
+        FromEmailAddress: this.config.from || 'getienne@nohvech.com',
         Destination: {
           ToAddresses: [to]
         },
-        Message: {
-          Subject: {
-            Data: subject,
-            Charset: 'UTF-8'
-          },
-          Body: {
-            Html: {
-              Data: htmlBody,
+        Content: {
+          Simple: {
+            Subject: {
+              Data: subject,
               Charset: 'UTF-8'
             },
-            Text: {
-              Data: textBody,
-              Charset: 'UTF-8'
+            Body: {
+              Html: {
+                Data: htmlBody,
+                Charset: 'UTF-8'
+              },
+              Text: {
+                Data: textBody,
+                Charset: 'UTF-8'
+              }
             }
           }
         }
-      }
+      })
 
-      // For now, we'll log what would be sent to AWS SES
-      console.log('📧 AWS SES Email (Ready to Send)')
+      // Send email via AWS SES
+      const result = await sesClient.send(emailCommand)
+      
+      console.log('📧 AWS SES Email Sent Successfully!')
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
       console.log(`To: ${to}`)
       console.log(`Subject: ${subject}`)
+      console.log(`Message ID: ${result.MessageId}`)
       console.log(`Region: ${this.config.awsRegion}`)
-      console.log('✅ Would send via AWS SES with proper credentials')
+      console.log('✅ Email sent via AWS SES successfully')
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
-      
-      // TODO: Implement actual AWS SES sending
-      // const sesClient = new SESv2Client({ region: this.config.awsRegion, credentials: ... })
-      // await sesClient.send(new SendEmailCommand(sesData))
       
       return true
     } catch (error) {
       console.error('AWS SES sending failed:', error)
+      console.error('Error details:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        region: this.config.awsRegion,
+        from: this.config.from
+      })
       return false
     }
   }
