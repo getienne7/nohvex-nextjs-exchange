@@ -40,7 +40,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
-  const twoFAEnabled = (token as any).twoFAEnabled === true
+  const twoFAEnabled = Boolean((token as unknown as { twoFAEnabled?: boolean }).twoFAEnabled)
   if (!twoFAEnabled) {
     return NextResponse.next()
   }
