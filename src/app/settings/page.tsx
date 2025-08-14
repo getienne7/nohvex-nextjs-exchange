@@ -16,6 +16,7 @@ import {
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline'
 import { NotificationPreferences, PrivacySettings } from '@/types/user-preferences'
+import { BackupCodesManager } from '@/components/auth/BackupCodesManager'
 
 export default function SettingsPage() {
   const { data: session, status } = useSession()
@@ -348,6 +349,13 @@ export default function SettingsPage() {
                           <CheckIcon className="w-5 h-5 text-green-400" />
                           <span className="text-green-300">Two-Factor Authentication Enabled</span>
                         </div>
+
+                        {/* Backup Codes Manager */}
+                        <div className="mt-3">
+                          {/* Lazy import pattern is fine; direct import at top for simplicity */}
+                          <BackupCodesManager />
+                        </div>
+
                         <button 
                           onClick={handleDisable2FA}
                           disabled={isLoading}
@@ -364,8 +372,8 @@ export default function SettingsPage() {
                     )}
                   </div>
                 </div>
-              </div>
-            </motion.div>
+                </div>
+              </motion.div>
 
             {/* Appearance */}
             <motion.div
