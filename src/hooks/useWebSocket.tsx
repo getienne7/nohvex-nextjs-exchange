@@ -124,20 +124,14 @@ interface WebSocketProviderProps {
   url?: string
 }
 
-export function WebSocketProvider({ 
-  children, 
-  url = typeof window !== 'undefined' && process.env.NODE_ENV === 'production' 
-    ? 'wss://your-domain.com/ws' 
-    : 'ws://localhost:3001/ws' 
-}: WebSocketProviderProps) {
-  const [socket, setSocket] = useState<WebSocket | null>(null)
+export function WebSocketProvider({ children }: WebSocketProviderProps) {
+  const [socket] = useState<WebSocket | null>(null)
   const [isConnected, setIsConnected] = useState(false)
   const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected' | 'error'>('disconnected')
   const [latestPrices, setLatestPrices] = useState<{ [symbol: string]: PriceUpdate }>({})
   const [portfolioUpdates, setPortfolioUpdates] = useState<PortfolioUpdate | null>(null)
   const [marketAlerts, setMarketAlerts] = useState<MarketAlert[]>([])
   
-  const { data: session } = useSession()
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _reconnectAttempts = useRef(0)

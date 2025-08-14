@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const { code, useBackupCode, action }: { code: string; useBackupCode?: boolean; action?: string } = await req.json()
+    const { code, useBackupCode, action, trustDevice }: { code: string; useBackupCode?: boolean; action?: string; trustDevice?: boolean } = await req.json()
 
     if (!code) {
       return NextResponse.json(
@@ -73,12 +73,14 @@ export async function POST(req: NextRequest) {
       message: 'Verification successful',
       method: useBackupCode ? 'backup_code' : 'totp'
     })
-    res.cookies.set('nx_twofa_verified', '1', {
+    // Set verification cookie; extend to 30 days if user trusts this device
+    const maxAge = trustDevice ? 60 * 60 * 24 * 30 : 60 * 30
+    res.cookies.set('nx_twofa_verified', trustDevice ? 'trusted' : '1', {
       httpOnly: true,
       sameSite: 'lax',
       secure: true,
       path: '/',
-      maxAge: 60 * 30 // 30 minutes
+      maxAge
     })
     return res
 
