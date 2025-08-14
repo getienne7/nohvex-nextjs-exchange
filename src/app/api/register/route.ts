@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     const user = await dbService.createUser(email, hashedPassword, name)
 
     // Remove password from response
-    const { password: _unusedPassword, ...userWithoutPassword } = user
+    const { password: _pw, ...userWithoutPassword } = user
 
     return NextResponse.json({
       message: 'User created successfully',

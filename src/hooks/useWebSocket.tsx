@@ -3,9 +3,10 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 
+type WsMessagePayload = PriceUpdate | PortfolioUpdate | MarketAlert | Record<string, unknown>
 interface WebSocketMessage {
   type: 'price_update' | 'portfolio_update' | 'notification' | 'market_alert'
-  data: any
+  data: WsMessagePayload
   timestamp: string
 }
 
@@ -43,7 +44,7 @@ interface WebSocketContextType {
   isConnected: boolean
   subscribe: (channel: string) => void
   unsubscribe: (channel: string) => void
-  sendMessage: (message: any) => void
+  sendMessage: (message: Record<string, unknown>) => void
   latestPrices: { [symbol: string]: PriceUpdate }
   portfolioUpdates: PortfolioUpdate | null
   marketAlerts: MarketAlert[]
@@ -345,7 +346,7 @@ export function WebSocketProvider({
     }
   }, [socket])
 
-  const sendMessage = useCallback((message: any) => {
+  const sendMessage = useCallback((message: Record<string, unknown>) => {
     if (socket?.readyState === WebSocket.OPEN) {
       socket.send(JSON.stringify(message))
     }

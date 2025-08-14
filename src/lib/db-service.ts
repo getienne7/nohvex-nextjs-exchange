@@ -9,13 +9,55 @@ declare global {
 // Database connection with fallback
 let prisma: PrismaClient | null = null
 let isDbConnected = false
-let schemaDeployAttempted = false
 
 // In-memory fallback storage
+type MemoryUser = {
+  id: string
+  email: string
+  password: string
+  name: string | null
+  emailVerified: Date | null
+  image: string | null
+  createdAt: Date
+  updatedAt: Date
+  // 2FA fields
+  twoFAEnabled?: boolean
+  twoFASecret?: string | null
+  twoFABackupCodes?: Array<{ code: string; used: boolean; createdAt: Date; usedAt?: Date }>
+  twoFAEnabledAt?: Date | null
+  twoFALastUsed?: Date | null
+}
+
+type MemoryPortfolio = {
+  id: string
+  userId: string
+  symbol: string
+  name: string
+  amount: number
+  averagePrice: number
+  totalValue: number
+  createdAt: Date
+  updatedAt: Date
+}
+
+type MemoryTransaction = {
+  id: string
+  userId: string
+  type: 'BUY' | 'SELL' | 'DEPOSIT' | 'WITHDRAWAL'
+  symbol: string
+  amount: number
+  price: number
+  totalValue: number
+  fee: number
+  status: 'COMPLETED'
+  createdAt: Date
+  updatedAt: Date
+}
+
 const memoryStore = {
-  users: [] as any[],
-  portfolios: [] as any[],
-  transactions: [] as any[],
+  users: [] as MemoryUser[],
+  portfolios: [] as MemoryPortfolio[],
+  transactions: [] as MemoryTransaction[],
   nextId: 1
 }
 
@@ -254,7 +296,7 @@ export class DatabaseService {
     }
   }
 
-  async addToPortfolio(userId: string, symbol: string, name: string, amount: number, price: number): Promise<any> {
+  async addToPortfolio(userId: string, symbol: string, name: string, amount: number, price: number): Promise<MemoryPortfolio> {
     if (!this.isConnected || !this.prisma) {
       // Fallback to in-memory storage
       const existingAsset = memoryStore.portfolios.find(p => p.userId === userId && p.symbol === symbol)
@@ -492,13 +534,13 @@ export class DatabaseService {
 
     if (!user) return null
 
-    const codes = (user as any).twoFABackupCodes as Array<{ code: string; used: boolean; createdAt: string | Date; usedAt?: string | Date }>|null
+    const codes = (user as unknown as { twoFABackupCodes?: Array<{ code: string; used: boolean; createdAt: Date; usedAt?: Date }> }).twoFABackupCodes ?? null
     if (!codes) return null
 
     const updated = codes.map(c => c.code === code ? { ...c, used: true, usedAt: new Date() } : c)
 
     return this.updateUser(userId, {
-      twoFABackupCodes: updated as any,
+      twoFABackupCodes: updated,
       twoFALastUsed: new Date()
     })
   }

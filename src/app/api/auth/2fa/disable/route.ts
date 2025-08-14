@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { dbService } from '@/lib/db-service'
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
     // Get user session
     const session = await getServerSession(authOptions)

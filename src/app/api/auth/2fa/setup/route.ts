@@ -14,7 +14,7 @@ const twoFactorSetupStore = new Map<string, {
   expiresAt: Date
 }>()
 
-export async function GET(_req: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions)
     
