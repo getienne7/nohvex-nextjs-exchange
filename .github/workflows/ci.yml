@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - chore/**
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install deps
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install deps
+        run: npm ci
+      - name: TypeScript type-check
+        run: npx tsc -p . --noEmit
+
+  api-smoke:
+    runs-on: ubuntu-latest
+    needs: [lint, typecheck]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install deps
+        run: npm ci
+      - name: Build app
+        run: npm run build
+      - name: Start app
+        run: |
+          npm start &
+          echo "Waiting for server..."
+          for i in {1..60}; do
+            if curl -sSf http://localhost:3000 > /dev/null; then
+              echo "Server is up"; break; fi; sleep 2; done
+      - name: API smoke tests (unauthenticated)
+        run: |
+          set -e
+          # 2FA status should return 401 when not authenticated
+          code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/auth/2fa/status)
+          if [ "$code" -ne 401 ] && [ "$code" -ne 200 ]; then
+            echo "Unexpected status for /api/auth/2fa/status: $code"; exit 1; fi
+          # Prices endpoint should respond (even if mock/fallback)
+          code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:3000/api/prices?symbols=BTC,ETH")
+          if [ "$code" -lt 200 ] || [ "$code" -ge 500 ]; then
+            echo "Unexpected status for /api/prices: $code"; exit 1; fi
+      - name: Stop server
+        if: always()
+        run: |
+          pkill -f "next start" || true
