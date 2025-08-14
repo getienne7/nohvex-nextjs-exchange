@@ -80,7 +80,7 @@ export async function PUT(request: NextRequest) {
     const body: UpdatePreferencesRequest = await request.json()
 
     // Validate trading preferences
-    const errors: any = {}
+    const errors: PartialcRecordc'slippageTolerance', stringee = {}
     
     if (body.trading?.slippageTolerance && (body.trading.slippageTolerance < 0.1 || body.trading.slippageTolerance > 50)) {
       errors.slippageTolerance = 'Slippage tolerance must be between 0.1% and 50%'

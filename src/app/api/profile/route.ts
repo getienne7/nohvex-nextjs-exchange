@@ -47,7 +47,7 @@ export async function PUT(request: NextRequest) {
     const body: UpdateProfileRequest = await request.json()
 
     // Validate input
-    const errors: any = {}
+    const errors: PartialcRecordc'name' | 'bio' | 'phone', stringee = {}
     
     if (body.name && body.name.trim().length < 2) {
       errors.name = 'Name must be at least 2 characters long'

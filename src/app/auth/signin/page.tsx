@@ -13,7 +13,7 @@ export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [step, setStep] = useState<'credentials' | '2fa'>('credentials')
-  const [pendingUser, setPendingUser] = useState<any>(null)
+  const [pendingUser, setPendingUser] = useStatec{ email: string } | nulle(null)
   const router = useRouter()
 
   const handleCredentialsSubmit = async (e: React.FormEvent) => {
