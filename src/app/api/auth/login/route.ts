@@ -1,16 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { twoFactorStore } from '../2fa/setup/route'
-
-// Mock user database for demo (replace with real database)
-const mockUsers = new Map([
-  ['user@example.com', {
-    id: '1',
-    email: 'user@example.com',
-    name: 'Demo User',
-    password: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi' // 'password'
-  }]
-])
+import { dbService } from '@/lib/db-service'
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,23 +14,42 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if user exists (replace with real database lookup)
-    const user = mockUsers.get(email)
+    console.log('🔐 Custom Login API - Processing login for:', email)
+    
+    // Look up user in actual database
+    const user = await dbService.findUserByEmail(email)
+    console.log('👤 User lookup result:', { found: !!user })
+    
     if (!user) {
+      console.log('❌ User not found in database')
       return NextResponse.json(
         { success: false, error: 'Invalid credentials' },
         { status: 401 }
       )
     }
 
-    // Verify password
-    const isValidPassword = await bcrypt.compare(password, user.password)
-    if (!isValidPassword) {
+    if (!user.password) {
+      console.log('❌ User has no password set')
       return NextResponse.json(
         { success: false, error: 'Invalid credentials' },
         { status: 401 }
       )
     }
+
+    console.log('🔐 Verifying password...')
+    // Verify password
+    const isValidPassword = await bcrypt.compare(password, user.password)
+    console.log('🔐 Password verification result:', isValidPassword)
+    
+    if (!isValidPassword) {
+      console.log('❌ Password verification failed')
+      return NextResponse.json(
+        { success: false, error: 'Invalid credentials' },
+        { status: 401 }
+      )
+    }
+    
+    console.log('✅ Password verification successful')
 
     // Check if user has 2FA enabled
     const user2FA = twoFactorStore.get(email)
