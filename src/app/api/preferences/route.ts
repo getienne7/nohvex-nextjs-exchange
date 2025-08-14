@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { UpdatePreferencesRequest, UserPreferences, NotificationPreferences, PrivacySettings, TradingPreferences } from '@/types/user-preferences'
+import { UpdatePreferencesRequest, NotificationPreferences, PrivacySettings, TradingPreferences } from '@/types/user-preferences'
 
 // Default preferences
 const defaultPreferences = {
