@@ -188,8 +188,8 @@ export function PriceHistoryChart({
       x: {
         grid: {
           color: chartTheme.gridColor,
-          drawBorder: false,
         },
+        border: { display: false },
         ticks: {
           color: chartTheme.textColor,
           maxTicksLimit: 8,
@@ -198,8 +198,8 @@ export function PriceHistoryChart({
       y: {
         grid: {
           color: chartTheme.gridColor,
-          drawBorder: false,
         },
+        border: { display: false },
         ticks: {
           color: chartTheme.textColor,
           callback: (value) => `$${Number(value).toLocaleString()}`
@@ -355,8 +355,8 @@ export function PortfolioTimelineChart({
       x: {
         grid: {
           color: chartTheme.gridColor,
-          drawBorder: false,
         },
+        border: { display: false },
         ticks: {
           color: chartTheme.textColor,
           maxTicksLimit: 8,
@@ -368,8 +368,8 @@ export function PortfolioTimelineChart({
         position: 'left' as const,
         grid: {
           color: chartTheme.gridColor,
-          drawBorder: false,
         },
+        border: { display: false },
         ticks: {
           color: chartTheme.textColor,
           callback: (value) => `$${Number(value).toLocaleString()}`
@@ -580,8 +580,8 @@ export function VolumeChart({
       x: {
         grid: {
           color: chartTheme.gridColor,
-          drawBorder: false,
         },
+        border: { display: false },
         ticks: {
           color: chartTheme.textColor,
           maxTicksLimit: 8,
@@ -590,8 +590,8 @@ export function VolumeChart({
       y: {
         grid: {
           color: chartTheme.gridColor,
-          drawBorder: false,
         },
+        border: { display: false },
         ticks: {
           color: chartTheme.textColor,
           callback: (value) => `${(Number(value) / 1000000).toFixed(1)}M`

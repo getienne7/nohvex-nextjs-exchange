@@ -143,7 +143,7 @@ export function WebSocketProvider({
   const [marketAlerts, setMarketAlerts] = useState<MarketAlert[]>([])
   
   const { data: session } = useSession()
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout>()
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const reconnectAttempts = useRef(0)
   const maxReconnectAttempts = 5
   const subscriptionsRef = useRef<Set<string>>(new Set())
