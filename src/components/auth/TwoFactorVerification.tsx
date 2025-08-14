@@ -20,6 +20,7 @@ export function TwoFactorVerification({ email, onVerified, onBack, onError }: Tw
   const [verificationCode, setVerificationCode] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [useBackupCode, setUseBackupCode] = useState(false)
+  const [trustDevice, setTrustDevice] = useState(false)
 
   const handleVerification = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -38,7 +39,8 @@ export function TwoFactorVerification({ email, onVerified, onBack, onError }: Tw
         body: JSON.stringify({
           code: verificationCode.replace(/\s/g, ''),
           useBackupCode,
-          action: 'login'
+          action: 'login',
+          trustDevice
         })
       })
 
@@ -95,7 +97,7 @@ export function TwoFactorVerification({ email, onVerified, onBack, onError }: Tw
           />
         </div>
 
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-between">
           <button
             type="button"
             onClick={() => {
@@ -106,6 +108,15 @@ export function TwoFactorVerification({ email, onVerified, onBack, onError }: Tw
           >
             {useBackupCode ? 'Use authenticator code instead' : 'Use backup code instead'}
           </button>
+          <label className="flex items-center space-x-2 text-sm text-gray-300">
+            <input
+              type="checkbox"
+              checked={trustDevice}
+              onChange={(e) => setTrustDevice(e.target.checked)}
+              className="h-4 w-4 rounded border-gray-600 bg-white/5"
+            />
+            <span>Remember this device for 30 days</span>
+          </label>
         </div>
 
         <div className="flex space-x-4">

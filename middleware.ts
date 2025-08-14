@@ -47,7 +47,7 @@ export async function middleware(req: NextRequest) {
 
   // Require verification cookie set by /api/auth/2fa/verify
   const verifiedCookie = req.cookies.get('nx_twofa_verified')?.value
-  if (verifiedCookie !== '1') {
+  if (verifiedCookie !== '1' && verifiedCookie !== 'trusted') {
     // Redirect to sign-in (which should trigger 2FA UI) or to settings if desired
     const url = req.nextUrl.clone()
     url.pathname = '/auth/signin'
