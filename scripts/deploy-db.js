@@ -8,8 +8,8 @@
  * 3. Verify the deployment
  */
 
-const { exec } = require('child_process')
-const util = require('util')
+import { exec } from 'child_process'
+import util from 'util'
 const execPromise = util.promisify(exec)
 
 async function deployDatabase() {
@@ -32,7 +32,7 @@ async function deployDatabase() {
 
     // Step 3: Deploy database schema (creates tables if they don't exist)
     console.log('📋 Deploying database schema...')
-    const { stdout, stderr } = await execPromise('npx prisma db push --accept-data-loss')
+const { stderr } = await execPromise('npx prisma db push --accept-data-loss')
     
     if (stderr && !stderr.includes('warnings')) {
       console.log('⚠️  Prisma warnings:', stderr)
@@ -42,8 +42,8 @@ async function deployDatabase() {
     
     // Step 4: Verify deployment
     console.log('🔍 Verifying database deployment...')
-    const { initializeDatabase } = require('./init-db.js')
-    await initializeDatabase()
+    const mod = await import('./init-db.js')
+    await mod.initializeDatabase()
     
     console.log('🎉 Database deployment completed successfully!')
 
@@ -65,8 +65,8 @@ async function deployDatabase() {
 }
 
 // Run the deployment
-if (require.main === module) {
+if (process.argv[1] && new URL(import.meta.url).pathname.endsWith(new URL(`file://${process.argv[1]}`).pathname)) {
   deployDatabase()
 }
 
-module.exports = { deployDatabase }
+export { deployDatabase }

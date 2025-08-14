@@ -53,13 +53,6 @@ export function EnhancedPortfolio({ className = "" }: EnhancedPortfolioProps) {
   const [prices, setPrices] = useState<{[key: string]: CryptoPrice}>({})
   const [isLoading, setIsLoading] = useState(true)
   const [hideBalances, setHideBalances] = useState(false)
-  const [timeRange, setTimeRange] = useState<'24h' | '7d' | '30d'>('24h')
-  const [isClient, setIsClient] = useState(false)
-
-  // Ensure we're on the client side before rendering charts
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
 
   useEffect(() => {
     if (session) {
@@ -293,17 +286,20 @@ export function EnhancedPortfolio({ className = "" }: EnhancedPortfolioProps) {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percentage }) => `${name} ${percentage.toFixed(1)}%`}
+label={({ name, percentage }) => `${name} ${percentage.toFixed(1)}%`}
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="value"
                   >
                     {portfolioAnalytics.chartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip 
-                    formatter={(value: any) => [formatCurrency(value), 'Value']}
+                  <Tooltip
+                    formatter={(value: number | string | (number | string)[]) => {
+                      const v = Array.isArray(value) ? value[0] : value
+                      return [formatCurrency(Number(v)), 'Value']
+                    }}
                     labelStyle={{ color: '#000' }}
                   />
                 </PieChart>

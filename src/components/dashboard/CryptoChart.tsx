@@ -1,15 +1,14 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { Line, Bar } from 'react-chartjs-2'
+import { Line } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
-  BarElement,
   Title,
   Tooltip,
   Legend,
@@ -21,7 +20,6 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
-  BarElement,
   Title,
   Tooltip,
   Legend,
@@ -55,11 +53,7 @@ export default function CryptoChart() {
     { value: '365', label: '1Y' }
   ]
 
-  useEffect(() => {
-    fetchChartData()
-  }, [selectedCrypto, timeframe])
-
-  const fetchChartData = async () => {
+  const fetchChartData = useCallback(async () => {
     setIsLoading(true)
     try {
       const response = await fetch(
@@ -74,7 +68,11 @@ export default function CryptoChart() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [selectedCrypto, timeframe])
+
+  useEffect(() => {
+    fetchChartData()
+  }, [fetchChartData])
 
   const formatChartData = () => {
     if (!chartData) return null
@@ -107,7 +105,7 @@ export default function CryptoChart() {
         backgroundColor = 'rgba(59, 130, 246, 0.1)'
     }
 
-    const labels = dataPoints.map(([timestamp]) => {
+    const labels = dataPoints.map(([timestamp]: [number, number]) => {
       const date = new Date(timestamp)
       return timeframe === '1' 
         ? date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -150,8 +148,8 @@ export default function CryptoChart() {
         borderColor: 'rgba(255, 255, 255, 0.1)',
         borderWidth: 1,
         callbacks: {
-          label: (context: any) => {
-            const value = context.parsed.y
+          label: (context: import('chart.js').TooltipItem<'line'>) => {
+            const value = context.parsed.y as number
             return `${context.dataset.label || 'Value'}: $${value.toLocaleString()}`
           }
         }
@@ -161,9 +159,9 @@ export default function CryptoChart() {
       x: {
         display: true,
         grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
-          drawBorder: false,
+          color: 'rgba(255, 255, 255, 0.1)'
         },
+        border: { display: false },
         ticks: {
           color: 'rgba(255, 255, 255, 0.7)',
           maxTicksLimit: 8,
@@ -172,13 +170,14 @@ export default function CryptoChart() {
       y: {
         display: true,
         grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
-          drawBorder: false,
+          color: 'rgba(255, 255, 255, 0.1)'
         },
+        border: { display: false },
         ticks: {
           color: 'rgba(255, 255, 255, 0.7)',
           callback: function(value: string | number) {
-            return '$' + value.toLocaleString()
+            const num = typeof value === 'number' ? value : Number(value)
+            return '$' + num.toLocaleString()
           }
         },
       },
@@ -325,7 +324,7 @@ export default function CryptoChart() {
               : '--',
             color: 'text-yellow-400'
           }
-        ].map((stat, index) => (
+        ].map((stat) => (
           <div
             key={stat.title}
             className="bg-white/5 rounded-xl p-4 backdrop-blur-sm ring-1 ring-white/10"

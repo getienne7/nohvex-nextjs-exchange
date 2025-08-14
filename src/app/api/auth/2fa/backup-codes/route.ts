@@ -4,7 +4,7 @@ import { authOptions } from '@/lib/auth'
 import speakeasy from 'speakeasy'
 import { dbService } from '@/lib/db-service'
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions)
     
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    const codes = (user as any).twoFABackupCodes as Array<{ code: string; used: boolean }>|null
+    const codes = (user as { twoFABackupCodes?: Array<{ code: string; used: boolean }> }).twoFABackupCodes ?? null
     const unusedCodes = codes ? codes.filter(c => !c.used).map(c => c.code) : []
 
     return NextResponse.json({

@@ -17,7 +17,6 @@ import {
   ChartPieIcon,
   ArrowsUpDownIcon,
   WifiIcon,
-  ExclamationTriangleIcon,
   BellIcon,
   XMarkIcon
 } from '@heroicons/react/24/outline'
@@ -112,7 +111,7 @@ function LivePriceTicker({ symbols }: { symbols: string[] }) {
 
 // Market alerts notification component
 function MarketAlertsPanel() {
-  const { alerts, alertCount } = useMarketAlerts()
+  const { alerts } = useMarketAlerts()
   const [showAlerts, setShowAlerts] = useState(false)
   const [dismissedAlerts, setDismissedAlerts] = useState<Set<string>>(new Set())
 

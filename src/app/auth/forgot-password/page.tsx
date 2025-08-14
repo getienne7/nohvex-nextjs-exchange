@@ -47,7 +47,7 @@ export default function ForgotPassword() {
       } else {
         setError(data.error || 'An error occurred. Please try again.')
       }
-    } catch (error) {
+    } catch {
       setError('Network error. Please check your connection and try again.')
     } finally {
       setIsLoading(false)
@@ -71,7 +71,7 @@ export default function ForgotPassword() {
             Forgot your password?
           </h2>
           <p className="mt-2 text-center text-sm text-gray-400">
-            Enter your email address and we'll send you a link to reset your password.
+Enter your email address and we\u2019ll send you a link to reset your password.
           </p>
         </div>
 
@@ -91,7 +91,7 @@ export default function ForgotPassword() {
             <h3 className="text-lg font-medium text-white mb-2">Check your email</h3>
             <p className="text-sm text-gray-300 mb-4">{message}</p>
             <p className="text-xs text-gray-400">
-              If you don't see the email, check your spam folder or try again with a different email address.
+              If you dont see the email, check your spam folder or try again with a different email address.
             </p>
           </motion.div>
         ) : (

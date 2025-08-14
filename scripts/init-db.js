@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client')
+import { PrismaClient } from '@prisma/client'
 
 async function initializeDatabase() {
   const prisma = new PrismaClient()
@@ -22,7 +22,7 @@ async function initializeDatabase() {
         console.log('📝 Database is empty. This is normal for a new deployment.')
       }
       
-    } catch (schemaError) {
+} catch {
       console.log('⚠️  Database schema not found. This is expected for a new database.')
       console.log('ℹ️  Schema will be created automatically on first use.')
     }
@@ -46,7 +46,7 @@ async function initializeDatabase() {
 }
 
 // Run if called directly
-if (require.main === module) {
+if (process.argv[1] && new URL(import.meta.url).pathname.endsWith(new URL(`file://${process.argv[1]}`).pathname)) {
   initializeDatabase()
     .then(() => {
       console.log('🎉 Database initialization complete!')
@@ -58,4 +58,4 @@ if (require.main === module) {
     })
 }
 
-module.exports = { initializeDatabase }
+export { initializeDatabase }

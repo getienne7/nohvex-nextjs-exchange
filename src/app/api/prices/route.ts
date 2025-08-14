@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     try {
       const url = new URL(req.url || 'http://localhost:3000')
       searchParams = url.searchParams
-    } catch (urlError) {
+    } catch {
       // Fallback if URL construction fails
       searchParams = new URLSearchParams()
     }

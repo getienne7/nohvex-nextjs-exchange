@@ -10,20 +10,12 @@ import {
   Cog6ToothIcon,
   BellIcon,
   ShieldCheckIcon,
-  EyeIcon,
-  EyeSlashIcon,
   KeyIcon,
-  GlobeAltIcon,
   PaintBrushIcon,
   CheckIcon,
-  ExclamationTriangleIcon,
-  CurrencyDollarIcon,
-  ChartBarIcon,
-  ClockIcon,
-  DevicePhoneMobileIcon,
-  ComputerDesktopIcon
+  ExclamationTriangleIcon
 } from '@heroicons/react/24/outline'
-import { NotificationPreferences, PrivacySettings, TradingPreferences } from '@/types/user-preferences'
+import { NotificationPreferences, PrivacySettings } from '@/types/user-preferences'
 
 export default function SettingsPage() {
   const { data: session, status } = useSession()
@@ -55,26 +47,7 @@ export default function SettingsPage() {
     shareAnalytics: false
   })
   
-  const [trading, setTrading] = useState<TradingPreferences>({
-    defaultCurrency: 'USD',
-    riskLevel: 'moderate',
-    autoConfirmTrades: false,
-    slippageTolerance: 1.0,
-    gasPreference: 'standard',
-    favoriteTokens: ['BTC', 'ETH'],
-    tradingPairs: ['BTC/USD', 'ETH/USD'],
-    chartTimeframe: '1h',
-    chartType: 'line'
-  })
-  
-  const [appearance, setAppearance] = useState({
-    theme: 'dark' as const,
-    language: 'en',
-    currency: 'USD',
-    dateFormat: 'MM/DD/YYYY' as const,
-    timeFormat: '12h' as const,
-    compactMode: false
-  })
+  // Removed unused trading and appearance state to satisfy lint rules
 
   useEffect(() => {
     if (status === 'loading') return
@@ -94,8 +67,8 @@ export default function SettingsPage() {
           // Also save to localStorage for persistence
           localStorage.setItem(`2fa_enabled_${session?.user?.email}`, data.enabled.toString())
         }
-      } catch (error) {
-        console.error('Error checking 2FA status:', error)
+      } catch {
+        console.error('Error checking 2FA status')
         // Fallback to localStorage if API fails
         if (session?.user?.email) {
           const stored = localStorage.getItem(`2fa_enabled_${session.user.email}`)
@@ -151,7 +124,7 @@ export default function SettingsPage() {
         setErrorMessage(data.error || 'Failed to disable two-factor authentication')
         setTimeout(() => setErrorMessage(''), 5000)
       }
-    } catch (error) {
+    } catch {
       setErrorMessage('Network error occurred. Please try again.')
       setTimeout(() => setErrorMessage(''), 5000)
     } finally {

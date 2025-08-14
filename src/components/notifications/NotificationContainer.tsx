@@ -32,19 +32,12 @@ const getContainerClasses = (position: NotificationPosition): string => {
   }
 }
 
-const getAnimationDirection = (position: NotificationPosition) => {
-  if (position.includes('left')) return 'left'
-  if (position.includes('right')) return 'right'
-  return 'center'
-}
-
 export function NotificationContainer({ 
   position = 'top-right',
   className = ''
 }: NotificationContainerProps) {
   const { notifications, removeNotification } = useNotifications()
   const containerClasses = getContainerClasses(position)
-  const animationDirection = getAnimationDirection(position)
 
   if (notifications.length === 0) {
     return null

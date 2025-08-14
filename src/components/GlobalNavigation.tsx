@@ -20,9 +20,7 @@ import {
 import { 
   ChartBarIcon as ChartBarSolidIcon,
   ArrowsRightLeftIcon as ArrowsRightLeftSolidIcon,
-  UserIcon as UserSolidIcon,
-  HomeIcon as HomeSolidIcon,
-  Cog6ToothIcon as Cog6ToothSolidIcon
+  HomeIcon as HomeSolidIcon
 } from '@heroicons/react/24/solid'
 
 interface NavigationProps {

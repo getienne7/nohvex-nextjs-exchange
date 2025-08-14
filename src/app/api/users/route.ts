@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { dbService } from '@/lib/db-service'
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Get detailed connection status
     const connectionStatus = await dbService.testConnection()
@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
       }]
     } else {
       // Using memory storage - show current in-memory users for debugging
-      const memoryStore = (dbService as any).memoryStore || { users: [] }
+      const memoryStore = (dbService as unknown as { memoryStore?: { users: Array<{ id: string; email: string; name?: string; createdAt: string | Date }> } }).memoryStore || { users: [] }
       
       if (memoryStore.users.length === 0) {
         userInfo = [{
@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
           instruction: 'Create an account to see it appear here temporarily'
         }]
       } else {
-        userInfo = memoryStore.users.map((user: any) => ({
+        userInfo = memoryStore.users.map((user: { id: string; email: string; name?: string; createdAt: string | Date }) => ({
           id: user.id,
           email: user.email,
           name: user.name,

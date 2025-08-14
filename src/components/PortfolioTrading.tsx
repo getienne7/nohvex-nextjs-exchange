@@ -1,17 +1,14 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { 
+import {
   ArrowsUpDownIcon,
   ChartBarIcon,
   BanknotesIcon,
   ArrowTrendingUpIcon,
   ArrowTrendingDownIcon,
-  ClockIcon,
-  CheckCircleIcon,
-  XCircleIcon,
-  InformationCircleIcon
+  ClockIcon
 } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
 import { useNotify } from '@/components/notifications'
@@ -20,52 +17,50 @@ interface PortfolioTradingProps {
   className?: string
 }
 
+type Holding = { symbol: string; amount: number }
+
 export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
   const { data: session } = useSession()
   const notify = useNotify()
   const priceUpdateInterval = useRef<NodeJS.Timeout | null>(null)
-  
+
   // Trading state
   const [fromCurrency, setFromCurrency] = useState('BTC')
   const [toCurrency, setToCurrency] = useState('USDT')
   const [amount, setAmount] = useState('')
-  const [portfolio, setPortfolio] = useState<any[]>([])
-  const [rates, setRates] = useState<{[key: string]: number}>({})
-  const [prevRates, setPrevRates] = useState<{[key: string]: number}>({})
+  const [portfolio, setPortfolio] = useState<Holding[]>([])
+  const [rates, setRates] = useState<{ [key: string]: number }>({})
   const [receivedAmount, setReceivedAmount] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [tradeType, setTradeType] = useState<'buy' | 'sell'>('buy')
-  
+
   // Enhanced features
-  const [orderType, setOrderType] = useState<'market' | 'limit'>('market')
-  const [limitPrice, setLimitPrice] = useState('')
-  const [recentTrades, setRecentTrades] = useState<any[]>([])
-  const [priceChangeAlert, setPriceChangeAlert] = useState<{[key: string]: 'up' | 'down' | null}>({})
+  const [priceChangeAlert, setPriceChangeAlert] = useState<{ [key: string]: 'up' | 'down' | null }>({})
   const [lastPriceUpdate, setLastPriceUpdate] = useState<Date | null>(null)
 
-  // Initialize and start real-time price updates
-  useEffect(() => {
-    if (session) {
-      fetchPortfolio()
-      fetchRates()
-      
-      // Start real-time price updates every 30 seconds
-      priceUpdateInterval.current = setInterval(() => {
-        fetchRatesWithComparison()
-      }, 30000)
+  // Helper: Crypto name mapping
+  const getCryptoName = (symbol: string): string => {
+    const nameMap: { [key: string]: string } = {
+      BTC: 'Bitcoin',
+      ETH: 'Ethereum',
+      BNB: 'Binance Coin',
+      USDT: 'Tether',
+      ADA: 'Cardano',
+      SOL: 'Solana',
+      XRP: 'XRP',
+      DOGE: 'Dogecoin',
+      DOT: 'Polkadot',
+      AVAX: 'Avalanche',
+      LINK: 'Chainlink',
+      UNI: 'Uniswap',
+      LTC: 'Litecoin',
+      MATIC: 'Polygon',
+      ATOM: 'Cosmos'
     }
-    
-    return () => {
-      if (priceUpdateInterval.current) {
-        clearInterval(priceUpdateInterval.current)
-      }
-    }
-  }, [session])
+    return nameMap[symbol] || symbol
+  }
 
-  useEffect(() => {
-    calculateReceiveAmount()
-  }, [amount, fromCurrency, toCurrency, rates, tradeType])
-
+  // API: Portfolio
   const fetchPortfolio = async () => {
     try {
       const response = await fetch('/api/portfolio')
@@ -78,15 +73,15 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
     }
   }
 
-  const fetchRates = async () => {
+  // API: Rates (initial and periodic)
+  const fetchRates = useCallback(async () => {
     try {
-      // Expanded cryptocurrency support
       const symbols = 'BTC,ETH,BNB,USDT,ADA,SOL,XRP,DOGE,DOT,AVAX,LINK,UNI,LTC,MATIC,ATOM'
       const response = await fetch(`/api/prices?symbols=${symbols}`)
       if (response.ok) {
         const { data } = await response.json()
-        const priceMap: {[key: string]: number} = {}
-        data.forEach((item: any) => {
+        const priceMap: { [key: string]: number } = {}
+        data.forEach((item: { symbol: string; current_price: number }) => {
           priceMap[item.symbol] = item.current_price
         })
         setRates(priceMap)
@@ -96,31 +91,29 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
       console.error('Error fetching rates:', error)
       notify.error('Price Update Failed', 'Unable to fetch latest cryptocurrency prices')
     }
-  }
+  }, [notify])
 
-  // Fetch rates with price change comparison for live updates
-  const fetchRatesWithComparison = async () => {
+  // API: Rates with comparison (for live alerts)
+  const fetchRatesWithComparison = useCallback(async () => {
     try {
-      const symbols = 'BTC,ETH,BNB,USDT,ADA,SOL,XRP,DOGE,DOT,AVAX,LINK,UNI,LTC,MATIC,ATOM'
+      const symbols = 'BTC,ETH,BNB,USDT,ADA,SOL,XRP,DOGE,DOT,AVAX,LINK,UNI,LTC,ATOM'
       const response = await fetch(`/api/prices?symbols=${symbols}`)
       if (response.ok) {
         const { data } = await response.json()
-        const newPriceMap: {[key: string]: number} = {}
-        const alerts: {[key: string]: 'up' | 'down' | null} = {}
-        
-        data.forEach((item: any) => {
+        const newPriceMap: { [key: string]: number } = {}
+        const alerts: { [key: string]: 'up' | 'down' | null } = {}
+
+        data.forEach((item: { symbol: string; current_price: number }) => {
           const symbol = item.symbol
           const newPrice = item.current_price
           const oldPrice = rates[symbol]
-          
+
           newPriceMap[symbol] = newPrice
-          
-          // Check for significant price changes (>2%)
+
           if (oldPrice && Math.abs((newPrice - oldPrice) / oldPrice) > 0.02) {
             const direction = newPrice > oldPrice ? 'up' : 'down'
             alerts[symbol] = direction
-            
-            // Show price alert notification for key currencies
+
             if ([fromCurrency, toCurrency].includes(symbol)) {
               const changePercent = (((newPrice - oldPrice) / oldPrice) * 100).toFixed(2)
               notify.info(
@@ -130,69 +123,117 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
             }
           }
         })
-        
-        setPrevRates(rates)
+
         setRates(newPriceMap)
         setPriceChangeAlert(alerts)
         setLastPriceUpdate(new Date())
-        
-        // Clear alerts after animation
+
         setTimeout(() => setPriceChangeAlert({}), 3000)
       }
     } catch (error) {
       console.error('Error fetching rates:', error)
     }
-  }
+  }, [rates, fromCurrency, toCurrency, notify])
 
-  const calculateReceiveAmount = () => {
+  // Derived amount
+  const calculateReceiveAmount = useCallback(() => {
     if (!amount || !rates[fromCurrency] || !rates[toCurrency]) {
       setReceivedAmount('')
       return
     }
-
     const fromPrice = rates[fromCurrency] || 0
     const toPrice = rates[toCurrency] || 0
-    
     if (fromPrice === 0 || toPrice === 0) {
       setReceivedAmount('')
       return
     }
+    const usdValue = parseFloat(amount) * fromPrice
+    const receivedValue = usdValue / toPrice
+    setReceivedAmount(receivedValue.toFixed(8))
+  }, [amount, fromCurrency, toCurrency, rates])
 
-    if (tradeType === 'buy') {
-      // Buying toCurrency with fromCurrency
-      const usdValue = parseFloat(amount) * fromPrice
-      const receivedValue = usdValue / toPrice
-      setReceivedAmount(receivedValue.toFixed(8))
-    } else {
-      // Selling fromCurrency for toCurrency
-      const usdValue = parseFloat(amount) * fromPrice
-      const receivedValue = usdValue / toPrice
-      setReceivedAmount(receivedValue.toFixed(8))
+  // Effects
+  useEffect(() => {
+    if (session) {
+      fetchPortfolio()
+      fetchRates()
+      priceUpdateInterval.current = setInterval(() => {
+        fetchRatesWithComparison()
+      }, 30000)
+    }
+    return () => {
+      if (priceUpdateInterval.current) clearInterval(priceUpdateInterval.current)
+    }
+  }, [session, fetchRates, fetchRatesWithComparison])
+
+  useEffect(() => {
+    calculateReceiveAmount()
+  }, [calculateReceiveAmount])
+
+  // Helpers
+  const updatePortfolio = async () => {
+    if (!session) return
+    try {
+      const symbol = tradeType === 'buy' ? toCurrency : fromCurrency
+      const price = tradeType === 'buy' ? rates[toCurrency] : rates[fromCurrency]
+      const tradeAmount = parseFloat(tradeType === 'buy' ? receivedAmount : amount)
+
+      const updateData = {
+        symbol,
+        name: getCryptoName(symbol),
+        amount: tradeType === 'sell' ? -tradeAmount : tradeAmount,
+        price
+      }
+
+      await fetch('/api/portfolio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updateData)
+      })
+
+      if (tradeType === 'sell') {
+        await fetch('/api/portfolio', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            symbol: toCurrency,
+            name: getCryptoName(toCurrency),
+            amount: parseFloat(receivedAmount),
+            price: rates[toCurrency]
+          })
+        })
+      }
+
+      fetchPortfolio()
+    } catch (error) {
+      console.error('Error updating portfolio:', error)
     }
   }
 
+  const getAvailableBalance = (symbol: string) => {
+    const holding = portfolio.find(p => p.symbol === symbol)
+    return holding ? holding.amount : 0
+  }
+
+  // UI Handlers
   const handleTrade = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!amount || !receivedAmount || !session) return
-    
-    // Enhanced validation
+
     const tradeAmount = parseFloat(amount)
     const availableBalance = getAvailableBalance(fromCurrency)
-    
+
     if (tradeAmount <= 0) {
       notify.error('Invalid Amount', 'Please enter a valid trading amount greater than 0')
       return
     }
-    
     if (tradeAmount > availableBalance) {
       notify.error('Insufficient Balance', `You only have ${availableBalance.toFixed(8)} ${fromCurrency} available`)
       return
     }
-    
+
     setIsLoading(true)
-    
     try {
-      // Create transaction record
       const transactionData = {
         type: tradeType.toUpperCase(),
         symbol: tradeType === 'buy' ? toCurrency : fromCurrency,
@@ -203,21 +244,14 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
 
       const response = await fetch('/api/transactions', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(transactionData)
       })
 
       if (response.ok) {
-        // Update portfolio
         await updatePortfolio()
-        
-        // Reset form
         setAmount('')
         setReceivedAmount('')
-        
-        // Success notification with trade details
         const tradeSymbol = tradeType === 'buy' ? toCurrency : fromCurrency
         const tradeAmountStr = (tradeType === 'buy' ? parseFloat(receivedAmount) : parseFloat(amount)).toFixed(6)
         notify.success(
@@ -225,8 +259,12 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
           `${tradeType === 'buy' ? 'Bought' : 'Sold'} ${tradeAmountStr} ${tradeSymbol} at $${rates[tradeSymbol]?.toFixed(2)}`
         )
       } else {
-        const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.message || 'Transaction failed')
+        const errorData: unknown = await response.json().catch(() => ({}))
+        const message =
+          errorData && typeof errorData === 'object' && 'message' in errorData && typeof (errorData as { message: unknown }).message === 'string'
+            ? (errorData as { message: string }).message
+            : 'Transaction failed'
+        throw new Error(message)
       }
     } catch (error) {
       console.error('Error executing trade:', error)
@@ -234,79 +272,6 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
     } finally {
       setIsLoading(false)
     }
-  }
-
-  // Cryptocurrency name mapping - expanded support
-  const getCryptoName = (symbol: string): string => {
-    const nameMap: {[key: string]: string} = {
-      'BTC': 'Bitcoin',
-      'ETH': 'Ethereum',
-      'BNB': 'Binance Coin',
-      'USDT': 'Tether',
-      'ADA': 'Cardano',
-      'SOL': 'Solana',
-      'XRP': 'XRP',
-      'DOGE': 'Dogecoin',
-      'DOT': 'Polkadot',
-      'AVAX': 'Avalanche',
-      'LINK': 'Chainlink',
-      'UNI': 'Uniswap',
-      'LTC': 'Litecoin',
-      'MATIC': 'Polygon',
-      'ATOM': 'Cosmos'
-    }
-    return nameMap[symbol] || symbol
-  }
-
-  const updatePortfolio = async () => {
-    if (!session) return
-
-    try {
-      const symbol = tradeType === 'buy' ? toCurrency : fromCurrency
-      const price = tradeType === 'buy' ? rates[toCurrency] : rates[fromCurrency]
-      const tradeAmount = parseFloat(tradeType === 'buy' ? receivedAmount : amount)
-      
-      const updateData = {
-        symbol,
-        name: getCryptoName(symbol),
-        amount: tradeType === 'sell' ? -tradeAmount : tradeAmount, // Negative for selling
-        price
-      }
-
-      await fetch('/api/portfolio', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updateData)
-      })
-
-      // If selling fromCurrency, also add the received toCurrency
-      if (tradeType === 'sell') {
-        await fetch('/api/portfolio', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            symbol: toCurrency,
-            name: getCryptoName(toCurrency),
-            amount: parseFloat(receivedAmount),
-            price: rates[toCurrency]
-          })
-        })
-      }
-
-      // Refresh portfolio
-      fetchPortfolio()
-    } catch (error) {
-      console.error('Error updating portfolio:', error)
-    }
-  }
-
-  const getAvailableBalance = (symbol: string) => {
-    const holding = portfolio.find(p => p.symbol === symbol)
-    return holding ? holding.amount : 0
   }
 
   const handleSwap = () => {
@@ -349,10 +314,9 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
         <p className="text-sm text-gray-400">
           Trade with your internal portfolio balance • Live prices every 30s
         </p>
-        
-        {/* Current Price Display */}
+
         {rates[fromCurrency] && rates[toCurrency] && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className="mt-3 p-3 bg-white/5 rounded-lg border border-white/10"
@@ -382,16 +346,13 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
             </div>
           </motion.div>
         )}
-        
-        {/* Trade Type Toggle */}
+
         <div className="flex mt-4 bg-white/5 rounded-lg p-1">
           <button
             type="button"
             onClick={() => setTradeType('buy')}
             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-              tradeType === 'buy'
-                ? 'bg-green-500 text-white'
-                : 'text-gray-400 hover:text-white'
+              tradeType === 'buy' ? 'bg-green-500 text-white' : 'text-gray-400 hover:text-white'
             }`}
           >
             <BanknotesIcon className="w-4 h-4 inline mr-1" />
@@ -401,9 +362,7 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
             type="button"
             onClick={() => setTradeType('sell')}
             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-              tradeType === 'sell'
-                ? 'bg-red-500 text-white'
-                : 'text-gray-400 hover:text-white'
+              tradeType === 'sell' ? 'bg-red-500 text-white' : 'text-gray-400 hover:text-white'
             }`}
           >
             <ChartBarIcon className="w-4 h-4 inline mr-1" />
@@ -413,7 +372,6 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
       </div>
 
       <form className="space-y-6" onSubmit={handleTrade}>
-        {/* From Currency */}
         <div>
           <div className="flex justify-between items-center mb-2">
             <label className="block text-sm font-medium text-gray-300">
@@ -457,7 +415,6 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
           </div>
         </div>
 
-        {/* Swap Button */}
         <div className="flex justify-center">
           <button
             type="button"
@@ -468,7 +425,6 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
           </button>
         </div>
 
-        {/* To Currency */}
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             {tradeType === 'buy' ? 'Receive' : 'Get'}
@@ -505,15 +461,10 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
           </div>
         </div>
 
-        {/* Trade Button */}
         <button
           type="submit"
-          disabled={isLoading || !amount || !receivedAmount || parseFloat(amount) > getAvailableBalance(fromCurrency)}
-          className={`w-full rounded-xl px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
-            tradeType === 'buy'
-              ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400'
-              : 'bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-400 hover:to-rose-400'
-          }`}
+          disabled={isLoading || !amount || !receivedAmount}
+          className="w-full rounded-xl px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400"
         >
           {isLoading ? (
             <div className="flex items-center justify-center">
@@ -528,3 +479,4 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
     </motion.div>
   )
 }
+

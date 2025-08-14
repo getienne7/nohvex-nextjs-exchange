@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   QrCodeIcon,
@@ -16,6 +16,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { useNotify } from '@/components/notifications'
 import type { TwoFactorSetup, Setup2FAResponse } from '@/types/auth'
+import Image from 'next/image'
 
 interface TwoFactorSetupProps {
   onComplete: () => void
@@ -33,11 +34,7 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
   const [backupCodes, setBackupCodes] = useState<string[]>([])
   const [copiedCode, setCopiedCode] = useState<string | null>(null)
 
-  useEffect(() => {
-    initializeSetup()
-  }, [])
-
-  const initializeSetup = async () => {
+  const initializeSetup = useCallback(async () => {
     setIsLoading(true)
     try {
       const response = await fetch('/api/auth/2fa/setup')
@@ -48,12 +45,16 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
       } else {
         notify.error('Setup Failed', data.error || 'Unable to initialize 2FA setup')
       }
-    } catch (error) {
+    } catch {
       notify.error('Network Error', 'Unable to connect to server')
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [notify])
+
+  useEffect(() => {
+    initializeSetup()
+  }, [initializeSetup])
 
   const handleSetupComplete = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -83,7 +84,7 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
       } else {
         notify.error('Setup Failed', data.error || 'Unable to complete 2FA setup')
       }
-    } catch (error) {
+    } catch {
       notify.error('Network Error', 'Unable to connect to server')
     } finally {
       setIsLoading(false)
@@ -96,7 +97,7 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
       setCopiedCode(text)
       notify.success('Copied!', `${type} copied to clipboard`)
       setTimeout(() => setCopiedCode(null), 2000)
-    } catch (error) {
+    } catch {
       notify.error('Copy Failed', 'Unable to copy to clipboard')
     }
   }
@@ -143,7 +144,7 @@ export function TwoFactorSetup({ onComplete, onCancel }: TwoFactorSetupProps) {
                       Scan QR Code
                     </h3>
                     <div className="bg-white p-4 rounded-lg mb-4">
-                      <img src={setupData.qrCodeUrl} alt="2FA QR Code" className="mx-auto" />
+                    <Image src={setupData.qrCodeUrl} alt="2FA QR Code" width={200} height={200} className="mx-auto" />
                     </div>
                     <p className="text-sm text-gray-400">
                       Use Google Authenticator, Authy, or any TOTP app

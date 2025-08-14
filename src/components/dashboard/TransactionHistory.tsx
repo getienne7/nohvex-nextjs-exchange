@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpIcon, ArrowDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 
@@ -29,25 +29,7 @@ export default function TransactionHistory() {
     fetchTransactions()
   }, [])
 
-  useEffect(() => {
-    filterTransactions()
-  }, [transactions, filter, searchTerm])
-
-  const fetchTransactions = async () => {
-    try {
-      const response = await fetch('/api/transactions')
-      if (response.ok) {
-        const data = await response.json()
-        setTransactions(data)
-      }
-    } catch (error) {
-      console.error('Failed to fetch transactions:', error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const filterTransactions = () => {
+  const filterTransactions = useCallback(() => {
     let filtered = transactions
 
     // Filter by type
@@ -66,7 +48,26 @@ export default function TransactionHistory() {
 
     setFilteredTransactions(filtered)
     setCurrentPage(1) // Reset to first page when filtering
+  }, [transactions, filter, searchTerm])
+
+  useEffect(() => {
+    filterTransactions()
+  }, [filterTransactions])
+
+  const fetchTransactions = async () => {
+    try {
+      const response = await fetch('/api/transactions')
+      if (response.ok) {
+        const data = await response.json()
+        setTransactions(data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch transactions:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
+
 
   const getTransactionIcon = (type: string) => {
     switch (type) {

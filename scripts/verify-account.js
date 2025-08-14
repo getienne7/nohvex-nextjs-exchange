@@ -1,8 +1,9 @@
-const { PrismaClient } = require('@prisma/client');
-require('dotenv').config({ path: '.env.local' });
+import { PrismaClient } from '@prisma/client'
+import dotenv from 'dotenv'
+dotenv.config({ path: '.env.local' })
 
 async function verifyAccount() {
-  const prisma = new PrismaClient();
+  const prisma = new PrismaClient()
   
   try {
     console.log('🔍 Checking for gletienne@outlook.com account...\n');
@@ -23,7 +24,7 @@ async function verifyAccount() {
     if (user) {
       console.log('✅ Account found in database!');
       console.log(`📧 Email: ${user.email}`);
-      console.log(`🆔 User ID: ${user.id}`);
+      console.log(`🆔 User ID: ${user.id}`)
       console.log(`📅 Created: ${user.createdAt}`);
       console.log(`🔄 Updated: ${user.updatedAt}`);
       
@@ -71,4 +72,4 @@ async function verifyAccount() {
 }
 
 // Run verification
-verifyAccount().catch(console.error);
+verifyAccount().catch(console.error)

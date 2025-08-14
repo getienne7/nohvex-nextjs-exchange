@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const { code, useBackupCode, action } = await req.json()
+    const { code, useBackupCode, action }: { code: string; useBackupCode?: boolean; action?: string } = await req.json()
 
     if (!code) {
       return NextResponse.json(
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     let verified = false
 
     if (useBackupCode) {
-      const codes = (user as any).twoFABackupCodes as Array<{ code: string; used: boolean; createdAt: string | Date; usedAt?: string | Date }>|null
+      const codes = (user as { twoFABackupCodes?: Array<{ code: string; used: boolean; createdAt: string | Date; usedAt?: string | Date }> }).twoFABackupCodes ?? null
       const found = codes?.find(c => c.code === String(code).toUpperCase() && !c.used)
       if (found) {
         verified = true
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
       })
 
       if (verified) {
-        await dbService.set2FA(user.id, { enabled: true, secret: user.twoFASecret, backupCodes: (user as any).twoFABackupCodes ?? undefined, lastUsed: new Date() })
+        await dbService.set2FA(user.id, { enabled: true, secret: user.twoFASecret, backupCodes: (user as { twoFABackupCodes?: Array<{ code: string; used: boolean; createdAt: Date; usedAt?: Date }> }).twoFABackupCodes, lastUsed: new Date() })
       }
     }
 

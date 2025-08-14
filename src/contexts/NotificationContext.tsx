@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useReducer, useCallback, useEffect } from 'react'
+import React, { createContext, useContext, useReducer, useCallback } from 'react'
 import { 
   Notification, 
   NotificationContextType, 
@@ -68,6 +68,7 @@ const NotificationContext = createContext<NotificationContextType | undefined>(u
 // Provider component
 export function NotificationProvider({
   children,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   position = 'top-right',
   maxNotifications = 5,
   defaultDuration = 4000
@@ -107,7 +108,7 @@ export function NotificationProvider({
     }
 
     return id
-  }, [defaultDuration, maxNotifications, state.notifications.length])
+  }, [defaultDuration, maxNotifications, state.notifications])
 
   // Remove notification
   const removeNotification = useCallback((id: string) => {

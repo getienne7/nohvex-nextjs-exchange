@@ -24,7 +24,10 @@ export async function POST(request: NextRequest) {
     // Find user by email and reset token
     const user = await dbService.findUserByEmail(email)
     
-    if (!user || !user.resetToken || !user.resetExpires) {
+    const hasResetFields = (u: unknown): u is { id: string; resetToken: string | null; resetExpires: Date | string | null } =>
+      !!u && typeof u === 'object' && 'resetToken' in u && 'resetExpires' in u
+    
+    if (!user || !hasResetFields(user) || !user.resetToken || !user.resetExpires) {
       return NextResponse.json(
         { success: false, error: 'Invalid or expired reset token' },
         { status: 400 }
@@ -99,7 +102,10 @@ export async function GET(request: NextRequest) {
     // Find user by email
     const user = await dbService.findUserByEmail(email)
     
-    if (!user || !user.resetToken || !user.resetExpires) {
+    const hasResetFields = (u: unknown): u is { id: string; resetToken: string | null; resetExpires: Date | string | null } =>
+      !!u && typeof u === 'object' && 'resetToken' in u && 'resetExpires' in u
+    
+    if (!user || !hasResetFields(user) || !user.resetToken || !user.resetExpires) {
       return NextResponse.json(
         { success: false, error: 'Invalid or expired reset token' },
         { status: 400 }

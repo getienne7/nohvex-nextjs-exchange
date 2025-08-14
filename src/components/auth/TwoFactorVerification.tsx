@@ -50,7 +50,7 @@ export function TwoFactorVerification({ email, onVerified, onBack, onError }: Tw
         onError(data.error || 'Invalid verification code')
         setVerificationCode('')
       }
-    } catch (error) {
+    } catch {
       onError('Network error. Please try again.')
     } finally {
       setIsLoading(false)
@@ -138,9 +138,9 @@ export function TwoFactorVerification({ email, onVerified, onBack, onError }: Tw
         <div className="flex items-start space-x-3">
           <ExclamationTriangleIcon className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
           <div className="text-sm">
-            <p className="text-yellow-300 font-medium">Can't access your authenticator?</p>
+          <p className="text-yellow-300 font-medium">{"Can't access your authenticator?"}</p>
             <p className="text-yellow-200">
-              Use a backup code or contact support if you've lost access to your authentication device.
+              {"Use a backup code or contact support if you've lost access to your authentication device."}
             </p>
           </div>
         </div>

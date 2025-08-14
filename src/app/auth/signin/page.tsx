@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { signIn, getSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -13,7 +13,6 @@ export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [step, setStep] = useState<'credentials' | '2fa'>('credentials')
-  const [pendingUser, setPendingUser] = useState<any>(null)
   const router = useRouter()
 
   const handleCredentialsSubmit = async (e: React.FormEvent) => {
@@ -38,7 +37,6 @@ export default function SignIn() {
       
       // If 2FA is required, show 2FA verification step
       if (loginData.requires2FA) {
-        setPendingUser(loginData.user)
         setStep('2fa')
       } else {
         // No 2FA required, proceed with normal NextAuth signin
@@ -55,7 +53,7 @@ export default function SignIn() {
           router.refresh()
         }
       }
-    } catch (error) {
+    } catch {
       setError('Network error. Please try again.')
     } finally {
       setIsLoading(false)
@@ -78,7 +76,7 @@ export default function SignIn() {
         router.push('/dashboard')
         router.refresh()
       }
-    } catch (error) {
+    } catch {
       setError('Authentication error. Please try again.')
       setStep('credentials')
     }
@@ -86,7 +84,6 @@ export default function SignIn() {
 
   const handleBack = () => {
     setStep('credentials')
-    setPendingUser(null)
     setError('')
   }
 

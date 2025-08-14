@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function DeploymentTestPage() {
   const buildTime = new Date().toISOString()
   
@@ -24,20 +26,20 @@ export default function DeploymentTestPage() {
             <div>
               <h3 className="font-semibold mb-2">Core Pages:</h3>
               <ul className="space-y-1">
-                <li>✅ <a href="/" className="text-blue-400 hover:underline">Homepage</a></li>
-                <li>✅ <a href="/trading" className="text-blue-400 hover:underline">Trading Interface</a></li>
-                <li>✅ <a href="/portfolio" className="text-blue-400 hover:underline">Portfolio Dashboard</a></li>
-                <li>✅ <a href="/dashboard" className="text-blue-400 hover:underline">User Dashboard</a></li>
+                <li>✅ <Link href="/" className="text-blue-400 hover:underline">Homepage</Link></li>
+                <li>✅ <Link href="/trading" className="text-blue-400 hover:underline">Trading Interface</Link></li>
+                <li>✅ <Link href="/portfolio" className="text-blue-400 hover:underline">Portfolio Dashboard</Link></li>
+                <li>✅ <Link href="/dashboard" className="text-blue-400 hover:underline">User Dashboard</Link></li>
               </ul>
             </div>
             
             <div>
               <h3 className="font-semibold mb-2">API Endpoints:</h3>
               <ul className="space-y-1">
-                <li>✅ <a href="/api/prices?symbols=BTC,ETH" className="text-blue-400 hover:underline">/api/prices</a></li>
-                <li>✅ <a href="/api/portfolio" className="text-blue-400 hover:underline">/api/portfolio</a></li>
-                <li>✅ <a href="/api/transactions" className="text-blue-400 hover:underline">/api/transactions</a></li>
-                <li>✅ <a href="/api/db-test" className="text-blue-400 hover:underline">/api/db-test</a></li>
+                <li>✅ <Link href="/api/prices?symbols=BTC,ETH" className="text-blue-400 hover:underline">/api/prices</Link></li>
+                <li>✅ <Link href="/api/portfolio" className="text-blue-400 hover:underline">/api/portfolio</Link></li>
+                <li>✅ <Link href="/api/transactions" className="text-blue-400 hover:underline">/api/transactions</Link></li>
+                <li>✅ <Link href="/api/db-test" className="text-blue-400 hover:underline">/api/db-test</Link></li>
               </ul>
             </div>
           </div>
@@ -58,12 +60,12 @@ export default function DeploymentTestPage() {
         </div>
         
         <div className="mt-8 text-center">
-          <a 
+          <Link 
             href="/"
             className="inline-block px-8 py-3 bg-gradient-to-r from-blue-500 to-emerald-500 text-white rounded-lg hover:from-blue-400 hover:to-emerald-400 transition-all font-semibold"
           >
             🏠 Go to Homepage
-          </a>
+          </Link>
         </div>
       </div>
     </div>

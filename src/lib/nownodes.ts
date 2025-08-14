@@ -1,14 +1,5 @@
 import axios from 'axios'
 
-interface NOWNodesPriceResponse {
-  symbol: string
-  price: string
-  change_24h: string
-  volume_24h: string
-  market_cap: string
-  last_updated: string
-}
-
 interface CryptoPrice {
   symbol: string
   name: string
@@ -83,8 +74,9 @@ class NOWNodesService {
             useNOWNodes = true
             console.log(`Successfully fetched ${prices.length} prices from NOWNodes`)
           }
-        } catch (nowNodesError: any) {
-          console.log('NOWNodes primary call failed, falling back to CoinGecko:', nowNodesError.message)
+        } catch (nowNodesError: unknown) {
+          const msg = nowNodesError instanceof Error ? nowNodesError.message : String(nowNodesError)
+          console.log('NOWNodes primary call failed, falling back to CoinGecko:', msg)
         }
         
         // Fallback: Use CoinGecko if NOWNodes fails or returns no data
@@ -106,9 +98,17 @@ class NOWNodesService {
             }
           )
 
-          const idToSymbol = this.createIdToSymbolMap(symbols)
+          const idToSymbol = this.createIdToSymbolMap()
         
-          Object.entries(response.data).forEach(([id, data]: [string, any]) => {
+          type CoinGeckoSimplePrice = {
+            usd?: number
+            usd_24h_change?: number
+            usd_24h_vol?: number
+            usd_market_cap?: number
+            last_updated_at?: number
+          }
+
+          Object.entries(response.data as Record<string, CoinGeckoSimplePrice>).forEach(([id, data]: [string, CoinGeckoSimplePrice]) => {
             const symbol = idToSymbol[id]
             if (symbol) {
               prices.push({
@@ -118,7 +118,7 @@ class NOWNodesService {
                 price_change_percentage_24h: data.usd_24h_change || 0,
                 volume_24h: data.usd_24h_vol || 0,
                 market_cap: data.usd_market_cap || 0,
-                last_updated: new Date(data.last_updated_at * 1000).toISOString()
+                last_updated: new Date(((data.last_updated_at ?? Math.floor(Date.now() / 1000)) * 1000)).toISOString()
               })
             }
           })
@@ -129,16 +129,17 @@ class NOWNodesService {
         console.log('Successfully fetched and cached crypto prices')
         
         return prices
-      } catch (error: any) {
-        console.error(`API call attempt ${attempt} failed:`, error.message)
+      } catch (error: unknown) {
+        const err = error as { response?: { status?: number } } & { message?: string }
+        console.error(`API call attempt ${attempt} failed:`, err?.message ?? error)
         
         // Check if it's a rate limiting error (429)
-        if (error.response?.status === 429) {
+        if (err.response?.status === 429) {
           console.log(`Rate limited on attempt ${attempt}, increasing delay`)
           if (attempt < this.maxRetries) {
             const delay = this.retryDelay * Math.pow(2, attempt - 1) // Exponential backoff
             console.log(`Waiting ${delay}ms before retry`)
-            await new Promise(resolve => setTimeout(resolve, delay))
+            await new Promise((resolve) => setTimeout(resolve, delay))
             continue
           }
         }
@@ -177,7 +178,7 @@ class NOWNodesService {
       const price = prices.find(p => p.symbol === symbol)
       
       return price || null
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(`Error fetching price for ${symbol}:`, error)
       return null
     }
@@ -211,7 +212,7 @@ class NOWNodesService {
               last_updated: new Date().toISOString()
             })
           }
-        } catch (error) {
+        } catch (error: unknown) {
           console.log(`Failed to get NOWNodes price for ${symbol}:`, error)
         }
       }
@@ -219,7 +220,7 @@ class NOWNodesService {
       console.log(`NOWNodes returned ${prices.length} prices out of ${symbols.length} requested`)
       return prices
       
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('NOWNodes price fetch failed:', error)
       throw error
     }
@@ -267,7 +268,7 @@ class NOWNodesService {
       if (response.data.result) {
         // Parse the returned data (this is a simplified version)
         // In reality, you'd need to decode the ABI-encoded response properly
-        const resultHex = response.data.result
+        // const resultHex = response.data.result
         
         // For demo purposes, return a reasonable price
         // In production, you'd decode the hex response properly
@@ -285,7 +286,7 @@ class NOWNodesService {
       
       return null
       
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(`Error fetching Chainlink price for ${symbol}:`, error)
       return null
     }
@@ -312,7 +313,7 @@ class NOWNodesService {
       )
       
       return response.data
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error fetching blockchain data:', error)
       return null
     }
@@ -340,7 +341,7 @@ class NOWNodesService {
     return symbols.map(symbol => mapping[symbol] || symbol.toLowerCase()).filter(Boolean)
   }
 
-  private createIdToSymbolMap(symbols: string[]): { [key: string]: string } {
+  private createIdToSymbolMap(): { [key: string]: string } {
     const mapping: { [key: string]: string } = {
       'bitcoin': 'BTC',
       'ethereum': 'ETH',

@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import speakeasy from 'speakeasy'
 import QRCode from 'qrcode'
-import { Setup2FAResponse } from '@/types/auth'
+// import { Setup2FAResponse } from '@/types/auth'
 import { dbService } from '@/lib/db-service'
 
 // Temporary setup store (in-memory) only for pending setup verification
@@ -14,7 +14,7 @@ const twoFactorSetupStore = new Map<string, {
   expiresAt: Date
 }>()
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions)
     
@@ -107,7 +107,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Verify password
-    const validPassword = await import('bcryptjs').then(m => m.compare(password, (user as any).password))
+    const validPassword = await import('bcryptjs').then(m => m.compare(password, (user as unknown as { password: string }).password))
     if (!validPassword) {
       return NextResponse.json(
         { success: false, error: 'Invalid password' },
