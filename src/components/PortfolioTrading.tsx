@@ -125,8 +125,7 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
               const changePercent = (((newPrice - oldPrice) / oldPrice) * 100).toFixed(2)
               notify.info(
                 `${symbol} Price ${direction === 'up' ? 'Surge' : 'Drop'}`,
-                `${getCryptoName(symbol)} ${direction === 'up' ? 'increased' : 'decreased'} by ${Math.abs(parseFloat(changePercent))}%`,
-                { autoRemove: true, removeDelay: 8000 }
+                `${getCryptoName(symbol)} ${direction === 'up' ? 'increased' : 'decreased'} by ${Math.abs(parseFloat(changePercent))}%`
               )
             }
           }

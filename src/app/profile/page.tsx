@@ -19,7 +19,7 @@ import {
   ClockIcon,
   PhoneIcon
 } from '@heroicons/react/24/outline'
-import { UserProfile, ProfileFormErrors } from '@/types/user-preferences'
+import { UserProfile } from '@/types/user-preferences'
 import { useNotify } from '@/components/notifications'
 
 export default function ProfilePage() {
@@ -29,7 +29,7 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [errors, setErrors] = useState<ProfileFormErrors>({})
+  const [errors, setErrors] = useState<Partial<Record<'name' | 'bio' | 'location' | 'timezone' | 'phone', string>>>({})
   const [formData, setFormData] = useState({
     name: '',
     bio: '',
@@ -127,7 +127,7 @@ export default function ProfilePage() {
 
   const handleInputChange = (field: keyof typeof formData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
-    if (errors[field]) {
+    if (errors[field as keyof typeof errors]) {
       setErrors(prev => ({ ...prev, [field]: undefined }))
     }
   }
