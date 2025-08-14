@@ -62,7 +62,7 @@ export default function PortfolioOverview() {
         const { data } = await response.json()
         const prices: { [key: string]: CryptoPrice } = {}
         
-        data.forEach((priceData: any) => {
+        data.forEach((priceData: CryptoPrice) => {
           prices[priceData.symbol] = {
             id: priceData.symbol.toLowerCase(),
             symbol: priceData.symbol,

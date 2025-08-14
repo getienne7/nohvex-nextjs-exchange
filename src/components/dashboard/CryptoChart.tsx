@@ -107,7 +107,7 @@ export default function CryptoChart() {
         backgroundColor = 'rgba(59, 130, 246, 0.1)'
     }
 
-    const labels = dataPoints.map(([timestamp]) => {
+    const labels = dataPoints.map(([timestamp]: [number, number]) => {
       const date = new Date(timestamp)
       return timeframe === '1' 
         ? date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -150,8 +150,8 @@ export default function CryptoChart() {
         borderColor: 'rgba(255, 255, 255, 0.1)',
         borderWidth: 1,
         callbacks: {
-          label: (context: any) => {
-            const value = context.parsed.y
+          label: (context: import('chart.js').TooltipItem<'line'>) => {
+            const value = context.parsed.y as number
             return `${context.dataset.label || 'Value'}: $${value.toLocaleString()}`
           }
         }
@@ -161,9 +161,9 @@ export default function CryptoChart() {
       x: {
         display: true,
         grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
-          drawBorder: false,
+          color: 'rgba(255, 255, 255, 0.1)'
         },
+        border: { display: false },
         ticks: {
           color: 'rgba(255, 255, 255, 0.7)',
           maxTicksLimit: 8,
@@ -172,9 +172,9 @@ export default function CryptoChart() {
       y: {
         display: true,
         grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
-          drawBorder: false,
+          color: 'rgba(255, 255, 255, 0.1)'
         },
+        border: { display: false },
         ticks: {
           color: 'rgba(255, 255, 255, 0.7)',
           callback: function(value: string | number) {

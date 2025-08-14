@@ -181,7 +181,7 @@ export default function ProfilePage() {
                   </h2>
                   <p className="text-gray-400">{profile?.email || session.user?.email}</p>
                   {profile?.bio && (
-                    <p className="text-gray-300 text-sm mt-2 italic">"{profile.bio}"</p>
+                    <p className="text-gray-300 text-sm mt-2 italic">&ldquo;{profile.bio}&rdquo;</p>
                   )}
                   <div className="mt-4">
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30">

@@ -107,7 +107,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Verify password
-    const validPassword = await import('bcryptjs').then(m => m.compare(password, (user as any).password))
+    const validPassword = await import('bcryptjs').then(m => m.compare(password, (user as unknown as { password: string }).password))
     if (!validPassword) {
       return NextResponse.json(
         { success: false, error: 'Invalid password' },

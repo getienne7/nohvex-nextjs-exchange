@@ -91,7 +91,7 @@ Enter your email address and we\u2019ll send you a link to reset your password.
             <h3 className="text-lg font-medium text-white mb-2">Check your email</h3>
             <p className="text-sm text-gray-300 mb-4">{message}</p>
             <p className="text-xs text-gray-400">
-              If you don't see the email, check your spam folder or try again with a different email address.
+              If you dont see the email, check your spam folder or try again with a different email address.
             </p>
           </motion.div>
         ) : (

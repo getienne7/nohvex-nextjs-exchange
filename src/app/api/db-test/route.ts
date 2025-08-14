@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { dbService } from '@/lib/db-service'
 
-export async function GET(_req: NextRequest) {
+export async function GET() {
   try {
     // Test database connection
     const connectionTest = await dbService.testConnection()

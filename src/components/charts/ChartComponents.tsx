@@ -20,7 +20,7 @@ import { format, subDays, startOfDay } from 'date-fns'
 
 // Chart wrapper component with proper cleanup
 function ChartWrapper({ children, chartKey }: { children: React.ReactNode, chartKey: string }) {
-  const chartRef = useRef<any>(null)
+  const chartRef = useRef<unknown>(null)
   
   useEffect(() => {
     return () => {

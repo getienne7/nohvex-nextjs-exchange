@@ -36,7 +36,7 @@ export function TradingWidget() {
       if (response.ok) {
         const { data } = await response.json()
         const priceMap: {[key: string]: number} = {}
-        data.forEach((item: any) => {
+        data.forEach((item: { symbol: string; current_price: number }) => {
           priceMap[item.symbol] = item.current_price
         })
         setRates(priceMap)

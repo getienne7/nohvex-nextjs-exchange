@@ -4,7 +4,7 @@ import { authOptions } from '@/lib/auth'
 import speakeasy from 'speakeasy'
 import { dbService } from '@/lib/db-service'
 
-export async function GET(_req: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions)
     
