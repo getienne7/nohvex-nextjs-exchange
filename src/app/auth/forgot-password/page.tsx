@@ -47,7 +47,7 @@ export default function ForgotPassword() {
       } else {
         setError(data.error || 'An error occurred. Please try again.')
       }
-    } catch (error) {
+    } catch {
       setError('Network error. Please check your connection and try again.')
     } finally {
       setIsLoading(false)

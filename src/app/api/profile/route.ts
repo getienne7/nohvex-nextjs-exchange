@@ -4,7 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { UpdateProfileRequest, UserProfile } from '@/types/user-preferences'
 
 // GET /api/profile - Get user profile
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions)
     
@@ -47,7 +47,7 @@ export async function PUT(request: NextRequest) {
     const body: UpdateProfileRequest = await request.json()
 
     // Validate input
-    const errors: PartialcRecordc'name' | 'bio' | 'phone', stringee = {}
+    const errors: Partial<Record<'name' | 'bio' | 'phone', string>> = {}
     
     if (body.name && body.name.trim().length < 2) {
       errors.name = 'Name must be at least 2 characters long'

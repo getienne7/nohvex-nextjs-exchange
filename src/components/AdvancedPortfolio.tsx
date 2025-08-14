@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { useSession } from 'next-auth/react'
 import {
@@ -114,7 +114,7 @@ export function AdvancedPortfolio({ className = "" }: AdvancedPortfolioProps) {
   }
 
   // Generate sample technical indicators
-  const generateTechnicalIndicators = (symbol: string): TechnicalIndicators => {
+  const generateTechnicalIndicators = useCallback((symbol: string): TechnicalIndicators => {
     return {
       rsi: Math.random() * 100,
       macd: {
@@ -130,9 +130,9 @@ export function AdvancedPortfolio({ className = "" }: AdvancedPortfolioProps) {
         lower: (prices[symbol]?.current_price || 45000) * 0.98
       }
     }
-  }
+  }, [prices])
 
-  const technicals = useMemo(() => generateTechnicalIndicators(selectedAsset), [selectedAsset, prices])
+  const technicals = useMemo(() => generateTechnicalIndicators(selectedAsset), [generateTechnicalIndicators, selectedAsset])
 
   const portfolioAnalytics = useMemo(() => {
     if (!portfolio.length || !Object.keys(prices).length) {

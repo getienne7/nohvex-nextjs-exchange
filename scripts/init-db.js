@@ -22,7 +22,7 @@ async function initializeDatabase() {
         console.log('📝 Database is empty. This is normal for a new deployment.')
       }
       
-} catch (_schemaError) {
+} catch {
       console.log('⚠️  Database schema not found. This is expected for a new database.')
       console.log('ℹ️  Schema will be created automatically on first use.')
     }

@@ -45,7 +45,7 @@ export function DataSourceIndicator({ className = "" }: DataSourceIndicatorProps
         setIsConnected(false)
         setDataSource('fallback')
       }
-    } catch (error) {
+    } catch {
       setIsConnected(false)
       setDataSource('fallback')
     }

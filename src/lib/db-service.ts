@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client'
-import bcrypt from 'bcryptjs'
 
 // Global Prisma instance to avoid connection issues in serverless
 declare global {
@@ -253,8 +252,8 @@ export class DatabaseService {
 
     // Create demo transactions in memory
     const demoTransactions = [
-      { type: 'BUY', symbol: 'BTC', amount: 0.5, price: 45000, totalValue: 22500 },
-      { type: 'BUY', symbol: 'ETH', amount: 2.0, price: 3200, totalValue: 6400 }
+      { type: 'BUY' as const, symbol: 'BTC', amount: 0.5, price: 45000, totalValue: 22500 },
+      { type: 'BUY' as const, symbol: 'ETH', amount: 2.0, price: 3200, totalValue: 6400 }
     ]
 
     for (const transaction of demoTransactions) {

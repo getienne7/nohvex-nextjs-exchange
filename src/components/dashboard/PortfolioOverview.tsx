@@ -26,7 +26,6 @@ export default function PortfolioOverview() {
   const [portfolio, setPortfolio] = useState<PortfolioItem[]>([])
   const [totalValue, setTotalValue] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
-  const [showAddAsset, setShowAddAsset] = useState(false)
   const [cryptoPrices, setCryptoPrices] = useState<{ [key: string]: CryptoPrice }>({})
 
   useEffect(() => {
@@ -142,7 +141,6 @@ export default function PortfolioOverview() {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-white">Your Assets</h2>
           <button
-            onClick={() => setShowAddAsset(true)}
             className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-emerald-500 text-white rounded-lg hover:from-blue-600 hover:to-emerald-600 transition-all duration-200"
           >
             <PlusIcon className="w-4 h-4" />
@@ -154,7 +152,6 @@ export default function PortfolioOverview() {
           <div className="text-center py-12">
             <div className="text-gray-400 mb-4">No assets in your portfolio yet</div>
             <button
-              onClick={() => setShowAddAsset(true)}
               className="px-6 py-3 bg-gradient-to-r from-blue-500 to-emerald-500 text-white rounded-lg hover:from-blue-600 hover:to-emerald-600 transition-all duration-200"
             >
               Add Your First Asset
@@ -162,7 +159,7 @@ export default function PortfolioOverview() {
           </div>
         ) : (
           <div className="space-y-4">
-            {portfolio.map((item, index) => {
+            {portfolio.map((item) => {
               const profitLoss = calculateProfitLoss(item)
               const currentPrice = cryptoPrices[item.symbol]?.current_price || item.averagePrice
               
@@ -171,7 +168,6 @@ export default function PortfolioOverview() {
                   key={item.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
                   className="flex items-center justify-between p-4 bg-white/5 rounded-xl hover:bg-white/10 transition-colors"
                 >
                   <div className="flex items-center space-x-4">
@@ -221,7 +217,7 @@ export default function PortfolioOverview() {
           { title: 'Sell Crypto', desc: 'Reduce holdings', color: 'from-red-500 to-pink-500' },
           { title: 'Market Analysis', desc: 'View trends', color: 'from-blue-500 to-indigo-500' },
           { title: 'Reports', desc: 'Download statements', color: 'from-purple-500 to-violet-500' }
-        ].map((action, index) => (
+        ].map((action) => (
           <div
             key={action.title}
             className={`bg-gradient-to-r ${action.color} p-4 rounded-xl text-white cursor-pointer hover:scale-105 transition-transform`}

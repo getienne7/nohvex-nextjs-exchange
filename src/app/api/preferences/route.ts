@@ -46,7 +46,7 @@ const defaultPreferences = {
 }
 
 // GET /api/preferences - Get user preferences
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions)
     
@@ -80,7 +80,7 @@ export async function PUT(request: NextRequest) {
     const body: UpdatePreferencesRequest = await request.json()
 
     // Validate trading preferences
-    const errors: PartialcRecordc'slippageTolerance', stringee = {}
+    const errors: Partial<Record<'slippageTolerance', string>> = {}
     
     if (body.trading?.slippageTolerance && (body.trading.slippageTolerance < 0.1 || body.trading.slippageTolerance > 50)) {
       errors.slippageTolerance = 'Slippage tolerance must be between 0.1% and 50%'

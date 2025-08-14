@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import React from 'react'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -18,23 +18,8 @@ import {
 import { Line, Bar, Doughnut } from 'react-chartjs-2'
 import { format, subDays, startOfDay } from 'date-fns'
 
-// Chart wrapper component with proper cleanup
+// Lightweight Chart wrapper
 function ChartWrapper({ children, chartKey }: { children: React.ReactNode, chartKey: string }) {
-  const chartRef = useRef<unknown>(null)
-  
-  useEffect(() => {
-    return () => {
-      // Cleanup chart instance on unmount
-      if (chartRef.current) {
-        try {
-          chartRef.current.destroy()
-        } catch (error) {
-          console.warn('Chart cleanup error:', error)
-        }
-      }
-    }
-  }, [])
-  
   return (
     <div key={chartKey}>
       {children}
@@ -68,14 +53,6 @@ interface PortfolioHistoryData {
   holdings: { symbol: string; value: number; pnl: number }[]
 }
 
-interface ChartComponentsProps {
-  priceHistory?: PriceHistoryData[]
-  portfolioHistory?: PortfolioHistoryData[]
-  portfolioDistribution?: { name: string; value: number; percentage: number }[]
-  currentPrices?: { [symbol: string]: number }
-  timeRange: '24h' | '7d' | '30d'
-  theme: 'dark' | 'light'
-}
 
 // Chart.js theme configurations
 const getChartTheme = (theme: 'dark' | 'light') => ({

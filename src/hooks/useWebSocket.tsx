@@ -3,12 +3,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 
-type WsMessagePayload = PriceUpdate | PortfolioUpdate | MarketAlert | Record<string, unknown>
-interface WebSocketMessage {
-  type: 'price_update' | 'portfolio_update' | 'notification' | 'market_alert'
-  data: WsMessagePayload
-  timestamp: string
-}
 
 interface PriceUpdate {
   symbol: string
@@ -44,7 +38,7 @@ interface WebSocketContextType {
   isConnected: boolean
   subscribe: (channel: string) => void
   unsubscribe: (channel: string) => void
-  sendMessage: (message: Record<string, unknown>) => void
+  sendMessage: (message: Record<string, unknown>) => void
   latestPrices: { [symbol: string]: PriceUpdate }
   portfolioUpdates: PortfolioUpdate | null
   marketAlerts: MarketAlert[]
@@ -145,8 +139,10 @@ export function WebSocketProvider({
   
   const { data: session } = useSession()
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const reconnectAttempts = useRef(0)
-  const maxReconnectAttempts = 5
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _reconnectAttempts = useRef(0)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _maxReconnectAttempts = 5
   const subscriptionsRef = useRef<Set<string>>(new Set())
 
   // Initialize intervals refs
@@ -248,81 +244,7 @@ export function WebSocketProvider({
     setConnectionStatus('disconnected')
   }, [])
 
-  const connect = useCallback(() => {
-    if (socket?.readyState === WebSocket.OPEN) {
-      return
-    }
-
-    // For now, we'll simulate the connection
-    startSimulation()
-
-    /* Real WebSocket implementation would look like this:
-    try {
-      setConnectionStatus('connecting')
-      const newSocket = new WebSocket(url)
-      
-      newSocket.onopen = () => {
-        setIsConnected(true)
-        setConnectionStatus('connected')
-        reconnectAttempts.current = 0
-        
-        // Authenticate if session exists
-        if (session) {
-          newSocket.send(JSON.stringify({
-            type: 'auth',
-            token: session.accessToken
-          }))
-        }
-      }
-      
-      newSocket.onmessage = (event) => {
-        try {
-          const message: WebSocketMessage = JSON.parse(event.data)
-          handleMessage(message)
-        } catch (error) {
-          console.error('Failed to parse WebSocket message:', error)
-        }
-      }
-      
-      newSocket.onclose = () => {
-        setIsConnected(false)
-        setConnectionStatus('disconnected')
-        setSocket(null)
-        
-        // Auto-reconnect
-        if (reconnectAttempts.current < maxReconnectAttempts) {
-          const delay = Math.pow(2, reconnectAttempts.current) * 1000
-          reconnectTimeoutRef.current = setTimeout(() => {
-            reconnectAttempts.current += 1
-            connect()
-          }, delay)
-        }
-      }
-      
-      newSocket.onerror = () => {
-        setConnectionStatus('error')
-      }
-      
-      setSocket(newSocket)
-    } catch (error) {
-      setConnectionStatus('error')
-      console.error('WebSocket connection failed:', error)
-    }
-    */
-  }, [url, session, startSimulation])
-
-  const disconnect = useCallback(() => {
-    if (reconnectTimeoutRef.current) {
-      clearTimeout(reconnectTimeoutRef.current)
-    }
-    
-    if (socket) {
-      socket.close()
-    }
-    
-    stopSimulation()
-    setSocket(null)
-  }, [socket, stopSimulation])
+  /* Real WebSocket implementation placeholder removed to avoid unused warnings */
 
   const subscribe = useCallback((channel: string) => {
     subscriptionsRef.current.add(channel)
@@ -346,7 +268,7 @@ export function WebSocketProvider({
     }
   }, [socket])
 
-  const sendMessage = useCallback((message: Record<string, unknown>) => {
+  const sendMessage = useCallback((message: Record<string, unknown>) => {
     if (socket?.readyState === WebSocket.OPEN) {
       socket.send(JSON.stringify(message))
     }
@@ -355,10 +277,10 @@ export function WebSocketProvider({
   // Auto-connect when component mounts
   useEffect(() => {
     startSimulation()
-    
+    const timeout = reconnectTimeoutRef.current
     return () => {
-      if (reconnectTimeoutRef.current) {
-        clearTimeout(reconnectTimeoutRef.current)
+      if (timeout) {
+        clearTimeout(timeout)
       }
       stopSimulation()
     }

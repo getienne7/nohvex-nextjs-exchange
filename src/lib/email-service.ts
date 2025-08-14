@@ -171,7 +171,8 @@ export class EmailService {
   }
 
   // SMTP Email Sending Method (fallback)
-  private async sendSMTPEmail(to: string, subject: string, htmlBody: string, textBody: string): Promise<boolean> {
+  private async sendSMTPEmail(to: string, subject: string, _htmlBody: string, _textBody: string): Promise<boolean> {
+    void _htmlBody; void _textBody;
     try {
       console.log('📧 SMTP Email (Ready to Send)')
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
@@ -255,7 +256,8 @@ export class EmailService {
     `
   }
 
-  private generatePasswordChangeEmailHTML(userEmail: string): string {
+  private generatePasswordChangeEmailHTML(_userEmail: string): string {
+    void _userEmail;
     return `
       <!DOCTYPE html>
       <html>
@@ -286,7 +288,7 @@ export class EmailService {
     `
   }
 
-  private generatePasswordChangeEmailText(userEmail: string): string {
+  private generatePasswordChangeEmailText(_userEmail: string): string {
     return `
       NOHVEX Exchange - Password Changed Successfully
       

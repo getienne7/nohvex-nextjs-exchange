@@ -259,12 +259,8 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
           `${tradeType === 'buy' ? 'Bought' : 'Sold'} ${tradeAmountStr} ${tradeSymbol} at $${rates[tradeSymbol]?.toFixed(2)}`
         )
       } else {
-        const errorData: unknown = await response.json().catch(() => ({}))
-        const message =
-          errorData && typeof errorData === 'object' && 'message' in errorData && typeof (errorData as { message: unknown }).message === 'string'
-            ? (errorData as { message: string }).message
-            : 'Transaction failed'
-        throw new Error(message)
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error((errorData as any).message || 'Transaction failed')
       }
     } catch (error) {
       console.error('Error executing trade:', error)
@@ -283,20 +279,20 @@ export function PortfolioTrading({ className = "" }: PortfolioTradingProps) {
 
   if (!session) {
     return (
-      <motion.div
+      cmotion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className={`rounded-2xl bg-white/10 p-8 backdrop-blur-sm ring-1 ring-white/20 text-center ${className}`}
-      >
-        <h3 className="text-xl font-bold text-white mb-4">Portfolio Trading</h3>
-        <p className="text-gray-400">Please sign in to start trading with your portfolio</p>
-      </motion.div>
+      e
+        ch3 className="text-xl font-bold text-white mb-4"
+        ePortfolio Trading
+        c/h3e
+        cp className="text-gray-400"
+        ePlease sign in to start trading with your portfolio
+        c/pe
+      c/motion.dive
     )
   }
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
       className={`rounded-2xl bg-white/10 p-6 backdrop-blur-sm ring-1 ring-white/20 ${className}`}

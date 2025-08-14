@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
@@ -38,21 +38,7 @@ export default function ProfilePage() {
     phone: ''
   })
 
-  // Load profile data
-  useEffect(() => {
-    if (session?.user) {
-      loadProfile()
-    }
-  }, [session])
-
-  useEffect(() => {
-    if (status === 'loading') return
-    if (!session) {
-      router.push('/auth/signin')
-    }
-  }, [session, status, router])
-
-  const loadProfile = async () => {
+  const loadProfile = useCallback(async () => {
     try {
       const response = await fetch('/api/profile')
       if (response.ok) {
@@ -72,7 +58,22 @@ export default function ProfilePage() {
       console.error('Failed to load profile:', error)
       notify.error('Network Error', 'Unable to connect to server. Please check your internet connection.')
     }
-  }
+  }, [notify])
+
+  // Load profile data
+  useEffect(() => {
+    if (session?.user) {
+      loadProfile()
+    }
+  }, [loadProfile, session])
+
+  useEffect(() => {
+    if (status === 'loading') return
+    if (!session) {
+      router.push('/auth/signin')
+    }
+  }, [session, status, router])
+
 
   const handleSave = async () => {
     setIsLoading(true)

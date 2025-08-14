@@ -1,5 +1,5 @@
-// Test script to verify basic API connectivity
-const https = require('https');
+// Test script to verify basic API connectivity (ESM)
+import https from 'node:https'
 
 const testBasicAPI = () => {
   const options = {
@@ -8,34 +8,37 @@ const testBasicAPI = () => {
     path: '/api/test',
     method: 'GET',
     headers: {
-      'Accept': 'application/json'
-    }
-  };
+      Accept: 'application/json',
+    },
+  }
 
   const req = https.request(options, (res) => {
-    console.log(`Status: ${res.statusCode}`);
-    console.log(`Headers: ${JSON.stringify(res.headers, null, 2)}`);
-    
-    let body = '';
+    console.log(`Status: ${res.statusCode}`)
+    console.log(`Headers: ${JSON.stringify(res.headers, null, 2)}`)
+
+    let body = ''
     res.on('data', (chunk) => {
-      body += chunk;
-    });
-    
+      body += chunk
+    })
+
     res.on('end', () => {
-      console.log('Response Body:', body);
+      console.log('Response Body:', body)
       if (res.statusCode === 200) {
-        console.log('✅ Basic API is working correctly!');
+        console.log('✅ Basic API is working correctly!')
       } else {
-        console.log('❌ Basic API returned an error');
+        console.log('❌ Basic API returned an error')
       }
-    });
-  });
+    })
+  })
 
   req.on('error', (e) => {
-    console.error(`Problem with request: ${e.message}`);
-  });
+    console.error(`Problem with request: ${e.message}`)
+  })
 
-  req.end();
-};
+  req.end()
+}
 
-testBasicAPI();
+// Run if executed directly
+if (process.argv[1] && new URL(import.meta.url).pathname.endsWith(new URL(`file://${process.argv[1]}`).pathname)) {
+  testBasicAPI()
+}

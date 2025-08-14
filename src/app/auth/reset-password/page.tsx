@@ -35,7 +35,7 @@ function ResetPasswordForm() {
         if (!response.ok || !data.success) {
           setTokenError(data.error || 'Invalid or expired reset token.')
         }
-      } catch (error) {
+      } catch {
         setTokenError('Network error. Please try again.')
       } finally {
         setIsVerifyingToken(false)
@@ -96,7 +96,7 @@ function ResetPasswordForm() {
       } else {
         setError(data.error || 'An error occurred. Please try again.')
       }
-    } catch (error) {
+    } catch {
       setError('Network error. Please check your connection and try again.')
     } finally {
       setIsLoading(false)
