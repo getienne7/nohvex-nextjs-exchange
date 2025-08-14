@@ -13,9 +13,12 @@ import puppeteer from 'puppeteer';
   try {
     const page = await browser.newPage();
     page.setDefaultTimeout(30000);
+    page.setDefaultNavigationTimeout(60000);
 
-    // 1) Go to NextAuth sign-in page (adjust if you have a custom signin route)
-    await page.goto(`${base}/api/auth/signin`, { waitUntil: 'networkidle0' });
+    // 1) Go to sign-in UI (not the API route) and wait for form
+    await page.goto(`${base}/auth/signin`, { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('input[name="email"], input[name="username"]', { timeout: 30000 });
+    await page.waitForSelector('input[name="password"]', { timeout: 30000 });
 
     // 2) Try to fill either username or email field
     const hasUsername = await page.$('input[name="username"]');
@@ -46,11 +49,11 @@ import puppeteer from 'puppeteer';
     }
     await Promise.all([
       submit.click(),
-      page.waitForNavigation({ waitUntil: 'networkidle0' })
+      page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 60000 })
     ]);
 
     // 5) Check session endpoint
-    const resp = await page.goto(`${base}/api/auth/session`, { waitUntil: 'networkidle0' });
+    const resp = await page.goto(`${base}/api/auth/session`, { waitUntil: 'domcontentloaded' });
     const text = await resp.text();
     let json;
     try {
