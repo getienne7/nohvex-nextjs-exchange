@@ -126,18 +126,22 @@ interface WebSocketProviderProps {
 
 export function WebSocketProvider({ 
   children, 
-  url = typeof window !== 'undefined' && process.env.NODE_ENV === 'production' 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  url: _url = typeof window !== 'undefined' && process.env.NODE_ENV === 'production' 
     ? 'wss://your-domain.com/ws' 
     : 'ws://localhost:3001/ws' 
 }: WebSocketProviderProps) {
-  const [socket, setSocket] = useState<WebSocket | null>(null)
+  // We keep a socket ref for future real WS logic; drop setter to avoid unused-var warning
+  const [socket] = useState<WebSocket | null>(null)
   const [isConnected, setIsConnected] = useState(false)
   const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected' | 'error'>('disconnected')
   const [latestPrices, setLatestPrices] = useState<{ [symbol: string]: PriceUpdate }>({})
   const [portfolioUpdates, setPortfolioUpdates] = useState<PortfolioUpdate | null>(null)
   const [marketAlerts, setMarketAlerts] = useState<MarketAlert[]>([])
   
-  const { data: session } = useSession()
+  // Session currently unused in the provider but may be used in future enhancements
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data: _session } = useSession()
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _reconnectAttempts = useRef(0)

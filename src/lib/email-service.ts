@@ -289,6 +289,7 @@ export class EmailService {
   }
 
   private generatePasswordChangeEmailText(_userEmail: string): string {
+    void _userEmail;
     return `
       NOHVEX Exchange - Password Changed Successfully
       

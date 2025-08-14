@@ -45,3 +45,8 @@ next-env.d.ts
 /src/generated/prisma
 
 .env*.local
+
+# local backups and temp artifacts
+*.bak
+*.rewrite.bak
+false/
