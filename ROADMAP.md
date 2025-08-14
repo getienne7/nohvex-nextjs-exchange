@@ -70,19 +70,31 @@
 
 ## Phase 4: Technical & Infrastructure Improvements ⚡
 
-### Performance & Scalability
+### Performance  Scalability
 - [ ] **PWA Implementation** - Progressive Web App for mobile-like experience
 - [ ] **WebSocket Optimization** - Real-time price feeds and order updates
 - [ ] **Caching Strategy** - Redis integration for better performance
 - [ ] **Code Splitting** - Lazy loading and bundle optimization
 - [ ] **CDN Integration** - Static asset optimization
+- [ ] **Offline Support** - Critical offline flows (view balances, watchlists)
+- [ ] **Background Sync** - Retry pending network actions
 
-### Security & Compliance
-- [ ] **Two-Factor Authentication (2FA)** - TOTP and SMS verification
-- [ ] **API Rate Limiting** - Protect against abuse
-- [ ] **Security Audit Logs** - Track all user actions
+### Security  Compliance
+- [ ] **Two-Factor Authentication (2FA)**
+  - [ ] TOTP (time-based one-time passwords)
+  - [ ] WebAuthn (FIDO2/security keys, platform authenticators)
+  - [ ] Backup codes (one-time recovery codes)
+  - [ ] SMS/Email fallback (optional; rate-limited)
+  - [ ] 2FA enrollment UX and enforcement policies (per-role/per-action)
+  - [ ] Device/session management (trusted devices, revoke sessions)
+  - [ ] Step-up auth for sensitive actions (withdrawals, API key creation)
+  - [ ] Secure account recovery flow
+- [ ] **API Rate Limiting** - Per-IP, per-user, per-endpoint; burst + sustained; global circuit breakers
+- [ ] **Security Audit Logs** - Admin-accessible audit trail with tamper-evident storage
+- [ ] **RBAC  Least Privilege** - Role-based access control for users/admins/API keys
 - [ ] **KYC Integration** - Optional identity verification
 - [ ] **AML Compliance** - Anti-money laundering features
+- [ ] **Secrets Management** - Key rotation, scoped tokens, environment separation
 
 ## Phase 5: Business & Monetization Features 💰
 
@@ -98,6 +110,7 @@
 - [ ] **White Label Solution** - Allow others to deploy their own exchange
 - [ ] **Mobile App** - React Native or Flutter mobile application
 - [ ] **Browser Extension** - Chrome/Firefox extension for quick access
+- [ ] **Admin Console** - User management, audit log viewer, feature flags, configs
 
 ## Phase 6: Advanced Features & Integrations 🔮
 
@@ -119,7 +132,22 @@
 - [ ] **Regional Compliance** - Adapt to different regulatory requirements
 - [ ] **Localized Payment Methods** - Region-specific payment options
 
-## Technical Debt & Maintenance 🔧
+## Quality Assurance, Testing  Observability 🧪
+
+### Testing Strategy
+- [ ] **API Smoke Tests** - Cover auth, portfolio, trading, and 2FA endpoints
+- [ ] **Unit  Integration Tests** - Critical paths for pricing, orders, portfolio math
+- [ ] **E2E Tests** - Core user journeys (onboarding, trade, portfolio update)
+- [ ] **Security Tests** - AuthZ gaps, rate limits, SSRF/XSS/CSRF checks
+- [ ] **Load/Stress Tests** - Baseline throughput and error budgets
+
+### Observability
+- [ ] **Structured Logging** - Correlation IDs, user/session context
+- [ ] **Metrics** - Latency, error rates, cache hit rate, dependency SLIs
+- [ ] **Tracing** - Distributed traces across API routes and background jobs
+- [ ] **Dashboards  Alerts** - SLOs with alerting on burn rate and anomalies
+
+## Technical Debt  Maintenance 🔧
 
 ### Code Quality
 - [ ] **Test Coverage** - Increase unit and integration test coverage
@@ -130,7 +158,7 @@
 ### Infrastructure
 - [ ] **Database Optimization** - Query optimization and indexing
 - [ ] **Backup Strategy** - Automated backups and disaster recovery
-- [ ] **Monitoring & Alerting** - System health monitoring
+- [ ] **Monitoring  Alerting** - System health monitoring
 - [ ] **CI/CD Pipeline** - Automated testing and deployment
 
 ## Feature Priority Matrix 🎯
@@ -182,8 +210,9 @@
 2. **Implement User Profile Page** - Settings and account management
 3. **Add Toast Notifications** - User feedback system
 4. **Create Price Alerts System** - Custom price monitoring
+5. **Write API Smoke Tests for 2FA Endpoints** - Basic happy-path and error-path checks (enable/disable 2FA, verify TOTP, backup codes)
 
 ---
 
-*Last Updated: January 13, 2025*
-*Version: 1.0*
+*Last Updated: August 14, 2025*
+*Version: 1.1*
