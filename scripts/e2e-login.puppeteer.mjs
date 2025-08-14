@@ -55,7 +55,7 @@ import puppeteer from 'puppeteer';
     let json;
     try {
       json = JSON.parse(text);
-    } catch (_e) {
+    } catch {
       console.error('Session response is not JSON:', text.slice(0, 300));
       process.exit(3);
     }
