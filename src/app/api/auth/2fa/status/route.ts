@@ -16,14 +16,11 @@ export async function GET(req: NextRequest) {
     }
 
     const user2FA = twoFactorStore.get(session.user.email)
-    const backupCodesRemaining = user2FA?.backupCodes 
-      ? user2FA.backupCodes.filter(code => !code.used).length 
-      : 0
 
-    return NextResponse.json({
-      success: true,
-      enabled: !!user2FA?.isEnabled
-    })
+    // Quick-unblock: if memory store lost, report disabled so UI doesn't block
+    const enabled = !!(user2FA && user2FA.isEnabled && user2FA.secret)
+
+    return NextResponse.json({ success: true, enabled })
 
   } catch (error) {
     console.error('2FA status error:', error)
