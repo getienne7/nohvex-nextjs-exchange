@@ -191,7 +191,12 @@ export class EmailService {
 
   // Email Template Generators
   private generatePasswordResetEmailHTML(resetToken: string, userEmail: string): string {
-    const resetLink = `${process.env.NEXTAUTH_URL || 'https://nohvex-nextjs-exchange.vercel.app'}/auth/reset-password?token=${resetToken}&email=${encodeURIComponent(userEmail)}`
+    // Get the base URL, ensuring we use the production URL for emails
+    const baseUrl = process.env.NEXTAUTH_URL?.trim() && process.env.NEXTAUTH_URL !== '' 
+      ? process.env.NEXTAUTH_URL.replace(/\/$/, '') // Remove trailing slash
+      : 'https://nohvex-nextjs-exchange.vercel.app'
+    
+    const resetLink = `${baseUrl}/auth/reset-password?token=${resetToken}&email=${encodeURIComponent(userEmail)}`
     
     return `
       <!DOCTYPE html>
@@ -226,7 +231,12 @@ export class EmailService {
   }
 
   private generatePasswordResetEmailText(resetToken: string, userEmail: string): string {
-    const resetLink = `${process.env.NEXTAUTH_URL || 'https://nohvex-nextjs-exchange.vercel.app'}/auth/reset-password?token=${resetToken}&email=${encodeURIComponent(userEmail)}`
+    // Get the base URL, ensuring we use the production URL for emails
+    const baseUrl = process.env.NEXTAUTH_URL?.trim() && process.env.NEXTAUTH_URL !== '' 
+      ? process.env.NEXTAUTH_URL.replace(/\/$/, '') // Remove trailing slash
+      : 'https://nohvex-nextjs-exchange.vercel.app'
+    
+    const resetLink = `${baseUrl}/auth/reset-password?token=${resetToken}&email=${encodeURIComponent(userEmail)}`
     
     return `
       NOHVEX Exchange - Password Reset Request
