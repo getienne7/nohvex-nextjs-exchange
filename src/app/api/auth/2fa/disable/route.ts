@@ -26,10 +26,13 @@ export async function POST() {
     // Disable 2FA in DB
     await dbService.set2FA(user.id, { enabled: false, secret: null, backupCodes: [] })
 
-    return NextResponse.json({
+    const res = NextResponse.json({
       success: true,
       message: 'Two-factor authentication has been disabled'
     })
+    // Clear 2FA verified cookie
+    res.cookies.set('nx_twofa_verified', '', { httpOnly: true, path: '/', maxAge: 0 })
+    return res
 
   } catch (error) {
     console.error('2FA disable error:', error)

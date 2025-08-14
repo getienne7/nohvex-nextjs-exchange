@@ -67,11 +67,20 @@ export async function POST(req: NextRequest) {
       console.log(`2FA verification: ${session.user.email} performed ${action} using ${useBackupCode ? 'backup_code' : 'totp'}`)
     }
 
-    return NextResponse.json({
+    // Mark this browser as 2FA-verified for a short window (30 minutes)
+    const res = NextResponse.json({
       success: true,
       message: 'Verification successful',
       method: useBackupCode ? 'backup_code' : 'totp'
     })
+    res.cookies.set('nx_twofa_verified', '1', {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+      path: '/',
+      maxAge: 60 * 30 // 30 minutes
+    })
+    return res
 
   } catch (error) {
     console.error('2FA verification error:', error)
