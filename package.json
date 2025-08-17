@@ -2,12 +2,15 @@
   "name": "nohvex-exchange",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "postbuild": "node scripts/deploy-db.js",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "tsc -p . --noEmit",
+    "postinstall": "prisma generate",
     "db:init": "node scripts/init-db.js",
     "db:deploy": "node scripts/deploy-db.js",
     "db:push": "prisma db push",
@@ -58,5 +61,9 @@
     "eslint-config-next": "15.4.6",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=20 <23",
+    "npm": ">=10"
   }
 }

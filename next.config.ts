@@ -1,23 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   serverExternalPackages: ['@prisma/client', 'bcryptjs'],
   images: {
     domains: ['localhost'],
     unoptimized: true,
   },
-  env: {
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'http://localhost:3000',
-    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'fallback-secret-for-build',
-    DATABASE_URL: process.env.DATABASE_URL || 'file:./dev.db',
-    NOWNODES_API_KEY: process.env.NOWNODES_API_KEY || 'build-fallback-key',
-  },
+  // Do not expose secrets or server-only env at build time. Access process.env directly in server code.
   trailingSlash: false,
   generateEtags: false,
 };

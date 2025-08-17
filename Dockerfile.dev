@@ -1,0 +1,17 @@
+FROM node:20-alpine
+
+WORKDIR /app
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Install dependencies first (leverages Docker cache)
+# Copy package manifests and Prisma schema so postinstall can run `prisma generate`
+COPY package*.json ./
+COPY prisma ./prisma
+RUN npm ci
+
+# Expose Next.js dev port
+EXPOSE 3000
+
+# Default command runs dev server (Turbopack as configured in package.json)
+CMD ["npm", "run", "dev"]
+
