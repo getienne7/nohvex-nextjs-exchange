@@ -38,6 +38,8 @@ export async function deleteAlert(userId: string, id: string) {
 }
 
 // One-off check used by poller
+import { emailService } from '@/lib/email-service'
+
 export async function checkAndTriggerAlerts() {
   const active = await prisma.alert.findMany({ where: { active: true } })
   if (active.length === 0) return { checked: 0, triggered: 0, items: [] as Array<{symbol:string, operator:Operator, threshold:number, price:number}> }
@@ -70,7 +72,19 @@ export async function checkAndTriggerAlerts() {
     await prisma.alert.update({ where: { id: alert.id }, data: { lastTriggeredAt: now } })
     triggered++
     items.push({ symbol: alert.symbol, operator: alert.operator as Operator, threshold: alert.threshold, price: price.usd })
-    // TODO: enqueue email/push; for now, just log
+    // Fire-and-forget email stub if SMTP/SES configured; otherwise logs
+    try {
+      const user = await prisma.user.findUnique({ where: { id: alert.userId } })
+      if (user?.email) {
+        void emailService.sendAlertTriggered(
+          user.email,
+          alert.symbol,
+          alert.operator as Operator,
+          alert.threshold,
+          price.usd
+        )
+      }
+    } catch {}
     console.log(`Price alert triggered: ${alert.symbol} ${alert.operator} ${alert.threshold} (price=${price.usd}) user=${alert.userId}`)
   }
 
