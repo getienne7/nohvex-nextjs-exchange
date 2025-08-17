@@ -31,9 +31,11 @@
 
 ### ⏳ Next Up
 - [ ] **User Profile Management** - Settings page, preferences, account details
-- [ ] **Notifications System** - Toast notifications for trades, alerts, system messages
-- [ ] **Price Alerts** - Set custom price targets with email/push notifications
-- [ ] **Improved Onboarding** - Welcome tutorial for new users
+- [ ] **Notifications System** - Toast notifications v1 for trades, alerts, and system messages
+- [ ] **Price Alerts** - Set custom price targets with delivery via web push and email (Telegram/Discord optional stretch)
+- [ ] **Improved Onboarding** - First-run checklist and dismissible tips for new users
+- [ ] **Dark/Light Theme Toggle** - Persisted per user and device
+- [ ] **Watchlists v1** - Save favorites with simple sort/filter
 
 ## Phase 2: Advanced Trading & Portfolio Features 📈
 
@@ -43,9 +45,13 @@
   - [ ] Stop-loss orders
   - [ ] Dollar Cost Averaging (DCA)
   - [ ] Market orders with slippage protection
-- [ ] **Watchlists** - Track and organize favorite cryptocurrencies
+- [ ] **Watchlists v2 (Advanced)** - Smart groups, bulk actions, alerts integration
 - [ ] **Trading History Export** - CSV/PDF export functionality
 - [ ] **Advanced Charts** - TradingView integration or custom charting
+  - [ ] Indicators (MA/RSI)
+  - [ ] Basic drawing tools
+- [ ] **Slippage Controls** - User-configurable slippage on swaps
+- [ ] **Multi-quote Routing** - Prefer best quote across providers (ChangeNOW + future)
 
 ### Portfolio Analytics
 - [ ] **P&L Tracking** - Detailed profit/loss analysis
@@ -53,6 +59,11 @@
 - [ ] **Tax Reporting** - Generate tax reports for different jurisdictions
 - [ ] **Asset Allocation** - Portfolio diversification analysis
 - [ ] **Historical Performance** - Time-based portfolio performance tracking
+
+### Portfolio Management
+- [ ] **Portfolio Import/Sync** - Read-only API keys for major CEXs (Binance, Coinbase) and CSV import
+- [ ] **Manual Transactions Enhancements** - Capture fees, notes, and attachments
+- [ ] **Asset Categorization/Tags** - Custom tags and filters in dashboards
 
 ## Phase 3: Social & Community Features 🌐
 
@@ -73,7 +84,10 @@
 ### Performance  Scalability
 - [ ] **PWA Implementation** - Progressive Web App for mobile-like experience
 - [ ] **WebSocket Optimization** - Real-time price feeds and order updates
+- [ ] **WebSocket Multiplexing** - Consolidate streams with heartbeat and backoff
 - [ ] **Caching Strategy** - Redis integration for better performance
+- [ ] **Background Jobs/Queue** - Process alerts and imports with retries and backoff
+- [ ] **Feature Flags System** - Configurable flags for risky features (onramp, bots, 2FA methods)
 - [ ] **Code Splitting** - Lazy loading and bundle optimization
 - [ ] **CDN Integration** - Static asset optimization
 - [ ] **Offline Support** - Critical offline flows (view balances, watchlists)
@@ -95,6 +109,10 @@
 - [ ] **KYC Integration** - Optional identity verification
 - [ ] **AML Compliance** - Anti-money laundering features
 - [ ] **Secrets Management** - Key rotation, scoped tokens, environment separation
+- [ ] **Account Deletion and Data Export (GDPR)** - Self-serve UI with email confirmation
+- [ ] **Session/Device Management** - View and revoke sessions; force logout all
+- [ ] **User API Keys** - Personal API keys with scopes and rotation
+- [ ] **IP Allow/Deny Rules** - Optional per-account restrictions
 
 ## Phase 5: Business & Monetization Features 💰
 
@@ -111,6 +129,7 @@
 - [ ] **Mobile App** - React Native or Flutter mobile application
 - [ ] **Browser Extension** - Chrome/Firefox extension for quick access
 - [ ] **Admin Console** - User management, audit log viewer, feature flags, configs
+- [ ] **Fiat On-Ramp/Off-Ramp** - Ramp or MoonPay (feature-flagged)
 
 ## Phase 6: Advanced Features & Integrations 🔮
 
@@ -132,12 +151,17 @@
 - [ ] **Regional Compliance** - Adapt to different regulatory requirements
 - [ ] **Localized Payment Methods** - Region-specific payment options
 
+### Integrations
+- [ ] **WalletConnect v2** - Connect popular wallets for view-only and signature auth
+- [ ] **Redundant Pricing Providers** - CoinGecko + CryptoCompare failover
+
 ## Quality Assurance, Testing  Observability 🧪
 
 ### Testing Strategy
 - [ ] **API Smoke Tests** - Cover auth, portfolio, trading, and 2FA endpoints
 - [ ] **Unit  Integration Tests** - Critical paths for pricing, orders, portfolio math
 - [ ] **E2E Tests** - Core user journeys (onboarding, trade, portfolio update)
+- [ ] **E2E Smoke Path** - Onboarding → connect/import → place trade → alert fires
 - [ ] **Security Tests** - AuthZ gaps, rate limits, SSRF/XSS/CSRF checks
 - [ ] **Load/Stress Tests** - Baseline throughput and error budgets
 
@@ -145,6 +169,7 @@
 - [ ] **Structured Logging** - Correlation IDs, user/session context
 - [ ] **Metrics** - Latency, error rates, cache hit rate, dependency SLIs
 - [ ] **Tracing** - Distributed traces across API routes and background jobs
+- [ ] **Error Tracking** - Sentry with release tagging and source maps
 - [ ] **Dashboards  Alerts** - SLOs with alerting on burn rate and anomalies
 
 ## Technical Debt  Maintenance 🔧
@@ -161,13 +186,21 @@
 - [ ] **Monitoring  Alerting** - System health monitoring
 - [ ] **CI/CD Pipeline** - Automated testing and deployment
 
+### Developer Experience
+- [ ] **API Docs** - OpenAPI for public/private endpoints with examples
+- [ ] **Local Dev Seeding v2** - Deterministic fixtures and “sample user” toggles
+- [ ] **CI Updates** - Node 20 baseline; cache Prisma engine (~/.cache/prisma); avoid caching node_modules with npm ci
+
 ## Feature Priority Matrix 🎯
 
 ### High Impact, Low Effort (Quick Wins) 🚀
 - Navigation Bar Enhancement
 - User Profile Management
-- Price Alerts
-- Notifications System
+- Watchlists v1
+- Dark/Light theme toggle
+- Price Alerts (web push/email delivery)
+- Notifications System (Toast v1)
+- Sentry setup
 
 ### High Impact, High Effort (Major Features) 💪
 - Advanced Order Types
@@ -176,7 +209,6 @@
 - Social Trading Features
 
 ### Low Impact, Low Effort (Nice to Have) ⭐
-- Dark/Light theme toggle
 - Trading History Export
 - Multi-language Support
 
@@ -208,11 +240,13 @@
 ### Next Sprint Goals 🎯
 1. **Complete Navigation Bar Enhancement** - Authenticated navigation system
 2. **Implement User Profile Page** - Settings and account management
-3. **Add Toast Notifications** - User feedback system
-4. **Create Price Alerts System** - Custom price monitoring
-5. **Write API Smoke Tests for 2FA Endpoints** - Basic happy-path and error-path checks (enable/disable 2FA, verify TOTP, backup codes)
+3. **Add Toast Notifications (v1)** - User feedback system
+4. **Create Price Alerts System** - Custom price monitoring with web push/email
+5. **Add Dark/Light Theme Toggle** - Persisted per user
+6. **Implement Watchlists v1** - Save favorites with basic sort/filter
+7. **Set up Sentry** - Error tracking with release tagging
 
 ---
 
-*Last Updated: August 14, 2025*
-*Version: 1.1*
+*Last Updated: August 17, 2025*
+*Version: 1.2*
