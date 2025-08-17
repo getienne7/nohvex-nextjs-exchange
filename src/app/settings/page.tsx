@@ -70,8 +70,8 @@ function PriceAlertsSection() {
       <form onSubmit={create} className="grid grid-cols-1 md:grid-cols-5 gap-3">
         <input className="px-3 py-2 bg-white/5 border border-gray-600 rounded-lg text-white" value={symbol} onChange={e=>setSymbol(e.target.value.toUpperCase())} placeholder="Symbol e.g. BTC"/>
         <select className="px-3 py-2 bg-white/5 border border-gray-600 rounded-lg text-white" value={operator} onChange={e=>setOperator(e.target.value as any)}>
-          <option value="GT">GT (&gt;)</option>
-          <option value="LT">LT (&lt;)</option>
+          <option value="GT">GT ({'>'})</option>
+          <option value="LT">LT ({'<'})</option>
         </select>
         <input className="px-3 py-2 bg-white/5 border border-gray-600 rounded-lg text-white" type="number" step="0.0001" value={threshold} onChange={e=>setThreshold(Number(e.target.value))} placeholder="Threshold (USD)"/>
         <button disabled={isSubmitting} className="px-3 py-2 bg-blue-600 rounded-lg text-white">{isSubmitting ? 'Adding...' : 'Add Alert'}</button>
