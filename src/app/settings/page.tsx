@@ -20,11 +20,22 @@ import { NotificationPreferences, PrivacySettings } from '@/types/user-preferenc
 import { BackupCodesManager } from '@/components/auth/BackupCodesManager'
 import { useNotify } from '@/components/notifications'
 
+type Operator = 'GT' | 'LT'
+
+type AlertItem = {
+  id: string
+  symbol: string
+  operator: Operator
+  threshold: number
+  active: boolean
+  lastTriggeredAt?: string | Date | null
+}
+
 function PriceAlertsSection() {
   const [symbol, setSymbol] = useState('BTC')
-  const [operator, setOperator] = useState<'GT'|'LT'>('GT')
+  const [operator, setOperator] = useState<Operator>('GT')
   const [threshold, setThreshold] = useState<number>(50000)
-  const [alerts, setAlerts] = useState<any[]>([])
+  const [alerts, setAlerts] = useState<AlertItem[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const notify = useNotify()
 
@@ -69,7 +80,7 @@ function PriceAlertsSection() {
       <h3 className="text-white font-medium">Price Alerts</h3>
       <form onSubmit={create} className="grid grid-cols-1 md:grid-cols-5 gap-3">
         <input className="px-3 py-2 bg-white/5 border border-gray-600 rounded-lg text-white" value={symbol} onChange={e=>setSymbol(e.target.value.toUpperCase())} placeholder="Symbol e.g. BTC"/>
-        <select className="px-3 py-2 bg-white/5 border border-gray-600 rounded-lg text-white" value={operator} onChange={e=>setOperator(e.target.value as any)}>
+        <select className="px-3 py-2 bg-white/5 border border-gray-600 rounded-lg text-white" value={operator} onChange={e=>setOperator(e.target.value as Operator)}>
           <option value="GT">GT ({'>'})</option>
           <option value="LT">LT ({'<'})</option>
         </select>

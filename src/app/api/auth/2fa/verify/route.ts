@@ -2,12 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import speakeasy from 'speakeasy'
-import { dbService } from '@/lib/db-service'
 import { checkLimit, clientIpFromHeaders } from '@/lib/rate-limit'
 import { logAudit } from '@/lib/audit'
 import { inc } from '@/lib/metrics'
+import { dbService } from '@/lib/db-service'
 
 export async function POST(req: NextRequest) {
+  // Basic rate limiting per IP/user
+  const ip = clientIpFromHeaders(req.headers)
+  const rl = checkLimit(`2fa_verify:${ip}`, 10, 60_000)
+  if (!rl.allowed) return NextResponse.json({ error: 'Too many attempts' }, { status: 429 })
   try {
     const session = await getServerSession(authOptions)
     
@@ -20,7 +24,6 @@ export async function POST(req: NextRequest) {
 
     const { code, useBackupCode, action, trustDevice }: { code: string; useBackupCode?: boolean; action?: string; trustDevice?: boolean } = await req.json()
 
-    const ip = clientIpFromHeaders(new Headers(req.headers))
 
     // Rate limit verification attempts: 5 per 5 minutes per user+ip
     {

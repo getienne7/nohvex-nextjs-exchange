@@ -330,6 +330,14 @@ export class EmailService {
   }
 
   private generateAlertEmailHTML(symbol: string, operator: 'GT'|'LT', threshold: number, price: number): string {
+    const opText = operator === 'GT' ? '>' : '<'
+    const ts = new Date().toUTCString()
+    const baseUrl = (process.env.NEXTAUTH_URL?.trim() && process.env.NEXTAUTH_URL !== '')
+      ? process.env.NEXTAUTH_URL.replace(/\/$/, '')
+      : 'https://nohvex-nextjs-exchange.vercel.app'
+    const viewLink = `${baseUrl}/settings?tab=alerts&symbol=${encodeURIComponent(symbol)}`
+    const num = (n: number) => new Intl.NumberFormat('en-US', { maximumFractionDigits: 8 }).format(n)
+
     return `
       <!DOCTYPE html>
       <html>
@@ -344,12 +352,17 @@ export class EmailService {
           </div>
 
           <div style="background: #ffffff; padding: 24px; border-radius: 0 0 10px 10px; border: 1px solid #e5e7eb;">
-            <h2 style="color: #111827; margin-top: 0;">${symbol} ${operator} ${threshold}</h2>
+            <h2 style="color: #111827; margin-top: 0;">${symbol.toUpperCase()} ${opText} ${num(threshold)} USD</h2>
             <p>The price alert you created has been triggered.</p>
 
             <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 16px;">
-              <p style="margin: 0;">Current Price: <strong>${price} USD</strong></p>
-              <p style="margin: 4px 0 0 0;">Condition: <strong>${symbol} ${operator} ${threshold} USD</strong></p>
+              <p style="margin: 0;">Current Price: <strong>${num(price)} USD</strong></p>
+              <p style="margin: 4px 0 0 0;">Condition: <strong>${symbol.toUpperCase()} ${opText} ${num(threshold)} USD</strong></p>
+              <p style="margin: 8px 0 0 0; color:#6b7280; font-size: 12px;">Triggered at: ${ts}</p>
+            </div>
+
+            <div style="text-align:center; margin-top: 20px;">
+              <a href="${viewLink}" style="display:inline-block; background:#111827; color:#fff; padding:10px 18px; border-radius:6px; text-decoration:none; font-weight:600;">View Alert</a>
             </div>
 
             <p style="color: #6b7280; font-size: 14px; margin-top: 16px;">You received this email because you enabled Price Alerts in NOHVEX.</p>
@@ -360,11 +373,22 @@ export class EmailService {
   }
 
   private generateAlertEmailText(symbol: string, operator: 'GT'|'LT', threshold: number, price: number): string {
+    const opText = operator === 'GT' ? '>' : '<'
+    const ts = new Date().toUTCString()
+    const baseUrl = (process.env.NEXTAUTH_URL?.trim() && process.env.NEXTAUTH_URL !== '')
+      ? process.env.NEXTAUTH_URL.replace(/\/$/, '')
+      : 'https://nohvex-nextjs-exchange.vercel.app'
+    const viewLink = `${baseUrl}/settings?tab=alerts&symbol=${encodeURIComponent(symbol)}`
+    const num = (n: number) => new Intl.NumberFormat('en-US', { maximumFractionDigits: 8 }).format(n)
+
     return `
       NOHVEX Exchange - Price Alert Triggered
 
-      ${symbol} ${operator} ${threshold} has been hit.
-      Current price: ${price} USD
+      ${symbol.toUpperCase()} ${opText} ${num(threshold)} USD has been hit.
+      Current price: ${num(price)} USD
+      Triggered at: ${ts}
+
+      Manage/view this alert: ${viewLink}
 
       You received this email because you enabled Price Alerts in NOHVEX.
     `

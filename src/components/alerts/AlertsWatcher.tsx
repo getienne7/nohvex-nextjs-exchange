@@ -7,7 +7,7 @@ import { useNotify } from '@/components/notifications'
 export default function AlertsWatcher() {
   const { status } = useSession()
   const notify = useNotify()
-  const timer = useRef<NodeJS.Timer | null>(null)
+  const timer = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
     if (status !== 'authenticated') return

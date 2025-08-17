@@ -3,25 +3,27 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { updateAlert, deleteAlert } from '@/lib/alerts-service'
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   try {
     const body = await req.json()
-    const alert = await updateAlert(session.user.id, params.id, body)
+    const { id } = await context.params
+    const alert = await updateAlert(session.user.id, id, body)
     return NextResponse.json({ success: true, alert })
-  } catch (e) {
+  } catch {
     return NextResponse.json({ error: 'Failed to update alert' }, { status: 500 })
   }
 }
 
-export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   try {
-    await deleteAlert(session.user.id, params.id)
+    const { id } = await context.params
+    await deleteAlert(session.user.id, id)
     return NextResponse.json({ success: true })
-  } catch (e) {
+  } catch {
     return NextResponse.json({ error: 'Failed to delete alert' }, { status: 500 })
   }
 }

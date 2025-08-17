@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       cooldownMinutes,
     })
     return NextResponse.json({ success: true, alert })
-  } catch (e) {
+  } catch {
     return NextResponse.json({ error: 'Failed to create alert' }, { status: 500 })
   }
 }

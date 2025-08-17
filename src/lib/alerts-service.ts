@@ -13,7 +13,7 @@ export async function createAlert(userId: string, data: { symbol: string; operat
     data: {
       userId,
       symbol,
-      operator: data.operator as any,
+      operator: data.operator,
       threshold: data.threshold,
       cooldownMinutes: data.cooldownMinutes ?? 10,
     },
@@ -25,7 +25,7 @@ export async function updateAlert(userId: string, id: string, data: Partial<{ sy
     where: { id },
     data: {
       ...(data.symbol ? { symbol: data.symbol.toUpperCase() } : {}),
-      ...(data.operator ? { operator: data.operator as any } : {}),
+      ...(data.operator ? { operator: data.operator } : {}),
       ...(data.threshold !== undefined ? { threshold: data.threshold } : {}),
       ...(data.active !== undefined ? { active: data.active } : {}),
       ...(data.cooldownMinutes !== undefined ? { cooldownMinutes: data.cooldownMinutes } : {}),
@@ -46,19 +46,20 @@ export async function checkAndTriggerAlerts() {
 
   // Group by symbol
   const symbols = Array.from(new Set(active.map(a => a.symbol)))
-  const priceMap = await nowNodesService.getCryptoPrices(symbols)
+  const priceList = await nowNodesService.getCryptoPrices(symbols)
 
   let triggered = 0
   const now = new Date()
   const items: Array<{symbol:string, operator:Operator, threshold:number, price:number}> = []
 
   for (const alert of active) {
-    const price = priceMap[alert.symbol]
-    if (!price || typeof price.usd !== 'number') continue
+    const info = priceList.find(p => p.symbol === alert.symbol)
+    const priceUsd = info?.current_price
+    if (typeof priceUsd !== 'number') continue
 
     const shouldTrigger = (
-      (alert.operator === 'GT' && price.usd > alert.threshold) ||
-      (alert.operator === 'LT' && price.usd < alert.threshold)
+      (alert.operator === 'GT' && priceUsd > alert.threshold) ||
+      (alert.operator === 'LT' && priceUsd < alert.threshold)
     )
 
     if (!shouldTrigger) continue
@@ -71,7 +72,7 @@ export async function checkAndTriggerAlerts() {
 
     await prisma.alert.update({ where: { id: alert.id }, data: { lastTriggeredAt: now } })
     triggered++
-    items.push({ symbol: alert.symbol, operator: alert.operator as Operator, threshold: alert.threshold, price: price.usd })
+    items.push({ symbol: alert.symbol, operator: alert.operator as Operator, threshold: alert.threshold, price: priceUsd })
     // Fire-and-forget email stub if SMTP/SES configured; otherwise logs
     try {
       const user = await prisma.user.findUnique({ where: { id: alert.userId } })
@@ -81,11 +82,11 @@ export async function checkAndTriggerAlerts() {
           alert.symbol,
           alert.operator as Operator,
           alert.threshold,
-          price.usd
+          priceUsd
         )
       }
     } catch {}
-    console.log(`Price alert triggered: ${alert.symbol} ${alert.operator} ${alert.threshold} (price=${price.usd}) user=${alert.userId}`)
+    console.log(`Price alert triggered: ${alert.symbol} ${alert.operator} ${alert.threshold} (price=${priceUsd}) user=${alert.userId}`)
   }
 
   return { checked: active.length, triggered, items }
