@@ -8,6 +8,10 @@ GitHub is fully updated with all fixes applied. You can now create a brand new V
 
 ## 🌐 **Step-by-Step Fresh Deployment**
 
+> Developing locally first? See the Docker local dev instructions in the README: [Run with Docker (Local Dev)](README.md#run-with-docker-local-dev). Quick start:
+>
+> docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+
 ### **1. Go to Vercel Dashboard**
 Visit: [https://vercel.com/dashboard](https://vercel.com/dashboard)
 
