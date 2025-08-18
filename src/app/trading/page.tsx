@@ -4,10 +4,11 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ChangeNowWidget } from '@/components/ChangeNowWidget'
 import { PortfolioTrading } from '@/components/PortfolioTrading'
+import RealTimeTrading from '@/components/RealTimeTrading'
 import { GlobalNavigation } from '@/components/GlobalNavigation'
 
 export default function TradingPage() {
-  const [activeTab, setActiveTab] = useState<'portfolio' | 'exchange'>('portfolio')
+  const [activeTab, setActiveTab] = useState<'portfolio' | 'realtime' | 'exchange'>('realtime')
 
   return (
     <>
@@ -42,6 +43,16 @@ export default function TradingPage() {
         >
           <div className="flex bg-white/10 backdrop-blur-sm rounded-xl p-1">
             <button
+              onClick={() => setActiveTab('realtime')}
+              className={`px-6 py-3 rounded-lg text-sm font-medium transition-all ${
+                activeTab === 'realtime'
+                  ? 'bg-gradient-to-r from-green-500 to-blue-500 text-white shadow-lg'
+                  : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              🔴 Live Portfolio Trading
+            </button>
+            <button
               onClick={() => setActiveTab('portfolio')}
               className={`px-6 py-3 rounded-lg text-sm font-medium transition-all ${
                 activeTab === 'portfolio'
@@ -49,7 +60,7 @@ export default function TradingPage() {
                   : 'text-gray-400 hover:text-white'
               }`}
             >
-              📊 Portfolio Trading
+              📊 Demo Trading
             </button>
             <button
               onClick={() => setActiveTab('exchange')}
@@ -69,14 +80,24 @@ export default function TradingPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="max-w-2xl mx-auto"
+          className="max-w-6xl mx-auto"
         >
-          {activeTab === 'portfolio' ? (
+          {activeTab === 'realtime' ? (
+            <div>
+              <RealTimeTrading />
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-400">
+                  🔴 <strong>Live Portfolio Trading:</strong> Your real wallet data from NOWNodes. 
+                  Trade with actual balances and real-time prices.
+                </p>
+              </div>
+            </div>
+          ) : activeTab === 'portfolio' ? (
             <div>
               <PortfolioTrading />
               <div className="mt-6 text-center">
                 <p className="text-sm text-gray-500">
-                  💡 <strong>Portfolio Trading:</strong> Practice with your internal balance. 
+                  💡 <strong>Demo Trading:</strong> Practice with simulated balance. 
                   Perfect for testing strategies and learning to trade.
                 </p>
               </div>

@@ -15,7 +15,13 @@ import {
   Cog6ToothIcon,
   BellIcon,
   ArrowRightOnRectangleIcon,
-  BuildingLibraryIcon
+  BuildingLibraryIcon,
+  WalletIcon,
+  SparklesIcon,
+  EyeIcon,
+  BeakerIcon,
+  RocketLaunchIcon,
+  CpuChipIcon
 } from '@heroicons/react/24/outline'
 import { 
   ChartBarIcon as ChartBarSolidIcon,
@@ -46,6 +52,13 @@ export function GlobalNavigation({ variant = 'standard' }: NavigationProps) {
   const authenticatedNavItems = [
     { name: 'Dashboard', href: '/dashboard', icon: ChartBarIcon, solidIcon: ChartBarSolidIcon },
     { name: 'Portfolio', href: '/portfolio', icon: BuildingLibraryIcon, solidIcon: BuildingLibraryIcon },
+    { name: 'Web3 Portfolio', href: '/web3', icon: WalletIcon, solidIcon: WalletIcon },
+    { name: 'Yield Optimizer', href: '/yield-optimizer', icon: SparklesIcon, solidIcon: SparklesIcon },
+    { name: 'Portfolio Analytics', href: '/portfolio-analytics', icon: ChartBarIcon, solidIcon: ChartBarSolidIcon },
+    { name: 'DeFi Positions', href: '/defi-positions', icon: BeakerIcon, solidIcon: BeakerIcon },
+    { name: 'Advanced Trading', href: '/advanced-trading', icon: RocketLaunchIcon, solidIcon: RocketLaunchIcon },
+    { name: 'Predictive Analytics', href: '/predictive-analytics', icon: CpuChipIcon, solidIcon: CpuChipIcon },
+    { name: 'Transaction Monitor', href: '/transaction-monitor', icon: EyeIcon, solidIcon: EyeIcon },
     { name: 'Trading', href: '/trading', icon: ArrowsRightLeftIcon, solidIcon: ArrowsRightLeftSolidIcon },
   ]
 

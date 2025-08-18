@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -36,6 +36,8 @@ model User {
   portfolio     Portfolio[]
   transactions  Transaction[]
   alerts        Alert[]
+  walletConnections WalletConnection[]
+  portfolioOptimizations PortfolioOptimization[]
 }
 
 model Account {
@@ -139,4 +141,75 @@ enum TransactionStatus {
 enum AlertOperator {
   GT
   LT
+}
+
+// Web3 Wallet Integration Models
+model WalletConnection {
+  id          String   @id @default(cuid())
+  userId      String
+  address     String
+  chainId     Int
+  walletType  WalletType
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assets      WalletAsset[]
+  optimizations PortfolioOptimization[]
+  
+  @@unique([userId, address, chainId])
+  @@index([userId])
+  @@index([address])
+}
+
+model WalletAsset {
+  id              String   @id @default(cuid())
+  walletId        String
+  tokenAddress    String   // Contract address (0x0 for native tokens)
+  symbol          String
+  name            String
+  balance         String   // Use string for precise decimal handling
+  decimals        Int
+  chainId         Int
+  usdValue        Float?
+  logoUrl         String?
+  lastUpdated     DateTime @default(now())
+  
+  wallet          WalletConnection @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  
+  @@unique([walletId, tokenAddress])
+  @@index([walletId])
+  @@index([symbol])
+}
+
+enum WalletType {
+  METAMASK
+  WALLETCONNECT
+  COINBASE_WALLET
+  TRUST_WALLET
+  OTHER
+}
+
+// Portfolio Optimization Analytics
+model PortfolioOptimization {
+  id                    String   @id @default(cuid())
+  userId                String
+  walletId              String
+  chainId               Int
+  riskTolerance         Int
+  currentYield          Float
+  optimizedYield        Float
+  potentialGain         Float
+  recommendationsCount  Int
+  overallRisk           Float
+  diversificationScore  Float
+  createdAt             DateTime @default(now())
+  
+  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet                WalletConnection @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([walletId])
+  @@index([createdAt])
 }
