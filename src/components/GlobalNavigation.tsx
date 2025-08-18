@@ -46,6 +46,7 @@ export function GlobalNavigation({ variant = 'standard' }: NavigationProps) {
   const authenticatedNavItems = [
     { name: 'Dashboard', href: '/dashboard', icon: ChartBarIcon, solidIcon: ChartBarSolidIcon },
     { name: 'Portfolio', href: '/portfolio', icon: BuildingLibraryIcon, solidIcon: BuildingLibraryIcon },
+    { name: 'Watchlists', href: '/watchlists', icon: BellIcon, solidIcon: BellIcon },
     { name: 'Trading', href: '/trading', icon: ArrowsRightLeftIcon, solidIcon: ArrowsRightLeftSolidIcon },
   ]
 

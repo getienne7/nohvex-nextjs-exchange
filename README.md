@@ -7,6 +7,7 @@ A modern, secure cryptocurrency exchange platform built with Next.js, featuring 
 - **Real-time Cryptocurrency Pricing**: Powered by NOWNodes API for accurate, up-to-date market data
 - **Interactive Trading Interface**: Live exchange rates with automatic conversion calculations
 - **Portfolio Management**: Track your crypto holdings with real-time profit/loss calculations
+- **Watchlists v1**: Save favorite symbols, add/remove from Trading via star button, manage at `/watchlists`
 - **Modern UI/UX**: Responsive design with smooth animations using Framer Motion
 - **Secure Authentication**: Built with NextAuth.js for robust user management
 - **Database Integration**: Prisma ORM with PostgreSQL for data persistence
