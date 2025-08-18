@@ -19,6 +19,7 @@ import '@/lib/alerts-poller'
 import { NotificationPreferences, PrivacySettings } from '@/types/user-preferences'
 import { BackupCodesManager } from '@/components/auth/BackupCodesManager'
 import { useNotify } from '@/components/notifications'
+import ThemeSelector from './ThemeSelector'
 
 type Operator = 'GT' | 'LT'
 
@@ -480,20 +481,7 @@ export default function SettingsPage() {
               <div className="space-y-4">
                 <div>
                   <h3 className="text-white font-medium mb-3">Theme</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <button className="p-4 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 rounded-lg border-2 border-blue-500 text-white">
-                      <div className="text-sm font-medium">Dark (Current)</div>
-                      <div className="text-xs text-gray-400 mt-1">Default dark theme</div>
-                    </button>
-                    <button className="p-4 bg-gray-200 rounded-lg border-2 border-transparent text-gray-600 opacity-50">
-                      <div className="text-sm font-medium">Light (Coming Soon)</div>
-                      <div className="text-xs text-gray-500 mt-1">Clean light theme</div>
-                    </button>
-                    <button className="p-4 bg-gradient-to-br from-purple-900 via-pink-900 to-purple-900 rounded-lg border-2 border-transparent text-white opacity-50">
-                      <div className="text-sm font-medium">Galaxy (Coming Soon)</div>
-                      <div className="text-xs text-gray-400 mt-1">Purple space theme</div>
-                    </button>
-                  </div>
+                  <ThemeSelector />
                 </div>
 
                 <div>
