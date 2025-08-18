@@ -36,6 +36,7 @@ model User {
   portfolio     Portfolio[]
   transactions  Transaction[]
   alerts        Alert[]
+  watchlist     WatchlistItem[]
 }
 
 model Account {
@@ -139,4 +140,16 @@ enum TransactionStatus {
 enum AlertOperator {
   GT
   LT
+}
+
+model WatchlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  symbol    String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, symbol])
+  @@index([userId])
 }
