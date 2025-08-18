@@ -107,6 +107,10 @@ jobs:
           code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:3000/api/prices?symbols=BTC,ETH")
           if [ "$code" -lt 200 ] || [ "$code" -ge 500 ]; then
             echo "Unexpected status for /api/prices: $code"; exit 1; fi
+          # Alerts endpoint should respond (auth not enforced for GET in CI)
+          code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/api/alerts)
+          if [ "$code" -lt 200 ] || [ "$code" -ge 500 ]; then
+            echo "Unexpected status for /api/alerts: $code"; exit 1; fi
       - name: Stop server
         if: always()
         run: |

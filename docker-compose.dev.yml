@@ -1,0 +1,28 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: nohvex-web
+    env_file:
+      - .env.local
+      - .env.docker
+    environment:
+      # Hardcoded for local dev to ensure Prisma connects inside the container
+      DATABASE_URL: postgresql://nohvex:changeme-override-in-your-env@postgres:5432/nohvex?schema=public
+      DIRECT_URL: postgresql://nohvex:changeme-override-in-your-env@postgres:5432/nohvex?schema=public
+      CHOKIDAR_USEPOLLING: '1'
+      WATCHPACK_POLLING: 'true'
+      NEXT_TELEMETRY_DISABLED: '1'
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+      - next_cache:/app/.next
+    depends_on:
+      - postgres
+volumes:
+  node_modules:
+  next_cache:
+

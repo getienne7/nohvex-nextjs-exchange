@@ -15,7 +15,96 @@ import {
   CheckIcon,
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline'
+import '@/lib/alerts-poller'
 import { NotificationPreferences, PrivacySettings } from '@/types/user-preferences'
+import { BackupCodesManager } from '@/components/auth/BackupCodesManager'
+import { useNotify } from '@/components/notifications'
+
+type Operator = 'GT' | 'LT'
+
+type AlertItem = {
+  id: string
+  symbol: string
+  operator: Operator
+  threshold: number
+  active: boolean
+  lastTriggeredAt?: string | Date | null
+}
+
+function PriceAlertsSection() {
+  const [symbol, setSymbol] = useState('BTC')
+  const [operator, setOperator] = useState<Operator>('GT')
+  const [threshold, setThreshold] = useState<number>(50000)
+  const [alerts, setAlerts] = useState<AlertItem[]>([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const notify = useNotify()
+
+  const loadAlerts = async () => {
+    const res = await fetch('/api/alerts', { cache: 'no-store' })
+    const data = await res.json()
+    setAlerts(data.alerts ?? [])
+  }
+
+  useEffect(() => { loadAlerts() }, [])
+
+  const create = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    try {
+      const resp = await fetch('/api/alerts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ symbol, operator, threshold: Number(threshold) })
+      })
+      if (resp.ok) notify.success('Alert created', `${symbol} ${operator} ${threshold}`)
+      await loadAlerts()
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const toggleActive = async (id: string, active: boolean) => {
+    const resp = await fetch(`/api/alerts/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ active }) })
+    if (resp.ok) notify.info(active ? 'Alert enabled' : 'Alert paused')
+    await loadAlerts()
+  }
+
+  const remove = async (id: string) => {
+    const resp = await fetch(`/api/alerts/${id}`, { method: 'DELETE' })
+    if (resp.ok) notify.warning('Alert deleted')
+    await loadAlerts()
+  }
+
+  return (
+    <div className="space-y-4">
+      <h3 className="text-white font-medium">Price Alerts</h3>
+      <form onSubmit={create} className="grid grid-cols-1 md:grid-cols-5 gap-3">
+        <input className="px-3 py-2 bg-white/5 border border-gray-600 rounded-lg text-white" value={symbol} onChange={e=>setSymbol(e.target.value.toUpperCase())} placeholder="Symbol e.g. BTC"/>
+        <select className="px-3 py-2 bg-white/5 border border-gray-600 rounded-lg text-white" value={operator} onChange={e=>setOperator(e.target.value as Operator)}>
+          <option value="GT">GT ({'>'})</option>
+          <option value="LT">LT ({'<'})</option>
+        </select>
+        <input className="px-3 py-2 bg-white/5 border border-gray-600 rounded-lg text-white" type="number" step="0.0001" value={threshold} onChange={e=>setThreshold(Number(e.target.value))} placeholder="Threshold (USD)"/>
+        <button disabled={isSubmitting} className="px-3 py-2 bg-blue-600 rounded-lg text-white">{isSubmitting ? 'Adding...' : 'Add Alert'}</button>
+      </form>
+      <div className="space-y-2">
+        {alerts.map(a => (
+          <div key={a.id} className="flex items-center justify-between px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-gray-200">
+            <div>
+              <span className="font-mono">{a.symbol}</span> {a.operator} {a.threshold} USD
+              {a.lastTriggeredAt && <span className="ml-2 text-xs text-gray-400">last: {new Date(a.lastTriggeredAt).toLocaleString()}</span>}
+            </div>
+            <div className="space-x-2">
+              <button onClick={()=>toggleActive(a.id, !a.active)} className={`px-2 py-1 rounded ${a.active?'bg-emerald-600':'bg-gray-600'}`}>{a.active?'Active':'Paused'}</button>
+              <button onClick={()=>remove(a.id)} className="px-2 py-1 bg-red-600 rounded">Delete</button>
+            </div>
+          </div>
+        ))}
+        {alerts.length===0 && <div className="text-gray-400 text-sm">No alerts yet.</div>}
+      </div>
+    </div>
+  )
+}
 
 export default function SettingsPage() {
   const { data: session, status } = useSession()
@@ -177,6 +266,8 @@ export default function SettingsPage() {
               </h2>
               
               <div className="space-y-4">
+                {/* Price Alerts MVP */}
+                <PriceAlertsSection />
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-white font-medium">Email Notifications</h3>
@@ -348,6 +439,13 @@ export default function SettingsPage() {
                           <CheckIcon className="w-5 h-5 text-green-400" />
                           <span className="text-green-300">Two-Factor Authentication Enabled</span>
                         </div>
+
+                        {/* Backup Codes Manager */}
+                        <div className="mt-3">
+                          {/* Lazy import pattern is fine; direct import at top for simplicity */}
+                          <BackupCodesManager />
+                        </div>
+
                         <button 
                           onClick={handleDisable2FA}
                           disabled={isLoading}
@@ -364,8 +462,8 @@ export default function SettingsPage() {
                     )}
                   </div>
                 </div>
-              </div>
-            </motion.div>
+                </div>
+              </motion.div>
 
             {/* Appearance */}
             <motion.div

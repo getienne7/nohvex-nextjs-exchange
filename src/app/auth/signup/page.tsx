@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { useNotify } from '@/components/notifications'
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -16,6 +17,7 @@ export default function SignUp() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
+  const notify = useNotify()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,12 +26,14 @@ export default function SignUp() {
 
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match')
+      notify.error('Sign up failed', 'Passwords do not match')
       setIsLoading(false)
       return
     }
 
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters')
+      notify.error('Sign up failed', 'Password must be at least 6 characters')
       setIsLoading(false)
       return
     }
@@ -48,6 +52,7 @@ export default function SignUp() {
       })
 
       if (response.ok) {
+        notify.success('Account created')
         // Auto sign in after successful registration
         const result = await signIn('credentials', {
           email: formData.email,
@@ -63,9 +68,11 @@ export default function SignUp() {
       } else {
         const data = await response.json()
         setError(data.error || 'An error occurred')
+        notify.error('Sign up failed', data.error)
       }
     } catch {
       setError('An error occurred. Please try again.')
+      notify.error('Network error')
     } finally {
       setIsLoading(false)
     }

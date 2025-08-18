@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TwoFactorVerification } from '@/components/auth/TwoFactorVerification'
+import { useNotify } from '@/components/notifications'
 
 export default function SignIn() {
   const [email, setEmail] = useState('')
@@ -14,6 +15,7 @@ export default function SignIn() {
   const [error, setError] = useState('')
   const [step, setStep] = useState<'credentials' | '2fa'>('credentials')
   const router = useRouter()
+  const notify = useNotify()
 
   const handleCredentialsSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,6 +34,7 @@ export default function SignIn() {
       
       if (!loginData.success) {
         setError(loginData.error)
+        notify.error('Sign in failed', loginData.error)
         return
       }
       
@@ -48,13 +51,16 @@ export default function SignIn() {
 
         if (result?.error) {
           setError('Authentication failed')
+          notify.error('Sign in failed')
         } else {
+          notify.success('Signed in')
           router.push('/dashboard')
           router.refresh()
         }
       }
     } catch {
       setError('Network error. Please try again.')
+      notify.error('Network error')
     } finally {
       setIsLoading(false)
     }
@@ -71,13 +77,16 @@ export default function SignIn() {
 
       if (result?.error) {
         setError('Authentication failed after 2FA verification')
+        notify.error('2FA verification failed')
         setStep('credentials')
       } else {
+        notify.success('Signed in')
         router.push('/dashboard')
         router.refresh()
       }
     } catch {
       setError('Authentication error. Please try again.')
+      notify.error('Authentication error')
       setStep('credentials')
     }
   }
