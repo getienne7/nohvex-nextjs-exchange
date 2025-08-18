@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowsUpDownIcon } from '@heroicons/react/24/outline'
+import { ArrowsUpDownIcon, StarIcon as StarOutline } from '@heroicons/react/24/outline'
+import { StarIcon as StarSolid } from '@heroicons/react/24/solid'
+import { useSession } from 'next-auth/react'
 
 const popularPairs = [
   { from: 'BTC', to: 'USDT', rate: '97,434' },
@@ -12,8 +14,10 @@ const popularPairs = [
 ]
 
 export function TradingWidget() {
+  const { data: session } = useSession()
   const [fromCurrency, setFromCurrency] = useState('BTC')
   const [toCurrency, setToCurrency] = useState('USDT')
+  const [watchlisted, setWatchlisted] = useState(false)
   const [amount, setAmount] = useState('')
   const [rates, setRates] = useState<{ [key: string]: number }>({})
   const [receivedAmount, setReceivedAmount] = useState('')
@@ -61,6 +65,37 @@ export function TradingWidget() {
     return () => clearInterval(interval)
   }, [])
 
+  // Sync watchlist state for current "from" symbol
+  useEffect(() => {
+    let cancelled = false
+    async function check() {
+      if (!session) { setWatchlisted(false); return }
+      try {
+        const res = await fetch('/api/watchlists', { cache: 'no-store' })
+        if (res.ok) {
+          const data = await res.json()
+          const exists = (data.items || []).some((it: any) => it.symbol === fromCurrency)
+          if (!cancelled) setWatchlisted(Boolean(exists))
+        }
+      } catch {}
+    }
+    check()
+    return () => { cancelled = true }
+  }, [fromCurrency, session])
+
+  const toggleWatchlist = async () => {
+    if (!session) return
+    try {
+      if (watchlisted) {
+        const res = await fetch(`/api/watchlists?symbol=${fromCurrency}`, { method: 'DELETE' })
+        if (res.ok) setWatchlisted(false)
+      } else {
+        const res = await fetch('/api/watchlists', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ symbol: fromCurrency }) })
+        if (res.ok) setWatchlisted(true)
+      }
+    } catch {}
+  }
+
   useEffect(() => {
     calculateReceiveAmount()
   }, [calculateReceiveAmount])
@@ -101,7 +136,8 @@ export function TradingWidget() {
   return (
     <div className="mx-auto max-w-7xl px-6 lg:px-8">
       <div className="mx-auto max-w-2xl text-center">
-        <motion.h2
+        <div className="flex items-center justify-center gap-3">
+          <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -109,6 +145,20 @@ export function TradingWidget() {
         >
           Instant Crypto Exchange
         </motion.h2>
+          {/* Watchlist toggle */}
+          <button
+            onClick={toggleWatchlist}
+            disabled={!session}
+            title={!session ? 'Sign in to use watchlists' : watchlisted ? 'Remove from watchlist' : 'Add to watchlist'}
+            className={`inline-flex items-center justify-center h-10 w-10 rounded-full border transition-colors ${watchlisted ? 'border-yellow-400 bg-yellow-500/20' : 'border-white/20 bg-white/10'} ${!session ? 'opacity-50 cursor-not-allowed' : 'hover:bg-white/20'}`}
+          >
+            {watchlisted ? (
+              <StarSolid className="h-5 w-5 text-yellow-400" />
+            ) : (
+              <StarOutline className="h-5 w-5 text-gray-300" />
+            )}
+          </button>
+        </div>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
