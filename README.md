@@ -2,6 +2,8 @@
 
 A comprehensive DeFi portfolio management platform built with Next.js, featuring advanced analytics, yield tracking, and cross-chain capabilities.
 
+> **Latest Update**: Repository consolidated with WalletConnect v2.0 production fixes - August 18, 2025
+
 ## 🚀 Features
 
 - **DeFi Portfolio Management**: Connect your wallet and track your decentralized investments
