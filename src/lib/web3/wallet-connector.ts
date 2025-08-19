@@ -153,7 +153,18 @@ export class WalletConnector {
   // Connect to WalletConnect v2.0
   async connectWalletConnect(): Promise<ConnectedWallet> {
     try {
-      const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'demo'
+      const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID
+      
+      if (!projectId || projectId === 'demo') {
+        throw new Error('WalletConnect Project ID is not configured. Please set NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID in your environment variables.')
+      }
+      
+      // Ensure we're running in the browser
+      if (typeof window === 'undefined') {
+        throw new Error('WalletConnect can only be initialized in the browser')
+      }
+      
+      console.log('🔗 Initializing WalletConnect v2.0 with Project ID:', projectId)
       
       // Clean up any existing provider and sessions
       await this.clearWalletConnectSessions()
@@ -166,19 +177,32 @@ export class WalletConnector {
         qrModalOptions: {
           themeMode: 'light',
           themeVariables: {
-            '--wcm-z-index': '1000'
-          }
+            '--wcm-z-index': '1000',
+            '--wcm-accent-color': '#3b82f6',
+            '--wcm-background-color': '#ffffff'
+          },
+          enableExplorer: true,
+          explorerRecommendedWalletIds: [
+            'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96', // MetaMask
+            '4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0', // Trust Wallet
+            '20459438007b75f4f4acb98bf29aa3b800550309646d375da5fd4aac6c2a2c66', // Token Pocket
+          ]
         },
         metadata: {
           name: 'NOHVEX Exchange',
           description: 'Professional Crypto Exchange Platform',
-          url: window.location.origin,
-          icons: [`${window.location.origin}/logo.png`]
+          url: typeof window !== 'undefined' ? window.location.origin : 'https://nohvex.com',
+          icons: [typeof window !== 'undefined' ? `${window.location.origin}/logo.png` : 'https://nohvex.com/logo.png']
         }
       })
 
+      console.log('✅ WalletConnect provider initialized successfully')
+      
       // Enable session (shows QR modal)
+      console.log('📱 Opening WalletConnect QR modal...')
       await this.walletConnectProvider.enable()
+      
+      console.log('🎉 WalletConnect session established!')
       
       const provider = new ethers.BrowserProvider(this.walletConnectProvider)
       const signer = await provider.getSigner()
@@ -198,8 +222,20 @@ export class WalletConnector {
       this.setupWalletConnectListeners(wallet)
       return wallet
     } catch (error) {
-      console.error('WalletConnect connection error:', error)
-      throw new Error(`Failed to connect WalletConnect: ${error}`)
+      console.error('❌ WalletConnect connection error:', error)
+      
+      // Provide more specific error messages
+      if (error instanceof Error) {
+        if (error.message.includes('User rejected')) {
+          throw new Error('Connection cancelled by user')
+        } else if (error.message.includes('Proposal expired')) {
+          throw new Error('Connection request expired. Please try again.')
+        } else if (error.message.includes('Project ID')) {
+          throw new Error('WalletConnect configuration error. Please contact support.')
+        }
+      }
+      
+      throw new Error(`Failed to connect WalletConnect: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
   }
 

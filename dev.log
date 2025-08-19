@@ -31,3 +31,23 @@ NOWNodes returned 2 prices out of 4 requested
 Successfully fetched 2 prices from NOWNodes
 Successfully fetched and cached crypto prices
  GET /api/prices?symbols=BTC,ETH,BNB,USDT 200 in 4133ms
+Returning cached crypto prices
+ GET /api/prices?symbols=BTC,ETH,BNB,USDT 200 in 45ms
+Returning cached crypto prices
+ GET /api/prices?symbols=BTC,ETH,BNB,USDT,ADA 200 in 50ms
+ ✓ Compiled in 153ms
+ ✓ Compiled in 161ms
+Returning slightly stale cached data to avoid API calls
+ GET /api/prices?symbols=BTC,ETH,BNB,USDT 200 in 29ms
+Returning slightly stale cached data to avoid API calls
+ GET /api/prices?symbols=BTC,ETH,BNB,USDT,ADA 200 in 35ms
+ ⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
+   ▲ Next.js 15.4.6 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://10.2.29.138:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Compiled middleware in 329ms
+ ✓ Ready in 1324ms
+[?25h

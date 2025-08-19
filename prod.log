@@ -1,0 +1,20 @@
+
+> nohvex-exchange@0.1.0 start
+> next start
+
+   ▲ Next.js 15.4.6
+   - Local:        http://localhost:3000
+   - Network:      http://10.2.29.138:3000
+
+ ✓ Starting...
+ ✓ Ready in 563ms
+✓ Database connection initialized
+Attempting API call (1/3)
+Rate limited, waiting before API call
+NOWNodes returned 2 prices out of 4 requested
+Successfully fetched 2 prices from NOWNodes
+Successfully fetched and cached crypto prices
+Attempting API call (1/3)
+NOWNodes returned 1 prices out of 5 requested
+Successfully fetched 1 prices from NOWNodes
+Successfully fetched and cached crypto prices

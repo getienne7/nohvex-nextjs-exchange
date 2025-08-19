@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRightIcon, CurrencyDollarIcon, ShieldCheckIcon, ClockIcon } from '@heroicons/react/24/outline'
 import { GlobalNavigation } from './GlobalNavigation'
-import WalletConnector from './web3/WalletConnector'
+import ClientWalletConnector from './web3/ClientWalletConnector'
 import { ConnectedWallet } from '@/lib/web3/wallet-connector'
 
 export function HeroSection() {
@@ -111,7 +111,7 @@ export function HeroSection() {
       </div>
 
       {/* Wallet Connector Modal */}
-      <WalletConnector
+      <ClientWalletConnector
         isOpen={isWalletModalOpen}
         onClose={() => setIsWalletModalOpen(false)}
         onWalletConnected={handleWalletConnected}
