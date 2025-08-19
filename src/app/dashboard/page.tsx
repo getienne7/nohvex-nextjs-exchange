@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import PortfolioOverview from '@/components/dashboard/PortfolioOverview'
+import RealTimePortfolioOverview from '@/components/dashboard/RealTimePortfolioOverview'
 import CryptoChart from '@/components/dashboard/CryptoChart'
 import TransactionHistory from '@/components/dashboard/TransactionHistory'
 import { GlobalNavigation } from '@/components/GlobalNavigation'
@@ -12,7 +13,7 @@ import { GlobalNavigation } from '@/components/GlobalNavigation'
 export default function Dashboard() {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState('overview')
+  const [activeTab, setActiveTab] = useState('realtime')
 
   useEffect(() => {
     if (status === 'loading') return
@@ -62,6 +63,7 @@ export default function Dashboard() {
             <nav className="-mb-px flex space-x-8">
               {[
                 { id: 'overview', name: 'Portfolio Overview' },
+                { id: 'realtime', name: 'Live Portfolio (NOWNodes)' },
                 { id: 'charts', name: 'Advanced Charts' },
                 { id: 'history', name: 'Transaction History' }
               ].map((tab) => (
@@ -89,6 +91,7 @@ export default function Dashboard() {
           transition={{ duration: 0.3 }}
         >
           {activeTab === 'overview' && <PortfolioOverview />}
+          {activeTab === 'realtime' && <RealTimePortfolioOverview />}
           {activeTab === 'charts' && <CryptoChart />}
           {activeTab === 'history' && <TransactionHistory />}
         </motion.div>

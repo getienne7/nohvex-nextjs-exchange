@@ -10,19 +10,29 @@ import {
   XMarkIcon,
   HomeIcon,
   ChartBarIcon,
-  CubeTransparentIcon,
+  ArrowsRightLeftIcon,
   UserIcon,
   Cog6ToothIcon,
   BellIcon,
   ArrowRightOnRectangleIcon,
   BuildingLibraryIcon,
-  PresentationChartLineIcon,
+  WalletIcon,
+  SparklesIcon,
+  EyeIcon,
+  BeakerIcon,
+  RocketLaunchIcon,
+  CpuChipIcon
 } from '@heroicons/react/24/outline'
 import { 
   ChartBarIcon as ChartBarSolidIcon,
-  CubeTransparentIcon as CubeTransparentSolidIcon,
+  ArrowsRightLeftIcon as ArrowsRightLeftSolidIcon,
   HomeIcon as HomeSolidIcon,
-  PresentationChartLineIcon as PresentationChartLineSolidIcon
+  WalletIcon as WalletSolidIcon,
+  SparklesIcon as SparklesSolidIcon,
+  EyeIcon as EyeSolidIcon,
+  BeakerIcon as BeakerSolidIcon,
+  RocketLaunchIcon as RocketLaunchSolidIcon,
+  CpuChipIcon as CpuChipSolidIcon
 } from '@heroicons/react/24/solid'
 
 interface NavigationProps {
@@ -42,14 +52,20 @@ export function GlobalNavigation({ variant = 'standard' }: NavigationProps) {
   // Define navigation items based on authentication status
   const publicNavItems = [
     { name: 'Home', href: '/', icon: HomeIcon, solidIcon: HomeSolidIcon },
-    { name: 'DeFi Tools', href: '/trading', icon: CubeTransparentIcon, solidIcon: CubeTransparentSolidIcon },
+    { name: 'Trading', href: '/trading', icon: ArrowsRightLeftIcon, solidIcon: ArrowsRightLeftSolidIcon },
   ]
 
   const authenticatedNavItems = [
     { name: 'Dashboard', href: '/dashboard', icon: ChartBarIcon, solidIcon: ChartBarSolidIcon },
     { name: 'Portfolio', href: '/portfolio', icon: BuildingLibraryIcon, solidIcon: BuildingLibraryIcon },
-    { name: 'Analytics', href: '/analytics', icon: PresentationChartLineIcon, solidIcon: PresentationChartLineSolidIcon },
-    { name: 'DeFi Tools', href: '/trading', icon: CubeTransparentIcon, solidIcon: CubeTransparentSolidIcon },
+    { name: 'Web3 Portfolio', href: '/web3', icon: WalletIcon, solidIcon: WalletSolidIcon },
+    { name: 'Yield Optimizer', href: '/yield-optimizer', icon: SparklesIcon, solidIcon: SparklesSolidIcon },
+    { name: 'Portfolio Analytics', href: '/portfolio-analytics', icon: ChartBarIcon, solidIcon: ChartBarSolidIcon },
+    { name: 'DeFi Positions', href: '/defi-positions', icon: BeakerIcon, solidIcon: BeakerSolidIcon },
+    { name: 'Advanced Trading', href: '/advanced-trading', icon: RocketLaunchIcon, solidIcon: RocketLaunchSolidIcon },
+    { name: 'Predictive Analytics', href: '/predictive-analytics', icon: CpuChipIcon, solidIcon: CpuChipSolidIcon },
+    { name: 'Transaction Monitor', href: '/transaction-monitor', icon: EyeIcon, solidIcon: EyeSolidIcon },
+    { name: 'Trading', href: '/trading', icon: ArrowsRightLeftIcon, solidIcon: ArrowsRightLeftSolidIcon },
   ]
 
   const isActive = (href: string) => pathname === href || (href !== '/' && pathname.startsWith(href))
