@@ -1,15 +1,17 @@
-# NOHVEX Exchange - Cryptocurrency Trading Platform
+# NOHVEX - DeFi Portfolio Management Platform
 
-A modern, secure cryptocurrency exchange platform built with Next.js, featuring real-time pricing via NOWNodes integration.
+A comprehensive DeFi portfolio management platform built with Next.js, featuring advanced analytics, yield tracking, and cross-chain capabilities.
 
 ## 🚀 Features
 
-- **Real-time Cryptocurrency Pricing**: Powered by NOWNodes API for accurate, up-to-date market data
-- **Interactive Trading Interface**: Live exchange rates with automatic conversion calculations
-- **Portfolio Management**: Track your crypto holdings with real-time profit/loss calculations
+- **DeFi Portfolio Management**: Connect your wallet and track your decentralized investments
+- **Real-time Analytics**: Monitor portfolio performance, yields, and risk metrics
+- **Strategy Simulator**: Test DeFi strategies risk-free with virtual balance
+- **Cross-Chain Swaps**: Swap cryptocurrencies across different blockchains
+- **Yield Tracking**: Monitor DeFi yields and farming rewards
 - **Modern UI/UX**: Responsive design with smooth animations using Framer Motion
-- **Secure Authentication**: Built with NextAuth.js for robust user management
-- **Database Integration**: Prisma ORM with PostgreSQL for data persistence
+- **Secure & Non-Custodial**: Your keys, your crypto - we never hold your funds
+- **Privacy First**: Encrypted data with no information sharing
 
 ## 🛠 Tech Stack
 
@@ -20,14 +22,14 @@ A modern, secure cryptocurrency exchange platform built with Next.js, featuring 
 - **Styling**: Tailwind CSS, Framer Motion
 - **API Integration**: NOWNodes for real-time crypto data
 
-## 📊 NOWNodes Integration
+## 🔗 DeFi Integration
 
-This project uses NOWNodes for real-time cryptocurrency pricing data. The integration provides:
+This platform integrates with various DeFi protocols and services:
 
-- Live price feeds for major cryptocurrencies (BTC, ETH, BNB, USDT, ADA, etc.)
-- Real-time exchange rate calculations
-- Automatic price updates every 10-30 seconds
-- Fallback pricing for enhanced reliability
+- **Real-time Price Feeds**: Live cryptocurrency pricing for accurate portfolio valuation
+- **Cross-Chain Support**: Swap assets across different blockchain networks
+- **Yield Farming**: Track and optimize DeFi yield farming strategies
+- **Portfolio Analytics**: Advanced metrics for DeFi investment performance
 
 ### API Endpoints
 

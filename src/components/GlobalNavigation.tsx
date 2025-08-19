@@ -10,17 +10,21 @@ import {
   XMarkIcon,
   HomeIcon,
   ChartBarIcon,
-  ArrowsRightLeftIcon,
+  CubeTransparentIcon,
   UserIcon,
   Cog6ToothIcon,
   BellIcon,
   ArrowRightOnRectangleIcon,
-  BuildingLibraryIcon
+  BuildingLibraryIcon,
+  PresentationChartLineIcon,
+  CpuChipIcon
 } from '@heroicons/react/24/outline'
 import { 
   ChartBarIcon as ChartBarSolidIcon,
-  ArrowsRightLeftIcon as ArrowsRightLeftSolidIcon,
-  HomeIcon as HomeSolidIcon
+  CubeTransparentIcon as CubeTransparentSolidIcon,
+  HomeIcon as HomeSolidIcon,
+  PresentationChartLineIcon as PresentationChartLineSolidIcon,
+  CpuChipIcon as CpuChipSolidIcon
 } from '@heroicons/react/24/solid'
 
 interface NavigationProps {
@@ -40,13 +44,14 @@ export function GlobalNavigation({ variant = 'standard' }: NavigationProps) {
   // Define navigation items based on authentication status
   const publicNavItems = [
     { name: 'Home', href: '/', icon: HomeIcon, solidIcon: HomeSolidIcon },
-    { name: 'Trading', href: '/trading', icon: ArrowsRightLeftIcon, solidIcon: ArrowsRightLeftSolidIcon },
+    { name: 'DeFi Tools', href: '/trading', icon: CubeTransparentIcon, solidIcon: CubeTransparentSolidIcon },
   ]
 
   const authenticatedNavItems = [
     { name: 'Dashboard', href: '/dashboard', icon: ChartBarIcon, solidIcon: ChartBarSolidIcon },
     { name: 'Portfolio', href: '/portfolio', icon: BuildingLibraryIcon, solidIcon: BuildingLibraryIcon },
-    { name: 'Trading', href: '/trading', icon: ArrowsRightLeftIcon, solidIcon: ArrowsRightLeftSolidIcon },
+    { name: 'Analytics', href: '/analytics', icon: PresentationChartLineIcon, solidIcon: PresentationChartLineSolidIcon },
+    { name: 'DeFi Tools', href: '/trading', icon: CubeTransparentIcon, solidIcon: CubeTransparentSolidIcon },
   ]
 
   const isActive = (href: string) => pathname === href || (href !== '/' && pathname.startsWith(href))

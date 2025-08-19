@@ -47,7 +47,7 @@ export default function Dashboard() {
             Welcome back, {session.user.name || session.user.email}
           </h1>
           <p className="text-gray-400 mt-2">
-            Manage your crypto portfolio and track your investments
+            Monitor your DeFi portfolio performance and track your decentralized investments
           </p>
         </motion.div>
 

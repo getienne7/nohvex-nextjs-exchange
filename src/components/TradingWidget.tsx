@@ -107,7 +107,7 @@ export function TradingWidget() {
           transition={{ duration: 0.6 }}
           className="text-3xl font-bold tracking-tight text-white sm:text-4xl"
         >
-          Instant Crypto Exchange
+          DeFi Tools Preview
         </motion.h2>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -115,7 +115,7 @@ export function TradingWidget() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="mt-2 text-lg leading-8 text-gray-400"
         >
-          Exchange cryptocurrencies instantly with the best rates in the market
+          Experience our portfolio management tools and cross-chain swap capabilities
         </motion.p>
       </div>
 

@@ -1,22 +1,22 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ShieldCheckIcon, GlobeAltIcon, LockClosedIcon } from '@heroicons/react/24/outline'
+import { ShieldCheckIcon, WalletIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 
 const trustSignals = [
   {
-    name: 'SSL Secured',
-    description: 'All data is encrypted with 256-bit SSL encryption to protect your privacy.',
-    icon: LockClosedIcon,
+    name: 'Non-Custodial',
+    description: 'Your keys, your crypto. We never hold your funds - you maintain full control.',
+    icon: WalletIcon,
   },
   {
-    name: 'Globally Regulated',
-    description: 'We are a fully regulated exchange operating in 150+ countries worldwide.',
-    icon: GlobeAltIcon,
+    name: 'Privacy First',
+    description: 'Your portfolio data is encrypted and private. We never share your information.',
+    icon: EyeSlashIcon,
   },
   {
-    name: 'SOC 2 Compliant',
-    description: 'Our platform adheres to the highest security and compliance standards.',
+    name: 'Security Audited',
+    description: 'Our smart contracts and platform undergo regular security audits.',
     icon: ShieldCheckIcon,
   },
 ]
@@ -32,7 +32,7 @@ export function TrustSignals() {
             transition={{ duration: 0.6 }}
             className="text-base font-semibold leading-7 text-emerald-400"
           >
-            Your Trust is Our Priority
+            Built for DeFi
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -40,7 +40,7 @@ export function TrustSignals() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl"
           >
-            A Secure and Compliant Crypto Exchange
+            Secure DeFi Portfolio Management
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -48,8 +48,8 @@ export function TrustSignals() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mt-6 text-lg leading-8 text-gray-300"
           >
-            We implement industry-leading security measures to protect your funds and personal data,
-            so you can trade with complete peace of mind.
+            Built with security and privacy at its core. Connect your wallet and manage your DeFi 
+            investments with confidence, knowing your assets remain under your control.
           </motion.p>
         </div>
         <motion.div

@@ -21,7 +21,7 @@ export default function TradingPage() {
             transition={{ duration: 0.6 }}
             className="text-4xl font-bold tracking-tight text-white sm:text-5xl"
           >
-            Trading Hub
+            DeFi Tools
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -29,7 +29,7 @@ export default function TradingPage() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="mt-4 text-lg leading-8 text-gray-400"
           >
-            Choose your trading experience - Portfolio management or Real crypto swaps
+            Practice portfolio strategies or swap real cryptocurrencies across chains
           </motion.p>
         </div>
 
@@ -49,7 +49,7 @@ export default function TradingPage() {
                   : 'text-gray-400 hover:text-white'
               }`}
             >
-              📊 Portfolio Trading
+              📊 Strategy Simulator
             </button>
             <button
               onClick={() => setActiveTab('exchange')}
@@ -59,7 +59,7 @@ export default function TradingPage() {
                   : 'text-gray-400 hover:text-white'
               }`}
             >
-              🔄 Real Exchange
+              🔄 Cross-Chain Swap
             </button>
           </div>
         </motion.div>
@@ -76,8 +76,8 @@ export default function TradingPage() {
               <PortfolioTrading />
               <div className="mt-6 text-center">
                 <p className="text-sm text-gray-500">
-                  💡 <strong>Portfolio Trading:</strong> Practice with your internal balance. 
-                  Perfect for testing strategies and learning to trade.
+                  💡 <strong>Strategy Simulator:</strong> Test DeFi strategies with virtual balance. 
+                  Perfect for learning portfolio rebalancing and yield optimization.
                 </p>
               </div>
             </div>
@@ -89,7 +89,7 @@ export default function TradingPage() {
               />
               <div className="mt-6 text-center">
                 <p className="text-sm text-gray-500">
-                  🚀 <strong>Real Exchange:</strong> Swap actual cryptocurrencies instantly. 
+                  🚀 <strong>Cross-Chain Swap:</strong> Swap real cryptocurrencies across chains. 
                   900+ assets • No KYC • Fixed rates guaranteed.
                 </p>
               </div>
@@ -105,26 +105,26 @@ export default function TradingPage() {
           className="mt-16 grid max-w-4xl mx-auto grid-cols-1 md:grid-cols-2 gap-8"
         >
           <div className="rounded-2xl bg-white/5 p-6 backdrop-blur-sm ring-1 ring-white/10">
-            <h3 className="text-lg font-semibold text-white mb-4">📊 Portfolio Trading</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">📊 Strategy Simulator</h3>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li>✅ Practice with virtual balance</li>
+              <li>✅ Test DeFi strategies risk-free</li>
               <li>✅ Real-time price updates</li>
-              <li>✅ Transaction history tracking</li>
-              <li>✅ Portfolio performance analytics</li>
-              <li>✅ Risk-free learning environment</li>
-              <li>✅ Instant execution</li>
+              <li>✅ Portfolio rebalancing practice</li>
+              <li>✅ Yield farming simulations</li>
+              <li>✅ Performance analytics</li>
+              <li>✅ Learn without losing funds</li>
             </ul>
           </div>
           
           <div className="rounded-2xl bg-white/5 p-6 backdrop-blur-sm ring-1 ring-white/10">
-            <h3 className="text-lg font-semibold text-white mb-4">🔄 Real Exchange</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">🔄 Cross-Chain Swap</h3>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li>✅ Actual cryptocurrency swaps</li>
+              <li>✅ Real cryptocurrency swaps</li>
               <li>✅ 900+ supported assets</li>
               <li>✅ Cross-chain exchanges</li>
               <li>✅ Fixed rates guaranteed</li>
               <li>✅ No KYC required</li>
-              <li>✅ Anonymous transactions</li>
+              <li>✅ Decentralized execution</li>
             </ul>
           </div>
         </motion.div>

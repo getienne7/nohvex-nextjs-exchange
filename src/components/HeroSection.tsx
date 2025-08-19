@@ -26,11 +26,11 @@ export function HeroSection() {
                 NOHVEX
               </span>
               <br />
-              Crypto Exchange
+              DeFi Portfolio Manager
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-300">
-              Trade 900+ cryptocurrencies with zero fees. Secure, fast, and anonymous trading 
-              for the modern crypto investor.
+              Manage your DeFi portfolio with advanced analytics, yield tracking, and risk management. 
+              Connect your wallet and take control of your decentralized investments.
             </p>
           </motion.div>
 
@@ -41,11 +41,11 @@ export function HeroSection() {
             className="mt-10 flex items-center justify-center gap-x-6"
           >
             <button className="group rounded-md bg-gradient-to-r from-blue-500 to-emerald-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:from-blue-400 hover:to-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-all duration-200">
-              Start Trading
+              Connect Wallet
               <ArrowRightIcon className="ml-2 h-4 w-4 inline-block group-hover:translate-x-1 transition-transform" />
             </button>
             <button className="text-sm font-semibold leading-6 text-gray-300 hover:text-white transition-colors">
-              View Markets <span aria-hidden="true">→</span>
+              View Portfolio <span aria-hidden="true">→</span>
             </button>
           </motion.div>
         </div>
