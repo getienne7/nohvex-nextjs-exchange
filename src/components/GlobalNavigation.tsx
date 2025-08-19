@@ -17,14 +17,12 @@ import {
   ArrowRightOnRectangleIcon,
   BuildingLibraryIcon,
   PresentationChartLineIcon,
-  CpuChipIcon
 } from '@heroicons/react/24/outline'
 import { 
   ChartBarIcon as ChartBarSolidIcon,
   CubeTransparentIcon as CubeTransparentSolidIcon,
   HomeIcon as HomeSolidIcon,
-  PresentationChartLineIcon as PresentationChartLineSolidIcon,
-  CpuChipIcon as CpuChipSolidIcon
+  PresentationChartLineIcon as PresentationChartLineSolidIcon
 } from '@heroicons/react/24/solid'
 
 interface NavigationProps {

@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { GlobalNavigation } from '@/components/GlobalNavigation'
 import { 
   ChartBarIcon, 
-  TrendingUpIcon, 
+  ArrowTrendingUpIcon, 
   CurrencyDollarIcon,
   PresentationChartLineIcon 
 } from '@heroicons/react/24/outline'
@@ -66,7 +66,7 @@ export default function AnalyticsPage() {
             </div>
             <h2 className="text-2xl font-bold text-white mb-4">Advanced Analytics Coming Soon</h2>
             <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
-              We're building powerful analytics tools to help you understand your DeFi portfolio performance, 
+              We&apos;re building powerful analytics tools to help you understand your DeFi portfolio performance, 
               track yield farming returns, analyze risk metrics, and optimize your investment strategies.
             </p>
             
@@ -80,7 +80,7 @@ export default function AnalyticsPage() {
               </div>
               
               <div className="bg-white/5 rounded-lg p-6">
-                <TrendingUpIcon className="w-8 h-8 text-emerald-400 mx-auto mb-3" />
+                <ArrowTrendingUpIcon className="w-8 h-8 text-emerald-400 mx-auto mb-3" />
                 <h3 className="text-lg font-semibold text-white mb-2">Risk Analysis</h3>
                 <p className="text-gray-400 text-sm">
                   Analyze portfolio risk and diversification metrics
