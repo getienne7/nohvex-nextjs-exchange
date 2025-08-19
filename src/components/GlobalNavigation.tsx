@@ -21,7 +21,9 @@ import {
   EyeIcon,
   BeakerIcon,
   RocketLaunchIcon,
-  CpuChipIcon
+  CpuChipIcon,
+  ChevronDownIcon,
+  PresentationChartLineIcon
 } from '@heroicons/react/24/outline'
 import { 
   ChartBarIcon as ChartBarSolidIcon,
@@ -32,7 +34,9 @@ import {
   EyeIcon as EyeSolidIcon,
   BeakerIcon as BeakerSolidIcon,
   RocketLaunchIcon as RocketLaunchSolidIcon,
-  CpuChipIcon as CpuChipSolidIcon
+  CpuChipIcon as CpuChipSolidIcon,
+  BuildingLibraryIcon as BuildingLibrarySolidIcon,
+  PresentationChartLineIcon as PresentationChartLineSolidIcon
 } from '@heroicons/react/24/solid'
 
 interface NavigationProps {
@@ -41,13 +45,29 @@ interface NavigationProps {
 
 export function GlobalNavigation({ variant = 'standard' }: NavigationProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const { data: session, status } = useSession()
   const pathname = usePathname()
 
   // Close mobile menu when route changes
   useEffect(() => {
     setMobileMenuOpen(false)
+    setOpenDropdown(null)
   }, [pathname])
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (openDropdown && !(event.target as Element).closest('.relative')) {
+        setOpenDropdown(null)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [openDropdown])
 
   // Define navigation items based on authentication status
   const publicNavItems = [
@@ -55,20 +75,65 @@ export function GlobalNavigation({ variant = 'standard' }: NavigationProps) {
     { name: 'Trading', href: '/trading', icon: ArrowsRightLeftIcon, solidIcon: ArrowsRightLeftSolidIcon },
   ]
 
-  const authenticatedNavItems = [
-    { name: 'Dashboard', href: '/dashboard', icon: ChartBarIcon, solidIcon: ChartBarSolidIcon },
-    { name: 'Portfolio', href: '/portfolio', icon: BuildingLibraryIcon, solidIcon: BuildingLibraryIcon },
-    { name: 'Web3 Portfolio', href: '/web3', icon: WalletIcon, solidIcon: WalletSolidIcon },
-    { name: 'Yield Optimizer', href: '/yield-optimizer', icon: SparklesIcon, solidIcon: SparklesSolidIcon },
-    { name: 'Portfolio Analytics', href: '/portfolio-analytics', icon: ChartBarIcon, solidIcon: ChartBarSolidIcon },
-    { name: 'DeFi Positions', href: '/defi-positions', icon: BeakerIcon, solidIcon: BeakerSolidIcon },
-    { name: 'Advanced Trading', href: '/advanced-trading', icon: RocketLaunchIcon, solidIcon: RocketLaunchSolidIcon },
-    { name: 'Predictive Analytics', href: '/predictive-analytics', icon: CpuChipIcon, solidIcon: CpuChipSolidIcon },
-    { name: 'Transaction Monitor', href: '/transaction-monitor', icon: EyeIcon, solidIcon: EyeSolidIcon },
-    { name: 'Trading', href: '/trading', icon: ArrowsRightLeftIcon, solidIcon: ArrowsRightLeftSolidIcon },
+  // Grouped navigation for authenticated users
+  const authenticatedNavGroups = [
+    {
+      name: 'Dashboard',
+      href: '/dashboard',
+      icon: ChartBarIcon,
+      solidIcon: ChartBarSolidIcon,
+      type: 'single' as const
+    },
+    {
+      name: 'Portfolio',
+      icon: BuildingLibraryIcon,
+      solidIcon: BuildingLibrarySolidIcon,
+      type: 'group' as const,
+      items: [
+        { name: 'Portfolio Overview', href: '/portfolio', icon: BuildingLibraryIcon },
+        { name: 'Web3 Portfolio', href: '/web3', icon: WalletIcon },
+        { name: 'Portfolio Analytics', href: '/portfolio-analytics', icon: ChartBarIcon },
+      ]
+    },
+    {
+      name: 'DeFi Tools',
+      icon: BeakerIcon,
+      solidIcon: BeakerSolidIcon,
+      type: 'group' as const,
+      items: [
+        { name: 'DeFi Positions', href: '/defi-positions', icon: BeakerIcon },
+        { name: 'Yield Optimizer', href: '/yield-optimizer', icon: SparklesIcon },
+        { name: 'Trading', href: '/trading', icon: ArrowsRightLeftIcon },
+        { name: 'Advanced Trading', href: '/advanced-trading', icon: RocketLaunchIcon },
+      ]
+    },
+    {
+      name: 'Analytics',
+      icon: PresentationChartLineIcon,
+      solidIcon: PresentationChartLineSolidIcon,
+      type: 'group' as const,
+      items: [
+        { name: 'Predictive Analytics', href: '/predictive-analytics', icon: CpuChipIcon },
+        { name: 'Transaction Monitor', href: '/transaction-monitor', icon: EyeIcon },
+      ]
+    }
   ]
 
   const isActive = (href: string) => pathname === href || (href !== '/' && pathname.startsWith(href))
+  
+  const isGroupActive = (group: typeof authenticatedNavGroups[0]) => {
+    if (group.type === 'single' && group.href) {
+      return isActive(group.href)
+    }
+    if (group.type === 'group' && group.items) {
+      return group.items.some(item => isActive(item.href))
+    }
+    return false
+  }
+
+  const toggleDropdown = (groupName: string) => {
+    setOpenDropdown(openDropdown === groupName ? null : groupName)
+  }
 
   // Hero variant styles
   const heroClasses = "relative z-10 bg-black/20 backdrop-blur-sm border-b border-white/10"
@@ -93,23 +158,79 @@ export function GlobalNavigation({ variant = 'standard' }: NavigationProps) {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
             {session ? (
-              // Authenticated navigation
+              // Authenticated navigation with groups
               <>
-                {authenticatedNavItems.map((item) => {
-                  const Icon = isActive(item.href) ? item.solidIcon : item.icon
+                {authenticatedNavGroups.map((group) => {
+                  if (group.type === 'single') {
+                    const Icon = isGroupActive(group) ? group.solidIcon : group.icon
+                    return (
+                      <Link
+                        key={group.name}
+                        href={group.href!}
+                        className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          isGroupActive(group)
+                            ? 'bg-gradient-to-r from-blue-500/20 to-emerald-500/20 text-white border border-blue-500/30'
+                            : 'text-gray-300 hover:text-white hover:bg-white/10'
+                        }`}
+                      >
+                        <Icon className="w-4 h-4" />
+                        <span>{group.name}</span>
+                      </Link>
+                    )
+                  }
+
+                  // Group with dropdown
+                  const Icon = isGroupActive(group) ? group.solidIcon : group.icon
+                  const isOpen = openDropdown === group.name
+                  
                   return (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                        isActive(item.href)
-                          ? 'bg-gradient-to-r from-blue-500/20 to-emerald-500/20 text-white border border-blue-500/30'
-                          : 'text-gray-300 hover:text-white hover:bg-white/10'
-                      }`}
-                    >
-                      <Icon className="w-4 h-4" />
-                      <span>{item.name}</span>
-                    </Link>
+                    <div key={group.name} className="relative">
+                      <button
+                        onClick={() => toggleDropdown(group.name)}
+                        className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          isGroupActive(group)
+                            ? 'bg-gradient-to-r from-blue-500/20 to-emerald-500/20 text-white border border-blue-500/30'
+                            : 'text-gray-300 hover:text-white hover:bg-white/10'
+                        }`}
+                      >
+                        <Icon className="w-4 h-4" />
+                        <span>{group.name}</span>
+                        <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+                      </button>
+
+                      <AnimatePresence>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                            transition={{ duration: 0.15 }}
+                            className="absolute top-full left-0 mt-1 w-56 bg-slate-800/95 backdrop-blur-sm border border-gray-700 rounded-lg shadow-xl z-50"
+                          >
+                            <div className="py-2">
+                              {group.items?.map((item) => {
+                                const ItemIcon = item.icon
+                                return (
+                                  <Link
+                                    key={item.name}
+                                    href={item.href}
+                                    className={`flex items-center space-x-3 px-4 py-2 text-sm transition-all duration-200 ${
+                                      isActive(item.href)
+                                        ? 'bg-gradient-to-r from-blue-500/20 to-emerald-500/20 text-white border-r-2 border-blue-500'
+                                        : 'text-gray-300 hover:text-white hover:bg-white/10'
+                                    }`}
+                                    onClick={() => setOpenDropdown(null)}
+                                  >
+                                    <ItemIcon className="w-4 h-4" />
+                                    <span>{item.name}</span>
+                                  </Link>
+                                )
+                              })}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   )
                 })}
               </>
@@ -256,22 +377,80 @@ export function GlobalNavigation({ variant = 'standard' }: NavigationProps) {
                     </div>
                   </div>
 
-                  {/* Authenticated mobile navigation */}
-                  {authenticatedNavItems.map((item) => {
-                    const Icon = isActive(item.href) ? item.solidIcon : item.icon
+                  {/* Authenticated mobile navigation with groups */}
+                  {authenticatedNavGroups.map((group) => {
+                    if (group.type === 'single') {
+                      const Icon = isGroupActive(group) ? group.solidIcon : group.icon
+                      return (
+                        <Link
+                          key={group.name}
+                          href={group.href!}
+                          className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                            isGroupActive(group)
+                              ? 'bg-gradient-to-r from-blue-500/20 to-emerald-500/20 text-white border border-blue-500/30'
+                              : 'text-gray-300 hover:text-white hover:bg-white/10'
+                          }`}
+                        >
+                          <Icon className="w-5 h-5" />
+                          <span>{group.name}</span>
+                        </Link>
+                      )
+                    }
+
+                    // Group with expandable items for mobile
+                    const Icon = isGroupActive(group) ? group.solidIcon : group.icon
+                    const isOpen = openDropdown === group.name
+                    
                     return (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                          isActive(item.href)
-                            ? 'bg-gradient-to-r from-blue-500/20 to-emerald-500/20 text-white border border-blue-500/30'
-                            : 'text-gray-300 hover:text-white hover:bg-white/10'
-                        }`}
-                      >
-                        <Icon className="w-5 h-5" />
-                        <span>{item.name}</span>
-                      </Link>
+                      <div key={group.name}>
+                        <button
+                          onClick={() => toggleDropdown(group.name)}
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                            isGroupActive(group)
+                              ? 'bg-gradient-to-r from-blue-500/20 to-emerald-500/20 text-white border border-blue-500/30'
+                              : 'text-gray-300 hover:text-white hover:bg-white/10'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <Icon className="w-5 h-5" />
+                            <span>{group.name}</span>
+                          </div>
+                          <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        <AnimatePresence>
+                          {isOpen && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="overflow-hidden"
+                            >
+                              <div className="ml-8 mt-1 space-y-1">
+                                {group.items?.map((item) => {
+                                  const ItemIcon = item.icon
+                                  return (
+                                    <Link
+                                      key={item.name}
+                                      href={item.href}
+                                      className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
+                                        isActive(item.href)
+                                          ? 'bg-gradient-to-r from-blue-500/20 to-emerald-500/20 text-white border-l-2 border-blue-500'
+                                          : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                      }`}
+                                      onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                      <ItemIcon className="w-4 h-4" />
+                                      <span>{item.name}</span>
+                                    </Link>
+                                  )
+                                })}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
                     )
                   })}
 
