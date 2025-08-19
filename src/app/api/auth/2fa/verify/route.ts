@@ -24,7 +24,6 @@ export async function POST(req: NextRequest) {
 
     const { code, useBackupCode, action, trustDevice }: { code: string; useBackupCode?: boolean; action?: string; trustDevice?: boolean } = await req.json()
 
-
     // Rate limit verification attempts: 5 per 5 minutes per user+ip
     {
       const key = `2fa:verify:${session.user.email}:${ip}:${useBackupCode ? 'backup' : 'totp'}`
