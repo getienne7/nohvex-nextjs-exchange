@@ -52,6 +52,27 @@ export class WalletConnector {
     return WalletConnector.instance
   }
 
+  // Clear WalletConnect sessions
+  async clearWalletConnectSessions(): Promise<void> {
+    try {
+      if (this.walletConnectProvider) {
+        await this.walletConnectProvider.disconnect()
+        this.walletConnectProvider = null
+      }
+      // Clear any stored sessions from localStorage
+      if (typeof window !== 'undefined') {
+        const keys = Object.keys(localStorage)
+        keys.forEach(key => {
+          if (key.startsWith('wc@2:') || key.startsWith('walletconnect')) {
+            localStorage.removeItem(key)
+          }
+        })
+      }
+    } catch (error) {
+      console.log('Cleared WalletConnect sessions')
+    }
+  }
+
   // Supported wallet providers with availability checks
   getSupportedWallets(): WalletProvider[] {
     return [
@@ -134,6 +155,9 @@ export class WalletConnector {
     try {
       const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'demo'
       
+      // Clean up any existing provider and sessions
+      await this.clearWalletConnectSessions()
+      
       // Initialize WalletConnect v2.0 provider
       this.walletConnectProvider = await EthereumProvider.init({
         projectId,
@@ -148,8 +172,8 @@ export class WalletConnector {
         metadata: {
           name: 'NOHVEX Exchange',
           description: 'Professional Crypto Exchange Platform',
-          url: 'https://nohvex.com',
-          icons: ['https://nohvex.com/logo.png']
+          url: window.location.origin,
+          icons: [`${window.location.origin}/logo.png`]
         }
       })
 
@@ -174,6 +198,7 @@ export class WalletConnector {
       this.setupWalletConnectListeners(wallet)
       return wallet
     } catch (error) {
+      console.error('WalletConnect connection error:', error)
       throw new Error(`Failed to connect WalletConnect: ${error}`)
     }
   }

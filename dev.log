@@ -8,55 +8,26 @@
    - Environments: .env
 
  ✓ Starting...
- ✓ Compiled middleware in 358ms
- ✓ Ready in 1381ms
- ○ Compiling /dashboard ...
- ✓ Compiled /dashboard in 4.1s
- GET /dashboard 200 in 4641ms
- ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 715ms
-✓ Database connection initialized
-✓ Database connection initialized
- GET /api/auth/session 200 in 1303ms
- ○ Compiling /auth/signin ...
-✓ Database connection initialized
- ✓ Compiled /auth/signin in 862ms
- GET /auth/signin 200 in 926ms
- ✓ Compiled /_not-found/page in 406ms
- GET /exchange 404 in 511ms
- GET /api/auth/session 200 in 63ms
-✓ Database connection initialized
+ ✓ Compiled middleware in 330ms
+ ✓ Ready in 1342ms
  ○ Compiling / ...
- ✓ Compiled / in 525ms
- GET / 200 in 641ms
- GET /grid.svg 404 in 86ms
- GET /api/auth/session 200 in 110ms
- ○ Compiling /api/prices ...
- ✓ Compiled /api/prices in 618ms
+ ✓ Compiled / in 10.2s
+ GET / 200 in 10958ms
+ ○ Compiling /_not-found/page ...
+ GET /grid.svg 404 in 1699ms
+ ✓ Compiled /_not-found/page in 2.1s
 Attempting API call (1/3)
-✓ Database connection initialized
 Rate limited, waiting before API call
+✓ Database connection initialized
 NOWNodes returned 1 prices out of 5 requested
 Successfully fetched 1 prices from NOWNodes
 Successfully fetched and cached crypto prices
- GET /api/prices?symbols=BTC,ETH,BNB,USDT,ADA 200 in 2401ms
+ GET /api/prices?symbols=BTC,ETH,BNB,USDT,ADA 200 in 2367ms
+✓ Database connection initialized
+ GET /api/auth/session 200 in 2441ms
+✓ Database connection initialized
 Attempting API call (1/3)
 NOWNodes returned 2 prices out of 4 requested
 Successfully fetched 2 prices from NOWNodes
 Successfully fetched and cached crypto prices
- GET /api/prices?symbols=BTC,ETH,BNB,USDT 200 in 3638ms
- ✓ Compiled in 101ms
- ✓ Compiled in 127ms
- ✓ Compiled in 91ms
- ○ Compiling / ...
- ✓ Compiled in 7.4s
- ✓ Compiled / in 842ms
- GET / 200 in 1561ms
- GET / 200 in 4307ms
- GET /grid.svg 404 in 260ms
-Returning cached crypto prices
- GET /api/prices?symbols=BTC,ETH,BNB,USDT 200 in 98ms
- GET /api/auth/session 200 in 170ms
-Returning cached crypto prices
- GET /api/prices?symbols=BTC,ETH,BNB,USDT,ADA 200 in 185ms
-✓ Database connection initialized
+ GET /api/prices?symbols=BTC,ETH,BNB,USDT 200 in 4133ms

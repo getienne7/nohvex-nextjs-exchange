@@ -26,10 +26,16 @@ export default function WalletConnector({ isOpen, onClose, onWalletConnected }: 
     setError(null)
 
     try {
+      // Clear WalletConnect sessions if connecting to WalletConnect
+      if (wallet.name === 'WalletConnect') {
+        await walletConnector.clearWalletConnectSessions()
+      }
+      
       const connectedWallet = await wallet.connector()
       onWalletConnected(connectedWallet)
       onClose()
     } catch (err: any) {
+      console.error('Wallet connection error:', err)
       setError(err.message || 'Failed to connect wallet')
     } finally {
       setConnecting(null)
