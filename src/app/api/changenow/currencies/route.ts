@@ -1,0 +1,90 @@
+import { NextRequest, NextResponse } from 'next/server'
+
+const CHANGENOW_API_KEY = process.env.CHANGENOW_API_KEY || 'demo-key'
+const CHANGENOW_BASE_URL = 'https://api.changenow.io/v1'
+
+export async function GET() {
+  try {
+    const response = await fetch(`${CHANGENOW_BASE_URL}/currencies?active=true&fixedRate=true`, {
+      headers: {
+        'x-changenow-api-key': CHANGENOW_API_KEY,
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error(`ChangeNOW API error: ${response.status}`)
+    }
+
+    const currencies = await response.json()
+    
+    // Filter and enhance currency data
+    const enhancedCurrencies = currencies
+      .filter((currency: any) => currency.isAvailable)
+      .map((currency: any) => ({
+        ticker: currency.ticker,
+        name: currency.name,
+        image: currency.image || `https://changenow.io/images/sprite/currencies/${currency.ticker}.svg`,
+        hasExternalId: currency.hasExternalId || false,
+        isFiat: currency.isFiat || false,
+        featured: currency.featured || false,
+        isStable: currency.isStable || false,
+        supportsFixedRate: currency.supportsFixedRate || false,
+      }))
+      .sort((a: any, b: any) => {
+        // Sort by featured first, then by name
+        if (a.featured && !b.featured) return -1
+        if (!a.featured && b.featured) return 1
+        return a.name.localeCompare(b.name)
+      })
+
+    return NextResponse.json(enhancedCurrencies)
+  } catch (error) {
+    console.error('Error fetching currencies:', error)
+    
+    // Return fallback currencies if API fails
+    const fallbackCurrencies = [
+      {
+        ticker: 'btc',
+        name: 'Bitcoin',
+        image: 'https://changenow.io/images/sprite/currencies/btc.svg',
+        hasExternalId: false,
+        isFiat: false,
+        featured: true,
+        isStable: false,
+        supportsFixedRate: true,
+      },
+      {
+        ticker: 'eth',
+        name: 'Ethereum',
+        image: 'https://changenow.io/images/sprite/currencies/eth.svg',
+        hasExternalId: false,
+        isFiat: false,
+        featured: true,
+        isStable: false,
+        supportsFixedRate: true,
+      },
+      {
+        ticker: 'usdt',
+        name: 'Tether',
+        image: 'https://changenow.io/images/sprite/currencies/usdt.svg',
+        hasExternalId: false,
+        isFiat: false,
+        featured: true,
+        isStable: true,
+        supportsFixedRate: true,
+      },
+      {
+        ticker: 'bnb',
+        name: 'BNB',
+        image: 'https://changenow.io/images/sprite/currencies/bnb.svg',
+        hasExternalId: false,
+        isFiat: false,
+        featured: true,
+        isStable: false,
+        supportsFixedRate: true,
+      },
+    ]
+
+    return NextResponse.json(fallbackCurrencies)
+  }
+}

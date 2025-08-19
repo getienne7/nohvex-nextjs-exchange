@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ChangeNowWidget } from '@/components/ChangeNowWidget'
+import { CrossChainSwap } from '@/components/CrossChainSwap'
 import { PortfolioTrading } from '@/components/PortfolioTrading'
 import RealTimeTrading from '@/components/RealTimeTrading'
 import { GlobalNavigation } from '@/components/GlobalNavigation'
@@ -104,10 +104,7 @@ export default function TradingPage() {
             </div>
           ) : (
             <div>
-              <ChangeNowWidget 
-                apiKey={process.env.NEXT_PUBLIC_CHANGENOW_API_KEY || 'demo-api-key'}
-                referralCode={process.env.NEXT_PUBLIC_CHANGENOW_REFERRAL || 'demo-referral'}
-              />
+              <CrossChainSwap />
               <div className="mt-6 text-center">
                 <p className="text-sm text-gray-500">
                   🚀 <strong>Cross-Chain Swap:</strong> Swap real cryptocurrencies across chains. 
