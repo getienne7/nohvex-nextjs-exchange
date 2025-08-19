@@ -8,61 +8,55 @@
    - Environments: .env
 
  ✓ Starting...
-Attention: Next.js now collects completely anonymous telemetry regarding usage.
-This information is used to shape Next.js' roadmap and prioritize features.
-You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
-https://nextjs.org/telemetry
-
- ✓ Compiled middleware in 331ms
- ✓ Ready in 1862ms
- ○ Compiling /api/changenow/currencies ...
- ✓ Compiled /api/changenow/currencies in 1304ms
- GET /api/changenow/currencies 200 in 2232ms
- GET /api/changenow/currencies 200 in 733ms
- GET /api/changenow/currencies 200 in 134ms
-Fetching currencies from ChangeNOW API...
-Received 638 currencies from ChangeNOW
-Returning 100 processed currencies
- GET /api/changenow/currencies 200 in 1220ms
-Fetching currencies from ChangeNOW API...
-Received 638 currencies from ChangeNOW
-Returning 100 processed currencies
- GET /api/changenow/currencies 200 in 1655ms
- ✓ Compiled /api/changenow/estimate in 94ms
- POST /api/changenow/estimate 200 in 658ms
- ○ Compiling /trading ...
- ✓ Compiled /trading in 3.2s
- GET /trading 200 in 3510ms
- ○ Compiling /api/wallet-dashboard ...
+ ✓ Compiled middleware in 358ms
+ ✓ Ready in 1381ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 4.1s
+ GET /dashboard 200 in 4641ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 715ms
 ✓ Database connection initialized
- ✓ Compiled /api/wallet-dashboard in 1532ms
-📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
-⛓️ Scanning Ethereum...
 ✓ Database connection initialized
- GET /api/auth/session 200 in 2040ms
+ GET /api/auth/session 200 in 1303ms
+ ○ Compiling /auth/signin ...
 ✓ Database connection initialized
-⛓️ Scanning BNB Smart Chain...
-⛓️ Scanning Polygon...
-✅ Dashboard data generated in 2944ms
-💰 Total portfolio value: $61.5185
- GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 4638ms
-Fetching currencies from ChangeNOW API...
-Received 638 currencies from ChangeNOW
-Returning 100 processed currencies
- GET /api/changenow/currencies 200 in 159ms
-Fetching currencies from ChangeNOW API...
-Received 638 currencies from ChangeNOW
-Returning 100 processed currencies
- GET /api/changenow/currencies 200 in 62ms
- POST /api/changenow/estimate 200 in 596ms
-Error getting exchange estimate: Error: ChangeNOW API error: 400
-    at POST (src/app/api/changenow/estimate/route.ts:28:12)
-  26 |
-  27 |     if (!response.ok) {
-> 28 |       throw new Error(`ChangeNOW API error: ${response.status}`)
-     |            ^
-  29 |     }
-  30 |
-  31 |     const data = await response.json()
- POST /api/changenow/estimate 200 in 705ms
- POST /api/changenow/estimate 200 in 433ms
+ ✓ Compiled /auth/signin in 862ms
+ GET /auth/signin 200 in 926ms
+ ✓ Compiled /_not-found/page in 406ms
+ GET /exchange 404 in 511ms
+ GET /api/auth/session 200 in 63ms
+✓ Database connection initialized
+ ○ Compiling / ...
+ ✓ Compiled / in 525ms
+ GET / 200 in 641ms
+ GET /grid.svg 404 in 86ms
+ GET /api/auth/session 200 in 110ms
+ ○ Compiling /api/prices ...
+ ✓ Compiled /api/prices in 618ms
+Attempting API call (1/3)
+✓ Database connection initialized
+Rate limited, waiting before API call
+NOWNodes returned 1 prices out of 5 requested
+Successfully fetched 1 prices from NOWNodes
+Successfully fetched and cached crypto prices
+ GET /api/prices?symbols=BTC,ETH,BNB,USDT,ADA 200 in 2401ms
+Attempting API call (1/3)
+NOWNodes returned 2 prices out of 4 requested
+Successfully fetched 2 prices from NOWNodes
+Successfully fetched and cached crypto prices
+ GET /api/prices?symbols=BTC,ETH,BNB,USDT 200 in 3638ms
+ ✓ Compiled in 101ms
+ ✓ Compiled in 127ms
+ ✓ Compiled in 91ms
+ ○ Compiling / ...
+ ✓ Compiled in 7.4s
+ ✓ Compiled / in 842ms
+ GET / 200 in 1561ms
+ GET / 200 in 4307ms
+ GET /grid.svg 404 in 260ms
+Returning cached crypto prices
+ GET /api/prices?symbols=BTC,ETH,BNB,USDT 200 in 98ms
+ GET /api/auth/session 200 in 170ms
+Returning cached crypto prices
+ GET /api/prices?symbols=BTC,ETH,BNB,USDT,ADA 200 in 185ms
+✓ Database connection initialized

@@ -4,7 +4,7 @@
  */
 
 import { ethers } from 'ethers'
-import WalletConnectProvider from '@walletconnect/web3-provider'
+import { EthereumProvider } from '@walletconnect/ethereum-provider'
 import { CoinbaseWalletSDK } from '@coinbase/wallet-sdk'
 
 declare global {
@@ -42,7 +42,7 @@ export interface WalletAsset {
 export class WalletConnector {
   private static instance: WalletConnector
   private connectedWallets: Map<string, ConnectedWallet> = new Map()
-  private walletConnectProvider: WalletConnectProvider | null = null
+  private walletConnectProvider: any = null
   private coinbaseWallet: CoinbaseWalletSDK | null = null
 
   static getInstance(): WalletConnector {
@@ -129,18 +129,31 @@ export class WalletConnector {
     }
   }
 
-  // Connect to WalletConnect
+  // Connect to WalletConnect v2.0
   async connectWalletConnect(): Promise<ConnectedWallet> {
     try {
-      this.walletConnectProvider = new WalletConnectProvider({
-        infuraId: process.env.NEXT_PUBLIC_INFURA_ID || 'demo',
-        rpc: {
-          1: 'https://mainnet.infura.io/v3/demo',
-          56: 'https://bsc-dataseed.binance.org/',
-          137: 'https://polygon-rpc.com/'
+      const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'demo'
+      
+      // Initialize WalletConnect v2.0 provider
+      this.walletConnectProvider = await EthereumProvider.init({
+        projectId,
+        chains: [1, 56, 137], // Ethereum, BSC, Polygon
+        showQrModal: true,
+        qrModalOptions: {
+          themeMode: 'light',
+          themeVariables: {
+            '--wcm-z-index': '1000'
+          }
+        },
+        metadata: {
+          name: 'NOHVEX Exchange',
+          description: 'Professional Crypto Exchange Platform',
+          url: 'https://nohvex.com',
+          icons: ['https://nohvex.com/logo.png']
         }
       })
 
+      // Enable session (shows QR modal)
       await this.walletConnectProvider.enable()
       
       const provider = new ethers.BrowserProvider(this.walletConnectProvider)
@@ -259,22 +272,29 @@ export class WalletConnector {
     })
   }
 
-  // Setup WalletConnect specific listeners
+  // Setup WalletConnect v2.0 specific listeners
   private setupWalletConnectListeners(wallet: ConnectedWallet): void {
     if (!this.walletConnectProvider) return
 
     this.walletConnectProvider.on('accountsChanged', (accounts: string[]) => {
       if (accounts.length === 0) {
         this.disconnectWallet(wallet.address)
+      } else {
+        wallet.address = accounts[0]
+        this.connectedWallets.set(accounts[0], wallet)
       }
     })
 
-    this.walletConnectProvider.on('chainChanged', (chainId: number) => {
-      wallet.chainId = chainId
+    this.walletConnectProvider.on('chainChanged', (chainId: string | number) => {
+      wallet.chainId = typeof chainId === 'string' ? parseInt(chainId as string, 16) : chainId
       this.connectedWallets.set(wallet.address, wallet)
     })
 
     this.walletConnectProvider.on('disconnect', () => {
+      this.disconnectWallet(wallet.address)
+    })
+
+    this.walletConnectProvider.on('session_delete', () => {
       this.disconnectWallet(wallet.address)
     })
   }
@@ -286,6 +306,16 @@ export class WalletConnector {
 
   // Disconnect wallet
   async disconnectWallet(address: string): Promise<void> {
+    const wallet = this.connectedWallets.get(address)
+    
+    if (wallet && wallet.provider === 'WalletConnect' && this.walletConnectProvider) {
+      try {
+        await this.walletConnectProvider.disconnect()
+      } catch (error) {
+        console.warn('Error disconnecting WalletConnect:', error)
+      }
+    }
+    
     this.connectedWallets.delete(address)
   }
 

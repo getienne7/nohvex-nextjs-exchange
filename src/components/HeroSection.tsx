@@ -1,10 +1,21 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRightIcon, CurrencyDollarIcon, ShieldCheckIcon, ClockIcon } from '@heroicons/react/24/outline'
 import { GlobalNavigation } from './GlobalNavigation'
+import WalletConnector from './web3/WalletConnector'
+import { ConnectedWallet } from '@/lib/web3/wallet-connector'
 
 export function HeroSection() {
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false)
+  const [connectedWallet, setConnectedWallet] = useState<ConnectedWallet | null>(null)
+
+  const handleWalletConnected = (wallet: ConnectedWallet) => {
+    setConnectedWallet(wallet)
+    console.log('Wallet connected:', wallet)
+  }
+
   return (
     <div className="relative overflow-hidden bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900">
       {/* Navigation */}
@@ -40,8 +51,11 @@ export function HeroSection() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-10 flex items-center justify-center gap-x-6"
           >
-            <button className="group rounded-md bg-gradient-to-r from-blue-500 to-emerald-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:from-blue-400 hover:to-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-all duration-200">
-              Connect Wallet
+            <button 
+              onClick={() => setIsWalletModalOpen(true)}
+              className="group rounded-md bg-gradient-to-r from-blue-500 to-emerald-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:from-blue-400 hover:to-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-all duration-200"
+            >
+              {connectedWallet ? `Connected: ${connectedWallet.address.slice(0, 6)}...${connectedWallet.address.slice(-4)}` : 'Connect Wallet'}
               <ArrowRightIcon className="ml-2 h-4 w-4 inline-block group-hover:translate-x-1 transition-transform" />
             </button>
             <button className="text-sm font-semibold leading-6 text-gray-300 hover:text-white transition-colors">
@@ -95,6 +109,13 @@ export function HeroSection() {
         </motion.div>
       </div>
       </div>
+
+      {/* Wallet Connector Modal */}
+      <WalletConnector
+        isOpen={isWalletModalOpen}
+        onClose={() => setIsWalletModalOpen(false)}
+        onWalletConnected={handleWalletConnected}
+      />
     </div>
   )
 }
