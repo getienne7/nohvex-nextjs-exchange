@@ -60,6 +60,38 @@ const memoryStore = {
   nextId: 1
 }
 
+// Pre-seed demo user for development
+async function initializeDemoUser() {
+  if (memoryStore.users.length === 0 && !process.env.DATABASE_URL) {
+    const bcrypt = await import('bcryptjs')
+    const hashedPassword = await bcrypt.hash('demo123', 12)
+    
+    const demoUser: MemoryUser = {
+      id: 'user_demo',
+      email: 'gletienne@outlook.com',
+      password: hashedPassword,
+      name: 'Demo User',
+      emailVerified: new Date(),
+      image: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      twoFAEnabled: false,
+      twoFASecret: null,
+      twoFABackupCodes: [],
+      twoFAEnabledAt: null,
+      twoFALastUsed: null
+    }
+    
+    memoryStore.users.push(demoUser)
+    console.log('✓ Demo user pre-seeded: gletienne@outlook.com / demo123')
+  }
+}
+
+// Initialize demo user
+if (typeof window === 'undefined') {
+  initializeDemoUser().catch(console.error)
+}
+
 // Initialize database connection
 try {
   if (process.env.DATABASE_URL) {
