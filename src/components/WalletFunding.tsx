@@ -230,7 +230,7 @@ export default function WalletFunding() {
             <ol className="text-sm text-blue-200 space-y-1 list-decimal list-inside">
               <li>Copy the deposit address above</li>
               <li>Send {getChainInfo(selectedChain).symbol} from your external wallet</li>
-              <li>Make sure you're using {getChainInfo(selectedChain).name} network</li>
+              <li>Make sure you&apos;re using {getChainInfo(selectedChain).name} network</li>
               <li>Wait for network confirmations (1-15 minutes)</li>
               <li>Funds will appear in your portfolio automatically</li>
             </ol>

@@ -340,7 +340,7 @@ export default function AdvancedTradingPage() {
                   <li>• <strong>Start Small:</strong> Test strategies with small position sizes</li>
                   <li>• <strong>Use Stop Losses:</strong> Always define your maximum acceptable loss</li>
                   <li>• <strong>Monitor Actively:</strong> Keep track of your positions and algorithms</li>
-                  <li>• <strong>Diversify:</strong> Don't put all capital into a single strategy</li>
+                  <li>• <strong>Diversify:</strong> Don&apos;t put all capital into a single strategy</li>
                 </ul>
               </div>
             </div>

@@ -1006,7 +1006,7 @@ export default function PredictiveAnalytics({ walletAddress }: PredictiveAnalyti
             <h3 className="font-semibold text-gray-900 mb-3">AI Limitations</h3>
             <ul className="space-y-2 text-gray-600 text-sm">
               <li>• <strong>Not Financial Advice:</strong> AI predictions are for informational purposes only</li>
-              <li>• <strong>Past Performance:</strong> Historical accuracy doesn't guarantee future results</li>
+              <li>• <strong>Past Performance:</strong> Historical accuracy doesn&apos;t guarantee future results</li>
               <li>• <strong>Market Volatility:</strong> Crypto markets are highly unpredictable</li>
               <li>• <strong>Model Limitations:</strong> AI models may have biases or blind spots</li>
             </ul>
