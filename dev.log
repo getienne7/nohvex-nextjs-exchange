@@ -1,0 +1,68 @@
+
+> nohvex-exchange@0.1.0 dev
+> next dev --turbopack
+
+   ▲ Next.js 15.4.6 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://10.2.29.138:3000
+   - Environments: .env
+
+ ✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+ ✓ Compiled middleware in 331ms
+ ✓ Ready in 1862ms
+ ○ Compiling /api/changenow/currencies ...
+ ✓ Compiled /api/changenow/currencies in 1304ms
+ GET /api/changenow/currencies 200 in 2232ms
+ GET /api/changenow/currencies 200 in 733ms
+ GET /api/changenow/currencies 200 in 134ms
+Fetching currencies from ChangeNOW API...
+Received 638 currencies from ChangeNOW
+Returning 100 processed currencies
+ GET /api/changenow/currencies 200 in 1220ms
+Fetching currencies from ChangeNOW API...
+Received 638 currencies from ChangeNOW
+Returning 100 processed currencies
+ GET /api/changenow/currencies 200 in 1655ms
+ ✓ Compiled /api/changenow/estimate in 94ms
+ POST /api/changenow/estimate 200 in 658ms
+ ○ Compiling /trading ...
+ ✓ Compiled /trading in 3.2s
+ GET /trading 200 in 3510ms
+ ○ Compiling /api/wallet-dashboard ...
+✓ Database connection initialized
+ ✓ Compiled /api/wallet-dashboard in 1532ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+✓ Database connection initialized
+ GET /api/auth/session 200 in 2040ms
+✓ Database connection initialized
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2944ms
+💰 Total portfolio value: $61.5185
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 4638ms
+Fetching currencies from ChangeNOW API...
+Received 638 currencies from ChangeNOW
+Returning 100 processed currencies
+ GET /api/changenow/currencies 200 in 159ms
+Fetching currencies from ChangeNOW API...
+Received 638 currencies from ChangeNOW
+Returning 100 processed currencies
+ GET /api/changenow/currencies 200 in 62ms
+ POST /api/changenow/estimate 200 in 596ms
+Error getting exchange estimate: Error: ChangeNOW API error: 400
+    at POST (src/app/api/changenow/estimate/route.ts:28:12)
+  26 |
+  27 |     if (!response.ok) {
+> 28 |       throw new Error(`ChangeNOW API error: ${response.status}`)
+     |            ^
+  29 |     }
+  30 |
+  31 |     const data = await response.json()
+ POST /api/changenow/estimate 200 in 705ms
+ POST /api/changenow/estimate 200 in 433ms

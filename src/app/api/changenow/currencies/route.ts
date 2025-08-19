@@ -5,6 +5,7 @@ const CHANGENOW_BASE_URL = 'https://api.changenow.io/v1'
 
 export async function GET() {
   try {
+    console.log('Fetching currencies from ChangeNOW API...')
     const response = await fetch(`${CHANGENOW_BASE_URL}/currencies?active=true&fixedRate=true`, {
       headers: {
         'x-changenow-api-key': CHANGENOW_API_KEY,
@@ -12,14 +13,15 @@ export async function GET() {
     })
 
     if (!response.ok) {
+      console.error(`ChangeNOW API error: ${response.status}`)
       throw new Error(`ChangeNOW API error: ${response.status}`)
     }
 
     const currencies = await response.json()
+    console.log(`Received ${currencies.length} currencies from ChangeNOW`)
     
-    // Filter and enhance currency data
+    // Filter and enhance currency data - remove isAvailable filter as it might not exist
     const enhancedCurrencies = currencies
-      .filter((currency: any) => currency.isAvailable)
       .map((currency: any) => ({
         ticker: currency.ticker,
         name: currency.name,
@@ -36,7 +38,9 @@ export async function GET() {
         if (!a.featured && b.featured) return 1
         return a.name.localeCompare(b.name)
       })
+      .slice(0, 100) // Limit to top 100 for performance
 
+    console.log(`Returning ${enhancedCurrencies.length} processed currencies`)
     return NextResponse.json(enhancedCurrencies)
   } catch (error) {
     console.error('Error fetching currencies:', error)
