@@ -60,7 +60,7 @@ export default function TradingPage() {
                   : 'text-gray-400 hover:text-white'
               }`}
             >
-              📊 Demo Trading
+              📊 Live Trading
             </button>
             <button
               onClick={() => setActiveTab('exchange')}

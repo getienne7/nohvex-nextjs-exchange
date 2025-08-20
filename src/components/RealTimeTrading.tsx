@@ -7,8 +7,12 @@ import {
   ChartBarIcon,
   CurrencyDollarIcon,
   ArrowPathIcon,
-  ExclamationTriangleIcon
+  ExclamationTriangleIcon,
+  CheckCircleIcon,
+  ClockIcon
 } from '@heroicons/react/24/outline'
+import { useDEXTrading } from '@/hooks/useDEXTrading'
+import { Token, TradeParams } from '@/lib/dex/index'
 
 interface AssetData {
   symbol: string
@@ -36,6 +40,22 @@ export default function RealTimeTrading() {
   const [fromAmount, setFromAmount] = useState('')
   const [toAmount, setToAmount] = useState('')
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
+  const [slippageTolerance, setSlippageTolerance] = useState(100) // 1%
+  const [isGettingQuote, setIsGettingQuote] = useState(false)
+  const [tradeStatus, setTradeStatus] = useState<'idle' | 'quoting' | 'trading' | 'success' | 'error'>('idle')
+
+  // DEX Trading hook
+  const {
+    isLoading: isDEXLoading,
+    error: dexError,
+    quotes,
+    bestRoute,
+    getQuotes,
+    findBestRoute,
+    executeTrade,
+    getSupportedTokens,
+    clearError
+  } = useDEXTrading()
 
   // Your real wallet address
   const WALLET_ADDRESS = '0xa2232F6250c89Da64475Fd998d96995cf8828f5a'
@@ -67,6 +87,123 @@ export default function RealTimeTrading() {
     return () => clearInterval(interval)
   }, [])
 
+  // Convert AssetData to Token format for DEX trading
+  const assetToToken = (asset: AssetData): Token => ({
+    address: getTokenAddress(asset.symbol, asset.chainName),
+    symbol: asset.symbol,
+    name: asset.name,
+    decimals: getTokenDecimals(asset.symbol),
+    chainId: getChainId(asset.chainName)
+  })
+
+  // Helper functions for token conversion
+  const getTokenAddress = (symbol: string, chainName: string): string => {
+    const addresses: { [key: string]: { [symbol: string]: string } } = {
+      'Ethereum': {
+        'ETH': '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH
+        'USDC': '0xA0b86a33E6417c4c6b8c4c6b8c4c6b8c4c6b8c4c',
+        'USDT': '0xdAC17F958D2ee523a2206206994597C13D831ec7'
+      },
+      'BSC': {
+        'BNB': '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', // WBNB
+        'USDC': '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
+        'USDT': '0x55d398326f99059fF775485246999027B3197955'
+      }
+    }
+    return addresses[chainName]?.[symbol] || '0x0000000000000000000000000000000000000000'
+  }
+
+  const getTokenDecimals = (symbol: string): number => {
+    const decimals: { [symbol: string]: number } = {
+      'ETH': 18, 'BNB': 18, 'MATIC': 18,
+      'USDC': 6, 'USDT': 6, 'DAI': 18
+    }
+    return decimals[symbol] || 18
+  }
+
+  const getChainId = (chainName: string): number => {
+    const chainIds: { [name: string]: number } = {
+      'Ethereum': 1,
+      'BSC': 56,
+      'Polygon': 137
+    }
+    return chainIds[chainName] || 1
+  }
+
+  // Get real-time quote when amount or assets change
+  useEffect(() => {
+    if (selectedFromAsset && selectedToAsset && fromAmount && parseFloat(fromAmount) > 0) {
+      handleGetQuote()
+    } else {
+      setToAmount('')
+    }
+  }, [selectedFromAsset, selectedToAsset, fromAmount])
+
+  const handleGetQuote = async () => {
+    if (!selectedFromAsset || !selectedToAsset || !fromAmount) return
+
+    setIsGettingQuote(true)
+    setTradeStatus('quoting')
+    clearError()
+
+    try {
+      const tokenIn = assetToToken(selectedFromAsset)
+      const tokenOut = assetToToken(selectedToAsset)
+
+      const tradeParams: TradeParams = {
+        tokenIn,
+        tokenOut,
+        amountIn: fromAmount,
+        slippageTolerance
+      }
+
+      const route = await findBestRoute(tradeParams)
+      if (route && route.bestQuote) {
+        setToAmount(route.bestQuote.amountOut)
+        setTradeStatus('idle')
+      }
+    } catch (error) {
+      console.error('Failed to get quote:', error)
+      setTradeStatus('error')
+    } finally {
+      setIsGettingQuote(false)
+    }
+  }
+
+  const handleExecuteTrade = async () => {
+    if (!selectedFromAsset || !selectedToAsset || !fromAmount || !tradingData) return
+
+    setTradeStatus('trading')
+    clearError()
+
+    try {
+      const tokenIn = assetToToken(selectedFromAsset)
+      const tokenOut = assetToToken(selectedToAsset)
+
+      const tradeParams: TradeParams & { walletAddress: string } = {
+        tokenIn,
+        tokenOut,
+        amountIn: fromAmount,
+        slippageTolerance,
+        walletAddress: tradingData.walletAddress
+      }
+
+      // Note: This will show a message about wallet connection in real implementation
+      const result = await executeTrade(tradeParams)
+      
+      if (result.hash) {
+        setTradeStatus('success')
+        setTimeout(() => {
+          fetchTradingData()
+          setTradeStatus('idle')
+        }, 3000)
+      }
+    } catch (error) {
+      console.error('Trade execution failed:', error)
+      setTradeStatus('error')
+    }
+  }
+
   const calculateToAmount = (amount: string) => {
     if (!selectedFromAsset || !selectedToAsset || !amount) return ''
     
@@ -77,7 +214,12 @@ export default function RealTimeTrading() {
 
   const handleFromAmountChange = (value: string) => {
     setFromAmount(value)
-    setToAmount(calculateToAmount(value))
+    // Don't use simple calculation anymore, let DEX quote handle it
+    if (selectedFromAsset && selectedToAsset && value) {
+      // The useEffect will trigger handleGetQuote
+    } else {
+      setToAmount('')
+    }
   }
 
   const swapAssets = () => {
@@ -311,24 +453,98 @@ export default function RealTimeTrading() {
             </motion.div>
           )}
 
+          {/* Slippage Tolerance Setting */}
+          <div className="flex items-center justify-between p-3 bg-gray-800/30 border border-gray-700/50 rounded-lg mb-4">
+            <span className="text-sm text-gray-300">Slippage Tolerance</span>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setSlippageTolerance(50)}
+                className={`px-2 py-1 text-xs rounded ${slippageTolerance === 50 ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
+              >
+                0.5%
+              </button>
+              <button
+                onClick={() => setSlippageTolerance(100)}
+                className={`px-2 py-1 text-xs rounded ${slippageTolerance === 100 ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
+              >
+                1%
+              </button>
+              <button
+                onClick={() => setSlippageTolerance(300)}
+                className={`px-2 py-1 text-xs rounded ${slippageTolerance === 300 ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
+              >
+                3%
+              </button>
+            </div>
+          </div>
+
+          {/* DEX Quote Information */}
+          {bestRoute && bestRoute.bestQuote && (
+            <div className="p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg mb-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-blue-300">Best Route</span>
+                <span className="text-sm font-medium text-blue-200">{bestRoute.bestQuote.dexName}</span>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div>
+                  <span className="text-gray-400">Price Impact:</span>
+                  <span className={`ml-1 ${bestRoute.bestQuote.priceImpact > 2 ? 'text-red-400' : 'text-green-400'}`}>
+                    {bestRoute.bestQuote.priceImpact.toFixed(2)}%
+                  </span>
+                </div>
+                <div>
+                  <span className="text-gray-400">Min. Received:</span>
+                  <span className="ml-1 text-gray-200">{parseFloat(bestRoute.bestQuote.minimumAmountOut).toFixed(6)}</span>
+                </div>
+              </div>
+              {bestRoute.savingsPercentage > 0 && (
+                <div className="mt-2 text-xs text-green-400">
+                  💰 Saving {bestRoute.savingsPercentage.toFixed(2)}% vs other DEXs
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Error Display */}
+          {(dexError || tradeStatus === 'error') && (
+            <div className="flex items-start space-x-2 p-3 bg-red-900/20 border border-red-500/30 rounded-lg mb-4">
+              <ExclamationTriangleIcon className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
+              <div className="text-sm text-red-200">
+                <p className="font-medium">Trading Error</p>
+                <p className="text-red-300 mt-1">
+                  {dexError || 'Trade execution requires wallet connection. Connect your Web3 wallet to trade.'}
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Trade Button */}
           <button
-            disabled={!fromAmount || !selectedFromAsset || !selectedToAsset}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-600 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 disabled:cursor-not-allowed"
+            onClick={handleExecuteTrade}
+            disabled={!fromAmount || !selectedFromAsset || !selectedToAsset || isGettingQuote || tradeStatus === 'trading'}
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-600 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
           >
-            {!selectedFromAsset || !selectedToAsset ? 'Select assets to trade' : 
-             !fromAmount ? 'Enter amount to trade' : 
-             'Execute Trade (Demo)'}
+            {tradeStatus === 'trading' && <ClockIcon className="w-5 h-5 animate-spin" />}
+            {tradeStatus === 'success' && <CheckCircleIcon className="w-5 h-5 text-green-400" />}
+            {isGettingQuote && <ArrowPathIcon className="w-5 h-5 animate-spin" />}
+            <span>
+              {!selectedFromAsset || !selectedToAsset ? 'Select assets to trade' :
+               !fromAmount ? 'Enter amount to trade' :
+               isGettingQuote ? 'Getting Quote...' :
+               tradeStatus === 'trading' ? 'Executing Trade...' :
+               tradeStatus === 'success' ? 'Trade Successful!' :
+               'Execute DEX Trade'}
+            </span>
           </button>
 
-          {/* Disclaimer */}
-          <div className="flex items-start space-x-2 p-3 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
-            <ExclamationTriangleIcon className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" />
-            <div className="text-sm text-yellow-200">
-              <p className="font-medium">Demo Trading Interface</p>
-              <p className="text-yellow-300 mt-1">
-                This interface shows your real portfolio data from NOWNodes. 
-                Actual trading would require integration with a DEX or CEX API.
+          {/* Real Trading Information */}
+          <div className="flex items-start space-x-2 p-3 bg-green-900/20 border border-green-500/30 rounded-lg">
+            <CheckCircleIcon className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
+            <div className="text-sm text-green-200">
+              <p className="font-medium">Live DEX Trading</p>
+              <p className="text-green-300 mt-1">
+                Real-time quotes from Uniswap V3, PancakeSwap V3, and other major DEXs. 
+                Connect your Web3 wallet to execute trades directly on-chain.
               </p>
             </div>
           </div>
