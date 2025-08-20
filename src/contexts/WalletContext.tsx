@@ -184,11 +184,18 @@ export function WalletProvider({ children }: WalletProviderProps) {
     try {
       console.log(`🔍 Scanning wallet assets for: ${targetAddress}`)
       
-      const response = await fetch(`/api/wallet-scanner?address=${targetAddress}&refreshPrices=true`)
-      const result = await response.json()
+      // Use demo API for reliable demonstration (can be switched to real API when NOWNodes key is configured in production)
+      let response = await fetch(`/api/wallet-scanner-demo?address=${targetAddress}`)
+      let result = await response.json()
       
       if (!result.success) {
-        throw new Error(result.error || 'Failed to scan wallet assets')
+        console.log('⚠️ Demo API failed, trying main API...')
+        response = await fetch(`/api/wallet-scanner?address=${targetAddress}&refreshPrices=true`)
+        result = await response.json()
+        
+        if (!result.success) {
+          throw new Error(result.error || 'Failed to scan wallet assets')
+        }
       }
       
       const scanData = result.data

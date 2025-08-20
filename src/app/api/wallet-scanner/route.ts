@@ -9,6 +9,13 @@ import { NOWNodesAssetScanner } from '@/lib/web3/nownodes-asset-scanner'
 import { ethers } from 'ethers'
 import { z } from 'zod'
 
+// Utility function to handle BigInt serialization
+function serializeBigInt(obj: any): any {
+  return JSON.parse(JSON.stringify(obj, (key, value) =>
+    typeof value === 'bigint' ? value.toString() : value
+  ))
+}
+
 // Request validation schema
 const WalletScanSchema = z.object({
   address: z.string().regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid Ethereum address'),
@@ -279,7 +286,7 @@ export async function GET(request: NextRequest) {
     console.log(`✅ Wallet scan completed in ${scanDuration}ms`)
     console.log(`📊 Portfolio: $${scanResults.summary.totalPortfolioValue.toFixed(2)} across ${scanResults.summary.successfulChains} chains`)
 
-    return NextResponse.json({
+    return NextResponse.json(serializeBigInt({
       success: true,
       data: scanResults,
       metadata: {
@@ -288,7 +295,7 @@ export async function GET(request: NextRequest) {
         timestamp: new Date().toISOString(),
         version: '1.0.0'
       }
-    })
+    }))
 
   } catch (error) {
     console.error('❌ Wallet scanner error:', error)
@@ -325,7 +332,7 @@ export async function POST(request: NextRequest) {
     const balance = await provider.getBalance(address)
     const balanceEth = ethers.formatEther(balance)
 
-    return NextResponse.json({
+    return NextResponse.json(serializeBigInt({
       success: true,
       data: {
         address,
@@ -333,7 +340,7 @@ export async function POST(request: NextRequest) {
         balance: balanceEth,
         balanceWei: balance.toString()
       }
-    })
+    }))
   } catch (error) {
     return NextResponse.json(
       { error: 'Balance check failed', details: error instanceof Error ? error.message : 'Unknown error' },
