@@ -84,7 +84,7 @@ export default function TradingPage() {
         >
           {activeTab === 'realtime' ? (
             <div>
-              <RealTimeTrading />
+              <PortfolioTrading />
               <div className="mt-6 text-center">
                 <p className="text-sm text-gray-400">
                   🔴 <strong>Live Portfolio Trading:</strong> Your real wallet data from NOWNodes. 
@@ -94,11 +94,11 @@ export default function TradingPage() {
             </div>
           ) : activeTab === 'portfolio' ? (
             <div>
-              <PortfolioTrading />
+              <RealTimeTrading />
               <div className="mt-6 text-center">
-                <p className="text-sm text-gray-500">
-                  💡 <strong>Demo Trading:</strong> Practice with simulated balance. 
-                  Perfect for testing strategies and learning to trade.
+                <p className="text-sm text-green-400">
+                  📊 <strong>Live DEX Trading:</strong> Real-time quotes from Uniswap V3, PancakeSwap V3, and other major DEXs. 
+                  Connect your Web3 wallet to execute trades directly on-chain.
                 </p>
               </div>
             </div>
