@@ -155,21 +155,21 @@ export default function Web3Dashboard() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400"></div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Web3 Portfolio</h1>
-              <p className="text-gray-600 mt-1">
+              <h1 className="text-3xl font-bold text-white">Web3 Portfolio</h1>
+              <p className="text-gray-300 mt-1">
                 Manage your multi-chain DeFi portfolio and discover yield opportunities
               </p>
             </div>
@@ -177,14 +177,14 @@ export default function Web3Dashboard() {
               <button
                 onClick={() => selectedWallet && scanWalletAssets(selectedWallet.address, selectedWallet.chainId)}
                 disabled={refreshing || !selectedWallet}
-                className="flex items-center space-x-2 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+                className="flex items-center space-x-2 bg-gray-800/50 backdrop-blur-sm text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-700/50 transition-colors disabled:opacity-50 border border-gray-700"
               >
                 <ArrowPathIcon className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
                 <span>Refresh</span>
               </button>
               <button
                 onClick={() => setShowWalletConnector(true)}
-                className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex items-center space-x-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all shadow-lg"
               >
                 <PlusIcon className="h-4 w-4" />
                 <span>Connect Wallet</span>
@@ -196,56 +196,58 @@ export default function Web3Dashboard() {
         {connectedWallets.length === 0 ? (
           /* Empty State */
           <div className="text-center py-12">
-            <WalletIcon className="h-24 w-24 text-gray-400 mx-auto mb-6" />
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-              Connect Your First Wallet
-            </h2>
-            <p className="text-gray-600 mb-8 max-w-md mx-auto">
-              Connect your Web3 wallet to start managing your multi-chain portfolio, 
-              discover yield opportunities, and optimize your DeFi strategy.
-            </p>
-            <button
-              onClick={() => setShowWalletConnector(true)}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
-            >
-              Connect Wallet
-            </button>
+            <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-12 border border-gray-700/50 max-w-2xl mx-auto">
+              <WalletIcon className="h-24 w-24 text-gray-400 mx-auto mb-6" />
+              <h2 className="text-2xl font-semibold text-white mb-4">
+                Connect Your First Wallet
+              </h2>
+              <p className="text-gray-300 mb-8 max-w-md mx-auto">
+                Connect your Web3 wallet to start managing your multi-chain portfolio, 
+                discover yield opportunities, and optimize your DeFi strategy.
+              </p>
+              <button
+                onClick={() => setShowWalletConnector(true)}
+                className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-8 py-3 rounded-lg hover:from-cyan-600 hover:to-blue-600 transition-all font-medium shadow-lg"
+              >
+                Connect Wallet
+              </button>
+            </div>
           </div>
         ) : (
           <div className="space-y-8">
             {/* Portfolio Overview */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl border border-gray-700/50 p-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-gray-900">
+                  <div className="text-3xl font-bold text-white">
                     {formatCurrency(getTotalPortfolioValue())}
                   </div>
-                  <div className="text-sm text-gray-600">Total Portfolio Value</div>
+                  <div className="text-sm text-gray-300">Total Portfolio Value</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600">
+                  <div className="text-3xl font-bold text-cyan-400">
                     {connectedWallets.length}
                   </div>
-                  <div className="text-sm text-gray-600">Connected Wallets</div>
+                  <div className="text-sm text-gray-300">Connected Wallets</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-green-600">
+                  <div className="text-3xl font-bold text-green-400">
                     {new Set(connectedWallets.map(w => w.chainId)).size}
                   </div>
-                  <div className="text-sm text-gray-600">Active Chains</div>
+                  <div className="text-sm text-gray-300">Active Chains</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-600">
+                  <div className="text-3xl font-bold text-purple-400">
                     {connectedWallets.reduce((total, wallet) => total + wallet.assets.length, 0)}
                   </div>
-                  <div className="text-sm text-gray-600">Total Assets</div>
+                  <div className="text-sm text-gray-300">Total Assets</div>
                 </div>
               </div>
             </div>
 
             {/* Wallet Selector */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Connected Wallets</h3>
+            <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl border border-gray-700/50 p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">Connected Wallets</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {connectedWallets.map((wallet) => (
                   <button
@@ -253,25 +255,25 @@ export default function Web3Dashboard() {
                     onClick={() => setSelectedWallet(wallet)}
                     className={`p-4 border rounded-lg text-left transition-all ${
                       selectedWallet?.id === wallet.id
-                        ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-cyan-500 bg-cyan-500/10 backdrop-blur-sm'
+                        : 'border-gray-600 hover:border-gray-500 bg-gray-800/20'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-2">
-                        <WalletIcon className="h-5 w-5 text-gray-600" />
-                        <span className="font-medium text-gray-900">
+                        <WalletIcon className="h-5 w-5 text-gray-300" />
+                        <span className="font-medium text-white">
                           {wallet.walletType.replace('_', ' ')}
                         </span>
                       </div>
-                      <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                      <span className="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded">
                         {getChainName(wallet.chainId)}
                       </span>
                     </div>
-                    <div className="text-sm text-gray-600 font-mono">
+                    <div className="text-sm text-gray-300 font-mono">
                       {wallet.address.slice(0, 6)}...{wallet.address.slice(-4)}
                     </div>
-                    <div className="text-sm text-gray-500 mt-1">
+                    <div className="text-sm text-gray-400 mt-1">
                       {wallet.assets.length} assets
                     </div>
                   </button>
@@ -299,30 +301,30 @@ export default function Web3Dashboard() {
             )}
 
             {/* Quick Actions */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <div className="bg-gray-800/30 backdrop-blur-sm rounded-xl border border-gray-700/50 p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">Quick Actions</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all">
-                  <ChartBarIcon className="h-8 w-8 text-blue-600" />
+                <button className="flex items-center space-x-3 p-4 border border-gray-600 rounded-lg hover:border-cyan-400 hover:bg-cyan-500/10 transition-all bg-gray-800/20">
+                  <ChartBarIcon className="h-8 w-8 text-cyan-400" />
                   <div className="text-left">
-                    <div className="font-medium text-gray-900">Portfolio Analytics</div>
-                    <div className="text-sm text-gray-600">View detailed analytics</div>
+                    <div className="font-medium text-white">Portfolio Analytics</div>
+                    <div className="text-sm text-gray-300">View detailed analytics</div>
                   </div>
                 </button>
                 
-                <button className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:border-green-300 hover:bg-green-50 transition-all">
-                  <FireIcon className="h-8 w-8 text-green-600" />
+                <button className="flex items-center space-x-3 p-4 border border-gray-600 rounded-lg hover:border-green-400 hover:bg-green-500/10 transition-all bg-gray-800/20">
+                  <FireIcon className="h-8 w-8 text-green-400" />
                   <div className="text-left">
-                    <div className="font-medium text-gray-900">Yield Opportunities</div>
-                    <div className="text-sm text-gray-600">Discover high-yield protocols</div>
+                    <div className="font-medium text-white">Yield Opportunities</div>
+                    <div className="text-sm text-gray-300">Discover high-yield protocols</div>
                   </div>
                 </button>
                 
-                <button className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:border-purple-300 hover:bg-purple-50 transition-all">
-                  <ArrowPathIcon className="h-8 w-8 text-purple-600" />
+                <button className="flex items-center space-x-3 p-4 border border-gray-600 rounded-lg hover:border-purple-400 hover:bg-purple-500/10 transition-all bg-gray-800/20">
+                  <ArrowPathIcon className="h-8 w-8 text-purple-400" />
                   <div className="text-left">
-                    <div className="font-medium text-gray-900">Rebalance Portfolio</div>
-                    <div className="text-sm text-gray-600">Optimize asset allocation</div>
+                    <div className="font-medium text-white">Rebalance Portfolio</div>
+                    <div className="text-sm text-gray-300">Optimize asset allocation</div>
                   </div>
                 </button>
               </div>
