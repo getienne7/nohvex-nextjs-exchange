@@ -13,7 +13,7 @@ import { GlobalNavigation } from '@/components/GlobalNavigation'
 export default function Dashboard() {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState('realtime')
+  const [activeTab, setActiveTab] = useState('overview')
 
   useEffect(() => {
     if (status === 'loading') return
