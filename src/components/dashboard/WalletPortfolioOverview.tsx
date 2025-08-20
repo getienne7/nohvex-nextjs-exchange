@@ -12,7 +12,11 @@ import {
   ShieldCheckIcon
 } from '@heroicons/react/24/outline'
 
-export default function WalletPortfolioOverview() {
+interface WalletPortfolioOverviewProps {
+  autoConnectWallet?: string | null
+}
+
+export default function WalletPortfolioOverview({ autoConnectWallet }: WalletPortfolioOverviewProps) {
   const {
     portfolio,
     isLoadingPortfolio,
@@ -51,7 +55,7 @@ export default function WalletPortfolioOverview() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center py-12"
         >
-          <WalletConnection showManualInput={true} />
+          <WalletConnection showManualInput={true} autoConnectWallet={autoConnectWallet} />
         </motion.div>
       </div>
     )

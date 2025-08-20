@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { redirect } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { 
   WalletIcon, 
   PlusIcon, 
@@ -27,6 +27,7 @@ interface WalletConnection {
 
 export default function Web3Dashboard() {
   const { data: session, status } = useSession()
+  const router = useRouter()
   const [showWalletConnector, setShowWalletConnector] = useState(false)
   const [connectedWallets, setConnectedWallets] = useState<WalletConnection[]>([])
   const [selectedWallet, setSelectedWallet] = useState<WalletConnection | null>(null)
@@ -63,6 +64,8 @@ export default function Web3Dashboard() {
 
   const handleWalletConnected = async (wallet: ConnectedWallet) => {
     try {
+      console.log('🔗 Connecting wallet:', wallet.address)
+      
       const response = await fetch('/api/wallet/connect', {
         method: 'POST',
         headers: {
@@ -78,14 +81,20 @@ export default function Web3Dashboard() {
       const data = await response.json()
       
       if (data.success) {
-        await loadConnectedWallets()
-        setShowWalletConnector(false)
+        console.log('✅ Wallet connected successfully')
         
         // Trigger asset scan for new wallet
+        console.log('🔍 Starting asset scan...')
         await scanWalletAssets(wallet.address, wallet.chainId)
+        
+        // Redirect to dashboard with the connected wallet address
+        console.log('🚀 Redirecting to dashboard...')
+        router.push(`/dashboard?wallet=${wallet.address}`)
+      } else {
+        console.error('❌ Failed to connect wallet:', data.error)
       }
     } catch (error) {
-      console.error('Failed to save wallet connection:', error)
+      console.error('❌ Failed to save wallet connection:', error)
     }
   }
 

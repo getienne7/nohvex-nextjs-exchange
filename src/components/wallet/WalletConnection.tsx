@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useWallet } from '@/contexts/WalletContext'
 import { walletConnector } from '@/lib/web3/wallet-connector'
@@ -16,9 +16,10 @@ import {
 interface WalletConnectionProps {
   onClose?: () => void
   showManualInput?: boolean
+  autoConnectWallet?: string | null
 }
 
-export default function WalletConnection({ onClose, showManualInput = true }: WalletConnectionProps) {
+export default function WalletConnection({ onClose, showManualInput = true, autoConnectWallet }: WalletConnectionProps) {
   const {
     isConnected,
     connectedWallet,
@@ -34,6 +35,7 @@ export default function WalletConnection({ onClose, showManualInput = true }: Wa
 
   const [showWalletOptions, setShowWalletOptions] = useState(false)
   const [inputAddress, setInputAddress] = useState(manualAddress)
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
   const supportedWallets = walletConnector.getSupportedWallets()
 
@@ -53,6 +55,19 @@ export default function WalletConnection({ onClose, showManualInput = true }: Wa
     await disconnectWallet()
     setInputAddress('')
   }
+
+  // Auto-connect wallet from /web3 redirect
+  useEffect(() => {
+    if (autoConnectWallet && !manualAddress && !isLoadingPortfolio) {
+      console.log('🚀 Auto-scanning wallet:', autoConnectWallet)
+      setInputAddress(autoConnectWallet)
+      setShowSuccessMessage(true)
+      scanManualAddress(autoConnectWallet)
+      
+      // Hide success message after 5 seconds
+      setTimeout(() => setShowSuccessMessage(false), 5000)
+    }
+  }, [autoConnectWallet, manualAddress, isLoadingPortfolio, scanManualAddress])
 
   if (isConnected && connectedWallet) {
     return (
@@ -130,6 +145,21 @@ export default function WalletConnection({ onClose, showManualInput = true }: Wa
           </button>
         )}
       </div>
+
+      {/* Success Message */}
+      {showSuccessMessage && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+          className="mb-4 p-3 bg-green-900/20 border border-green-500/50 rounded-lg flex items-center space-x-2"
+        >
+          <CheckCircleIcon className="w-5 h-5 text-green-400 flex-shrink-0" />
+          <span className="text-sm text-green-300">
+            🎉 Wallet connected successfully! Scanning portfolio...
+          </span>
+        </motion.div>
+      )}
 
       {connectionError && (
         <motion.div

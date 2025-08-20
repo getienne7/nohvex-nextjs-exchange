@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import WalletPortfolioOverview from '@/components/dashboard/WalletPortfolioOverview'
 import RealTimePortfolioOverview from '@/components/dashboard/RealTimePortfolioOverview'
@@ -13,7 +13,9 @@ import { GlobalNavigation } from '@/components/GlobalNavigation'
 export default function Dashboard() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [activeTab, setActiveTab] = useState('overview')
+  const [autoConnectWallet, setAutoConnectWallet] = useState<string | null>(null)
 
   useEffect(() => {
     if (status === 'loading') return
@@ -21,6 +23,20 @@ export default function Dashboard() {
       router.push('/auth/signin')
     }
   }, [session, status, router])
+
+  // Handle wallet query parameter from /web3 redirect
+  useEffect(() => {
+    const walletParam = searchParams.get('wallet')
+    if (walletParam && walletParam !== autoConnectWallet) {
+      console.log('🔗 Auto-connecting wallet from URL:', walletParam)
+      setAutoConnectWallet(walletParam)
+      
+      // Clear the URL parameter after processing
+      const newUrl = new URL(window.location.href)
+      newUrl.searchParams.delete('wallet')
+      window.history.replaceState({}, '', newUrl.toString())
+    }
+  }, [searchParams, autoConnectWallet])
 
   if (status === 'loading') {
     return (
@@ -90,7 +106,7 @@ export default function Dashboard() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3 }}
         >
-          {activeTab === 'overview' && <WalletPortfolioOverview />}
+          {activeTab === 'overview' && <WalletPortfolioOverview autoConnectWallet={autoConnectWallet} />}
           {activeTab === 'realtime' && <RealTimePortfolioOverview />}
           {activeTab === 'charts' && <WalletBasedCryptoChart />}
           {activeTab === 'history' && <WalletBasedTransactionHistory />}
