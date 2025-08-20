@@ -1,45 +1,69 @@
 # Database Setup for NOHVEX Exchange
 
-## Step 1: Create a Free PostgreSQL Database on Neon
+## 🚀 Quick Setup (Recommended)
 
+### Option 1: Neon (Free PostgreSQL)
 1. Go to [Neon Console](https://console.neon.tech/)
 2. Sign up for a free account
 3. Create a new project called "nohvex-exchange"
 4. Select PostgreSQL 15+ and the region closest to you
 5. Copy the connection string (it will look like: `postgresql://username:password@ep-xxx.us-east-2.aws.neon.tech/neondb`)
 
+### Option 2: Supabase (Free PostgreSQL)
+1. Go to [Supabase Dashboard](https://supabase.com/dashboard)
+2. Create a new project called "nohvex-exchange"
+3. Wait for the database to be ready
+4. Go to Settings > Database
+5. Copy the connection string under "Connection string" > "URI"
+
+### Option 3: Vercel Postgres (Paid)
+1. Go to your Vercel dashboard
+2. Select your nohvex-exchange project
+3. Go to the "Storage" tab
+4. Click "Create Database" > "Postgres"
+5. The environment variables will be automatically configured
+
 ## Step 2: Update Environment Variables
 
-### Local Environment (.env.local)
+### Local Environment (.env)
+Add these to your `.env` file:
 ```env
-DATABASE_URL=postgresql://your-neon-connection-string
-DIRECT_URL=postgresql://your-neon-connection-string
+# Replace with your actual database connection string
+DATABASE_URL="postgresql://username:password@host:5432/database"
+DIRECT_URL="postgresql://username:password@host:5432/database"
 ```
 
 ### Vercel Environment Variables
-Run these commands to update your Vercel environment variables:
+Set these in your Vercel dashboard or via CLI:
 
 ```bash
-# Remove old DATABASE_URL
-vercel env rm DATABASE_URL
+# Set DATABASE_URL in Vercel
+vercel env add DATABASE_URL production
+# Paste your PostgreSQL connection string when prompted
 
-# Add new DATABASE_URL with your Neon connection string  
-vercel env add DATABASE_URL
-
-# Also add DIRECT_URL for Prisma
-vercel env add DIRECT_URL
+# Set DIRECT_URL in Vercel (same as DATABASE_URL for most providers)
+vercel env add DIRECT_URL production
+# Paste your PostgreSQL connection string when prompted
 ```
 
-## Step 3: Run Database Migration
+## Step 3: Run Database Setup
 
-After updating the environment variables, run:
+### Automated Setup (Recommended)
+```bash
+# Run the automated setup script
+npm run db:setup
+```
 
+### Manual Setup
 ```bash
 # Generate Prisma client
 npx prisma generate
 
-# Push the database schema to your Neon database
+# Push the database schema
 npx prisma db push
+
+# Seed with demo data
+npm run db:seed
 
 # Optional: View your database in Prisma Studio
 npx prisma studio

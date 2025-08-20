@@ -13,9 +13,11 @@
     "postinstall": "prisma generate",
     "db:init": "node scripts/init-db.js",
     "db:deploy": "node scripts/deploy-db.js",
+    "db:setup": "node scripts/setup-database.js",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:generate": "prisma generate",
+    "db:seed": "node prisma/seed.js",
     "verify-account": "node scripts/verify-account.js"
   },
   "dependencies": {
@@ -72,5 +74,8 @@
   "engines": {
     "node": ">=20 <23",
     "npm": ">=10"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   }
 }

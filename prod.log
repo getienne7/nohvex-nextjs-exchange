@@ -7,8 +7,314 @@
    - Network:      http://10.2.29.138:3000
 
  ✓ Starting...
- ✓ Ready in 563ms
+ ✓ Ready in 564ms
 ✓ Database connection initialized
+Attempting API call (1/3)
+Rate limited, waiting before API call
+NOWNodes returned 2 prices out of 4 requested
+Successfully fetched 2 prices from NOWNodes
+Successfully fetched and cached crypto prices
+Attempting API call (1/3)
+NOWNodes returned 1 prices out of 5 requested
+Successfully fetched 1 prices from NOWNodes
+Successfully fetched and cached crypto prices
+Returning cached crypto prices
+Returning cached crypto prices
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Returning slightly stale cached data to avoid API calls
+Returning slightly stale cached data to avoid API calls
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Attempting API call (1/3)
+Rate limited, waiting before API call
+NOWNodes returned 2 prices out of 4 requested
+Successfully fetched 2 prices from NOWNodes
+Successfully fetched and cached crypto prices
+Attempting API call (1/3)
+NOWNodes returned 1 prices out of 5 requested
+Successfully fetched 1 prices from NOWNodes
+Successfully fetched and cached crypto prices
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Returning cached crypto prices
+Returning cached crypto prices
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Returning slightly stale cached data to avoid API calls
+Returning slightly stale cached data to avoid API calls
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Attempting API call (1/3)
+Rate limited, waiting before API call
+NOWNodes returned 2 prices out of 4 requested
+Successfully fetched 2 prices from NOWNodes
+Successfully fetched and cached crypto prices
+Attempting API call (1/3)
+NOWNodes returned 1 prices out of 5 requested
+Successfully fetched 1 prices from NOWNodes
+Successfully fetched and cached crypto prices
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Returning cached crypto prices
+Returning cached crypto prices
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Returning slightly stale cached data to avoid API calls
+Returning slightly stale cached data to avoid API calls
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Attempting API call (1/3)
+Rate limited, waiting before API call
+Attempting API call (1/3)
+NOWNodes returned 1 prices out of 5 requested
+Successfully fetched 1 prices from NOWNodes
+Successfully fetched and cached crypto prices
+Error fetching Chainlink price for BTC: Error [AxiosError]: timeout of 10000ms exceeded
+    at u.<anonymous> (.next/server/chunks/4612.js:3:9872)
+    at Timeout.<anonymous> (.next/server/chunks/4612.js:1:18236)
+    at bK.request (.next/server/chunks/4612.js:3:21252)
+    at async e.getChainlinkPrice (.next/server/chunks/5814.js:123:5525)
+    at async e.getNOWNodesPrices (.next/server/chunks/5814.js:123:4883)
+    at async e.getCryptoPrices (.next/server/chunks/5814.js:123:2763)
+    at async w (.next/server/app/api/prices/route.js:1:1750)
+    at async k (.next/server/app/api/prices/route.js:1:5076)
+    at async g (.next/server/app/api/prices/route.js:1:6079) {
+  code: 'ECONNABORTED',
+  config: [Object],
+  request: [Writable],
+  constructor: [Function],
+  toJSON: [Function: toJSON]
+}
+NOWNodes returned 1 prices out of 4 requested
+Successfully fetched 1 prices from NOWNodes
+Successfully fetched and cached crypto prices
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Returning cached crypto prices
+Returning cached crypto prices
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Returning slightly stale cached data to avoid API calls
+Returning slightly stale cached data to avoid API calls
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Attempting API call (1/3)
+Rate limited, waiting before API call
+NOWNodes returned 2 prices out of 4 requested
+Successfully fetched 2 prices from NOWNodes
+Successfully fetched and cached crypto prices
+Attempting API call (1/3)
+NOWNodes returned 1 prices out of 5 requested
+Successfully fetched 1 prices from NOWNodes
+Successfully fetched and cached crypto prices
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Returning cached crypto prices
+Returning cached crypto prices
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Returning slightly stale cached data to avoid API calls
+Returning slightly stale cached data to avoid API calls
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Attempting API call (1/3)
+Rate limited, waiting before API call
+NOWNodes returned 2 prices out of 4 requested
+Successfully fetched 2 prices from NOWNodes
+Successfully fetched and cached crypto prices
+Attempting API call (1/3)
+NOWNodes returned 1 prices out of 5 requested
+Successfully fetched 1 prices from NOWNodes
+Successfully fetched and cached crypto prices
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Returning cached crypto prices
+Returning cached crypto prices
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Returning slightly stale cached data to avoid API calls
+Returning slightly stale cached data to avoid API calls
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Attempting API call (1/3)
+Rate limited, waiting before API call
+NOWNodes returned 2 prices out of 4 requested
+Successfully fetched 2 prices from NOWNodes
+Successfully fetched and cached crypto prices
+Attempting API call (1/3)
+NOWNodes returned 1 prices out of 5 requested
+Successfully fetched 1 prices from NOWNodes
+Successfully fetched and cached crypto prices
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Returning cached crypto prices
+Returning cached crypto prices
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+Returning slightly stale cached data to avoid API calls
+Returning slightly stale cached data to avoid API calls
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
+prisma:query SELECT 1
+prisma:query SELECT `main`.`Alert`.`id`, `main`.`Alert`.`userId`, `main`.`Alert`.`symbol`, `main`.`Alert`.`operator`, `main`.`Alert`.`threshold`, `main`.`Alert`.`active`, `main`.`Alert`.`cooldownMinutes`, `main`.`Alert`.`lastTriggeredAt`, `main`.`Alert`.`createdAt`, `main`.`Alert`.`updatedAt` FROM `main`.`Alert` WHERE `main`.`Alert`.`active` = ? LIMIT ? OFFSET ?
 Attempting API call (1/3)
 Rate limited, waiting before API call
 NOWNodes returned 2 prices out of 4 requested
