@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
@@ -10,7 +10,7 @@ import WalletBasedCryptoChart from '@/components/dashboard/WalletBasedCryptoChar
 import WalletBasedTransactionHistory from '@/components/dashboard/WalletBasedTransactionHistory'
 import { GlobalNavigation } from '@/components/GlobalNavigation'
 
-export default function Dashboard() {
+function DashboardContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -115,4 +115,11 @@ export default function Dashboard() {
     </div>
   )
 }
-// Trigger deployment
+
+export default function Dashboard() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+      <DashboardContent />
+    </Suspense>
+  )
+}

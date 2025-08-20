@@ -8,7 +8,8 @@ import {
   TimeInForce,
   AlgorithmType,
   AdvancedOrder,
-  TradingAlgorithm
+  TradingAlgorithm,
+  ConditionType
 } from '@/lib/advanced-trading'
 import { z } from 'zod'
 
@@ -43,18 +44,18 @@ const createOrderSchema = z.object({
   trailingPercent: z.number().optional(),
   timeInForce: z.nativeEnum(TimeInForce).default(TimeInForce.GTC),
   conditions: z.array(z.object({
-    type: z.string(),
+    type: z.nativeEnum(ConditionType),
     asset: z.string(),
     operator: z.enum(['gt', 'lt', 'gte', 'lte', 'eq']),
     value: z.string(),
     timeframe: z.string().optional()
   })).default([]),
   riskParameters: z.object({
-    maxPositionSize: z.string().optional(),
-    maxDailyLoss: z.string().optional(),
+    maxPositionSize: z.string(),
+    maxDailyLoss: z.string(),
     stopLossPercent: z.number().optional(),
     takeProfitPercent: z.number().optional(),
-    maxSlippage: z.number().optional()
+    maxSlippage: z.number()
   }).optional()
 })
 

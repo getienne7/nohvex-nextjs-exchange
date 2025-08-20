@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
 
       const validatedParams = getHistorySchema.parse(queryParams)
 
-      const transactions = transactionMonitor.getTransactionHistory(validatedParams.walletAddress)
+      const transactions = transactionMonitor.getStoredTransactionHistory(validatedParams.walletAddress)
       const paginatedTransactions = transactions.slice(
         validatedParams.offset,
         validatedParams.offset + validatedParams.limit

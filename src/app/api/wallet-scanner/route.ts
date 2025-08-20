@@ -166,7 +166,6 @@ export async function GET(request: NextRequest) {
             assets: chainResult.assets,
             totalAssets: chainResult.assets.length,
             totalUsdValue: chainResult.totalUsdValue + nativeValueUsd,
-            scanDuration: chainResult.scanDuration,
             lastActivity: transactionCount > 0 ? 'Active' : 'Inactive'
           }
 

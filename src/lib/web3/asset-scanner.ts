@@ -3,6 +3,7 @@
  * Scans wallet addresses across different chains to discover assets
  */
 
+import { ethers } from 'ethers'
 import { WalletAsset } from './wallet-connector'
 
 export interface ChainConfig {

@@ -262,17 +262,18 @@ export class WalletConnector {
       })
 
       const provider = new ethers.BrowserProvider(ethereum)
-      const balance = await provider.getBalance(accounts[0])
+      const accountAddress = (accounts as string[])[0]
+      const balance = await provider.getBalance(accountAddress)
 
       const wallet: ConnectedWallet = {
-        address: accounts[0],
-        chainId: parseInt(chainId, 16),
+        address: accountAddress,
+        chainId: parseInt(chainId as string, 16),
         provider: 'Coinbase Wallet',
         balance: ethers.formatEther(balance),
         providerInstance: provider
       }
 
-      this.connectedWallets.set(accounts[0], wallet)
+      this.connectedWallets.set(accountAddress, wallet)
       this.setupEventListeners(ethereum, wallet)
       return wallet
     } catch (error) {

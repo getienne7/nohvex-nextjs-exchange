@@ -262,7 +262,7 @@ export async function GET(request: NextRequest) {
       )
       
       // Get sentiment for major assets
-      const sentimentData = {}
+      const sentimentData: Record<string, any> = {}
       for (const asset of assets) {
         const sentiment = predictiveAnalyticsEngine.getSentimentAnalysis(asset)
         if (sentiment) {
