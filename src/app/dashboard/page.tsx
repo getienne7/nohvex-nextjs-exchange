@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import PortfolioOverview from '@/components/dashboard/PortfolioOverview'
+import WalletPortfolioOverview from '@/components/dashboard/WalletPortfolioOverview'
 import RealTimePortfolioOverview from '@/components/dashboard/RealTimePortfolioOverview'
-import CryptoChart from '@/components/dashboard/CryptoChart'
-import TransactionHistory from '@/components/dashboard/TransactionHistory'
+import WalletBasedCryptoChart from '@/components/dashboard/WalletBasedCryptoChart'
+import WalletBasedTransactionHistory from '@/components/dashboard/WalletBasedTransactionHistory'
 import { GlobalNavigation } from '@/components/GlobalNavigation'
 
 export default function Dashboard() {
@@ -90,10 +90,10 @@ export default function Dashboard() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3 }}
         >
-          {activeTab === 'overview' && <PortfolioOverview />}
+          {activeTab === 'overview' && <WalletPortfolioOverview />}
           {activeTab === 'realtime' && <RealTimePortfolioOverview />}
-          {activeTab === 'charts' && <CryptoChart />}
-          {activeTab === 'history' && <TransactionHistory />}
+          {activeTab === 'charts' && <WalletBasedCryptoChart />}
+          {activeTab === 'history' && <WalletBasedTransactionHistory />}
         </motion.div>
       </div>
     </div>
