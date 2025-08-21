@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useWallet } from '@/contexts/WalletContext'
 import { walletConnector } from '@/lib/web3/wallet-connector'
+import { ethers } from 'ethers'
 import { 
   WalletIcon, 
   LinkIcon, 
@@ -46,8 +47,16 @@ export default function WalletConnection({ onClose, showManualInput = true, auto
 
   const handleManualScan = async () => {
     if (inputAddress) {
-      await scanManualAddress(inputAddress)
-      if (onClose) onClose()
+      try {
+        // Validate and normalize the address
+        const checksumAddress = ethers.getAddress(inputAddress.trim())
+        await scanManualAddress(checksumAddress)
+        if (onClose) onClose()
+      } catch (error) {
+        console.error('Invalid address format:', error)
+        // The scanManualAddress function will handle the error display
+        await scanManualAddress(inputAddress.trim())
+      }
     }
   }
 
@@ -186,7 +195,7 @@ export default function WalletConnection({ onClose, showManualInput = true, auto
                 type="text"
                 value={inputAddress}
                 onChange={(e) => setInputAddress(e.target.value)}
-                placeholder="0xa2232F6250c89Da64475Fd998d96995cf8828f5a"
+                placeholder="0x742d35Cc6634C0532925a3b8D4C9db96590b4C8d"
                 className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <button
@@ -267,18 +276,11 @@ export default function WalletConnection({ onClose, showManualInput = true, auto
           </AnimatePresence>
         </div>
 
-        {/* Test Address Button */}
+        {/* Help Text */}
         <div className="pt-4 border-t border-white/10">
-          <button
-            onClick={() => {
-              setInputAddress('0xa2232F6250c89Da64475Fd998d96995cf8828f5a')
-              scanManualAddress('0xa2232F6250c89Da64475Fd998d96995cf8828f5a')
-            }}
-            disabled={isLoadingPortfolio}
-            className="w-full px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200 disabled:opacity-50"
-          >
-            Try Demo Address
-          </button>
+          <p className="text-xs text-gray-400 text-center">
+            Enter any Ethereum wallet address to scan its portfolio across multiple chains
+          </p>
         </div>
       </div>
     </motion.div>
