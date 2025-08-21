@@ -35,3 +35,822 @@
  GET /api/defi-positions?action=alerts&walletAddress= 401 in 30ms
  GET /api/defi-positions?action=optimizations&walletAddress= 401 in 35ms
  GET /api/defi-positions?action=optimizations&walletAddress= 401 in 28ms
+ ○ Compiling /api/wallet-scanner ...
+ ✓ Compiled /api/wallet-scanner in 512ms
+🔍 Scanning wallet 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a across 8 chains...
+⛓️ Scanning chain 1...
+🔍 Scanning Ethereum for wallet 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a...
+Error getting balances for 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a on chain 1: TypeError: bad address checksum (argument="address", value="0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a", code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:691:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at assertArgument (../../src.ts/utils/errors.ts:731:4)
+    at getAddress (../../src.ts/address/address.ts:131:23)
+    at resolveAddress (../../src.ts/address/checks.ts:108:67)
+    at JsonRpcProvider._getAddress (../../src.ts/providers/abstract-provider.ts:718:30)
+    at #getAccountValue (../../src.ts/providers/abstract-provider.ts:1061:53)
+    at JsonRpcProvider.getBalance (../../src.ts/providers/abstract-provider.ts:1072:53)
+    at NOWNodesService.getNativeBalance (src/lib/web3/nownodes-service.ts:147:35)
+    at NOWNodesService.getAllTokenBalances (src/lib/web3/nownodes-service.ts:210:39)
+    at NOWNodesAssetScanner.scanChainAssets (src/lib/web3/nownodes-asset-scanner.ts:61:41)
+    at GET (src/app/api/wallet-scanner/route.ts:135:42)
+  145 |   public async getNativeBalance(address: string, chainId: number): Promise<string> {
+  146 |     const provider = this.getProvider(chainId)
+> 147 |     const balance = await provider.getBalance(address)
+      |                                   ^
+  148 |     return ethers.formatEther(balance)
+  149 |   }
+  150 | {
+  code: 'INVALID_ARGUMENT',
+  argument: 'address',
+  value: '0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a',
+  shortMessage: 'bad address checksum'
+}
+✅ Ethereum scan completed in 160ms - Found 0 assets worth $0.00
+❌ Error scanning chain 1: TypeError: bad address checksum (argument="address", value="0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a", code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:691:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at assertArgument (../../src.ts/utils/errors.ts:731:4)
+    at getAddress (../../src.ts/address/address.ts:131:23)
+    at resolveAddress (../../src.ts/address/checks.ts:108:67)
+    at JsonRpcProvider._getAddress (../../src.ts/providers/abstract-provider.ts:718:30)
+    at #getAccountValue (../../src.ts/providers/abstract-provider.ts:1061:53)
+    at JsonRpcProvider.getBalance (../../src.ts/providers/abstract-provider.ts:1072:53)
+    at GET (src/app/api/wallet-scanner/route.ts:141:47)
+  139 |           // Get additional chain data
+  140 |           const provider = nowNodes.getProvider(chainId)
+> 141 |           const nativeBalance = await provider.getBalance(walletAddress)
+      |                                               ^
+  142 |           const nativeBalanceFormatted = ethers.formatEther(nativeBalance)
+  143 |           const transactionCount = await provider.getTransactionCount(walletAddress)
+  144 |            {
+  code: 'INVALID_ARGUMENT',
+  argument: 'address',
+  value: '0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a',
+  shortMessage: 'bad address checksum'
+}
+⛓️ Scanning chain 56...
+🔍 Scanning BNB Smart Chain for wallet 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a...
+Error getting balances for 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a on chain 56: TypeError: bad address checksum (argument="address", value="0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a", code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:691:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at assertArgument (../../src.ts/utils/errors.ts:731:4)
+    at getAddress (../../src.ts/address/address.ts:131:23)
+    at resolveAddress (../../src.ts/address/checks.ts:108:67)
+    at JsonRpcProvider._getAddress (../../src.ts/providers/abstract-provider.ts:718:30)
+    at #getAccountValue (../../src.ts/providers/abstract-provider.ts:1061:53)
+    at JsonRpcProvider.getBalance (../../src.ts/providers/abstract-provider.ts:1072:53)
+    at NOWNodesService.getNativeBalance (src/lib/web3/nownodes-service.ts:147:35)
+    at NOWNodesService.getAllTokenBalances (src/lib/web3/nownodes-service.ts:210:39)
+    at NOWNodesAssetScanner.scanChainAssets (src/lib/web3/nownodes-asset-scanner.ts:61:41)
+    at GET (src/app/api/wallet-scanner/route.ts:135:42)
+  145 |   public async getNativeBalance(address: string, chainId: number): Promise<string> {
+  146 |     const provider = this.getProvider(chainId)
+> 147 |     const balance = await provider.getBalance(address)
+      |                                   ^
+  148 |     return ethers.formatEther(balance)
+  149 |   }
+  150 | {
+  code: 'INVALID_ARGUMENT',
+  argument: 'address',
+  value: '0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a',
+  shortMessage: 'bad address checksum'
+}
+✅ BNB Smart Chain scan completed in 65ms - Found 0 assets worth $0.00
+❌ Error scanning chain 56: TypeError: bad address checksum (argument="address", value="0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a", code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:691:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at assertArgument (../../src.ts/utils/errors.ts:731:4)
+    at getAddress (../../src.ts/address/address.ts:131:23)
+    at resolveAddress (../../src.ts/address/checks.ts:108:67)
+    at JsonRpcProvider._getAddress (../../src.ts/providers/abstract-provider.ts:718:30)
+    at #getAccountValue (../../src.ts/providers/abstract-provider.ts:1061:53)
+    at JsonRpcProvider.getBalance (../../src.ts/providers/abstract-provider.ts:1072:53)
+    at GET (src/app/api/wallet-scanner/route.ts:141:47)
+  139 |           // Get additional chain data
+  140 |           const provider = nowNodes.getProvider(chainId)
+> 141 |           const nativeBalance = await provider.getBalance(walletAddress)
+      |                                               ^
+  142 |           const nativeBalanceFormatted = ethers.formatEther(nativeBalance)
+  143 |           const transactionCount = await provider.getTransactionCount(walletAddress)
+  144 |            {
+  code: 'INVALID_ARGUMENT',
+  argument: 'address',
+  value: '0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a',
+  shortMessage: 'bad address checksum'
+}
+⛓️ Scanning chain 137...
+🔍 Scanning Polygon for wallet 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a...
+Error getting balances for 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a on chain 137: TypeError: bad address checksum (argument="address", value="0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a", code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:691:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at assertArgument (../../src.ts/utils/errors.ts:731:4)
+    at getAddress (../../src.ts/address/address.ts:131:23)
+    at resolveAddress (../../src.ts/address/checks.ts:108:67)
+    at JsonRpcProvider._getAddress (../../src.ts/providers/abstract-provider.ts:718:30)
+    at #getAccountValue (../../src.ts/providers/abstract-provider.ts:1061:53)
+    at JsonRpcProvider.getBalance (../../src.ts/providers/abstract-provider.ts:1072:53)
+    at NOWNodesService.getNativeBalance (src/lib/web3/nownodes-service.ts:147:35)
+    at NOWNodesService.getAllTokenBalances (src/lib/web3/nownodes-service.ts:210:39)
+    at NOWNodesAssetScanner.scanChainAssets (src/lib/web3/nownodes-asset-scanner.ts:61:41)
+    at GET (src/app/api/wallet-scanner/route.ts:135:42)
+  145 |   public async getNativeBalance(address: string, chainId: number): Promise<string> {
+  146 |     const provider = this.getProvider(chainId)
+> 147 |     const balance = await provider.getBalance(address)
+      |                                   ^
+  148 |     return ethers.formatEther(balance)
+  149 |   }
+  150 | {
+  code: 'INVALID_ARGUMENT',
+  argument: 'address',
+  value: '0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a',
+  shortMessage: 'bad address checksum'
+}
+✅ Polygon scan completed in 75ms - Found 0 assets worth $0.00
+❌ Error scanning chain 137: TypeError: bad address checksum (argument="address", value="0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a", code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:691:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at assertArgument (../../src.ts/utils/errors.ts:731:4)
+    at getAddress (../../src.ts/address/address.ts:131:23)
+    at resolveAddress (../../src.ts/address/checks.ts:108:67)
+    at JsonRpcProvider._getAddress (../../src.ts/providers/abstract-provider.ts:718:30)
+    at #getAccountValue (../../src.ts/providers/abstract-provider.ts:1061:53)
+    at JsonRpcProvider.getBalance (../../src.ts/providers/abstract-provider.ts:1072:53)
+    at GET (src/app/api/wallet-scanner/route.ts:141:47)
+  139 |           // Get additional chain data
+  140 |           const provider = nowNodes.getProvider(chainId)
+> 141 |           const nativeBalance = await provider.getBalance(walletAddress)
+      |                                               ^
+  142 |           const nativeBalanceFormatted = ethers.formatEther(nativeBalance)
+  143 |           const transactionCount = await provider.getTransactionCount(walletAddress)
+  144 |            {
+  code: 'INVALID_ARGUMENT',
+  argument: 'address',
+  value: '0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a',
+  shortMessage: 'bad address checksum'
+}
+⛓️ Scanning chain 42161...
+🔍 Scanning Arbitrum One for wallet 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a...
+Error getting balances for 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a on chain 42161: TypeError: bad address checksum (argument="address", value="0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a", code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:691:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at assertArgument (../../src.ts/utils/errors.ts:731:4)
+    at getAddress (../../src.ts/address/address.ts:131:23)
+    at resolveAddress (../../src.ts/address/checks.ts:108:67)
+    at JsonRpcProvider._getAddress (../../src.ts/providers/abstract-provider.ts:718:30)
+    at #getAccountValue (../../src.ts/providers/abstract-provider.ts:1061:53)
+    at JsonRpcProvider.getBalance (../../src.ts/providers/abstract-provider.ts:1072:53)
+    at NOWNodesService.getNativeBalance (src/lib/web3/nownodes-service.ts:147:35)
+    at NOWNodesService.getAllTokenBalances (src/lib/web3/nownodes-service.ts:210:39)
+    at NOWNodesAssetScanner.scanChainAssets (src/lib/web3/nownodes-asset-scanner.ts:61:41)
+    at GET (src/app/api/wallet-scanner/route.ts:135:42)
+  145 |   public async getNativeBalance(address: string, chainId: number): Promise<string> {
+  146 |     const provider = this.getProvider(chainId)
+> 147 |     const balance = await provider.getBalance(address)
+      |                                   ^
+  148 |     return ethers.formatEther(balance)
+  149 |   }
+  150 | {
+  code: 'INVALID_ARGUMENT',
+  argument: 'address',
+  value: '0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a',
+  shortMessage: 'bad address checksum'
+}
+✅ Arbitrum One scan completed in 90ms - Found 0 assets worth $0.00
+❌ Error scanning chain 42161: TypeError: bad address checksum (argument="address", value="0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a", code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:691:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at assertArgument (../../src.ts/utils/errors.ts:731:4)
+    at getAddress (../../src.ts/address/address.ts:131:23)
+    at resolveAddress (../../src.ts/address/checks.ts:108:67)
+    at JsonRpcProvider._getAddress (../../src.ts/providers/abstract-provider.ts:718:30)
+    at #getAccountValue (../../src.ts/providers/abstract-provider.ts:1061:53)
+    at JsonRpcProvider.getBalance (../../src.ts/providers/abstract-provider.ts:1072:53)
+    at GET (src/app/api/wallet-scanner/route.ts:141:47)
+  139 |           // Get additional chain data
+  140 |           const provider = nowNodes.getProvider(chainId)
+> 141 |           const nativeBalance = await provider.getBalance(walletAddress)
+      |                                               ^
+  142 |           const nativeBalanceFormatted = ethers.formatEther(nativeBalance)
+  143 |           const transactionCount = await provider.getTransactionCount(walletAddress)
+  144 |            {
+  code: 'INVALID_ARGUMENT',
+  argument: 'address',
+  value: '0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a',
+  shortMessage: 'bad address checksum'
+}
+⛓️ Scanning chain 10...
+🔍 Scanning Optimism for wallet 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a...
+Error getting balances for 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a on chain 10: TypeError: bad address checksum (argument="address", value="0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a", code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:691:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at assertArgument (../../src.ts/utils/errors.ts:731:4)
+    at getAddress (../../src.ts/address/address.ts:131:23)
+    at resolveAddress (../../src.ts/address/checks.ts:108:67)
+    at JsonRpcProvider._getAddress (../../src.ts/providers/abstract-provider.ts:718:30)
+    at #getAccountValue (../../src.ts/providers/abstract-provider.ts:1061:53)
+    at JsonRpcProvider.getBalance (../../src.ts/providers/abstract-provider.ts:1072:53)
+    at NOWNodesService.getNativeBalance (src/lib/web3/nownodes-service.ts:147:35)
+    at NOWNodesService.getAllTokenBalances (src/lib/web3/nownodes-service.ts:210:39)
+    at NOWNodesAssetScanner.scanChainAssets (src/lib/web3/nownodes-asset-scanner.ts:61:41)
+    at GET (src/app/api/wallet-scanner/route.ts:135:42)
+  145 |   public async getNativeBalance(address: string, chainId: number): Promise<string> {
+  146 |     const provider = this.getProvider(chainId)
+> 147 |     const balance = await provider.getBalance(address)
+      |                                   ^
+  148 |     return ethers.formatEther(balance)
+  149 |   }
+  150 | {
+  code: 'INVALID_ARGUMENT',
+  argument: 'address',
+  value: '0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a',
+  shortMessage: 'bad address checksum'
+}
+✅ Optimism scan completed in 67ms - Found 0 assets worth $0.00
+❌ Error scanning chain 10: TypeError: bad address checksum (argument="address", value="0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a", code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:691:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at assertArgument (../../src.ts/utils/errors.ts:731:4)
+    at getAddress (../../src.ts/address/address.ts:131:23)
+    at resolveAddress (../../src.ts/address/checks.ts:108:67)
+    at JsonRpcProvider._getAddress (../../src.ts/providers/abstract-provider.ts:718:30)
+    at #getAccountValue (../../src.ts/providers/abstract-provider.ts:1061:53)
+    at JsonRpcProvider.getBalance (../../src.ts/providers/abstract-provider.ts:1072:53)
+    at GET (src/app/api/wallet-scanner/route.ts:141:47)
+  139 |           // Get additional chain data
+  140 |           const provider = nowNodes.getProvider(chainId)
+> 141 |           const nativeBalance = await provider.getBalance(walletAddress)
+      |                                               ^
+  142 |           const nativeBalanceFormatted = ethers.formatEther(nativeBalance)
+  143 |           const transactionCount = await provider.getTransactionCount(walletAddress)
+  144 |            {
+  code: 'INVALID_ARGUMENT',
+  argument: 'address',
+  value: '0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a',
+  shortMessage: 'bad address checksum'
+}
+⛓️ Scanning chain 43114...
+🔍 Scanning Avalanche for wallet 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a...
+Error getting balances for 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a on chain 43114: TypeError: bad address checksum (argument="address", value="0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a", code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:691:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at assertArgument (../../src.ts/utils/errors.ts:731:4)
+    at getAddress (../../src.ts/address/address.ts:131:23)
+    at resolveAddress (../../src.ts/address/checks.ts:108:67)
+    at JsonRpcProvider._getAddress (../../src.ts/providers/abstract-provider.ts:718:30)
+    at #getAccountValue (../../src.ts/providers/abstract-provider.ts:1061:53)
+    at JsonRpcProvider.getBalance (../../src.ts/providers/abstract-provider.ts:1072:53)
+    at NOWNodesService.getNativeBalance (src/lib/web3/nownodes-service.ts:147:35)
+    at NOWNodesService.getAllTokenBalances (src/lib/web3/nownodes-service.ts:210:39)
+    at NOWNodesAssetScanner.scanChainAssets (src/lib/web3/nownodes-asset-scanner.ts:61:41)
+    at GET (src/app/api/wallet-scanner/route.ts:135:42)
+  145 |   public async getNativeBalance(address: string, chainId: number): Promise<string> {
+  146 |     const provider = this.getProvider(chainId)
+> 147 |     const balance = await provider.getBalance(address)
+      |                                   ^
+  148 |     return ethers.formatEther(balance)
+  149 |   }
+  150 | {
+  code: 'INVALID_ARGUMENT',
+  argument: 'address',
+  value: '0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a',
+  shortMessage: 'bad address checksum'
+}
+✅ Avalanche scan completed in 65ms - Found 0 assets worth $0.00
+❌ Error scanning chain 43114: TypeError: bad address checksum (argument="address", value="0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a", code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:691:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at assertArgument (../../src.ts/utils/errors.ts:731:4)
+    at getAddress (../../src.ts/address/address.ts:131:23)
+    at resolveAddress (../../src.ts/address/checks.ts:108:67)
+    at JsonRpcProvider._getAddress (../../src.ts/providers/abstract-provider.ts:718:30)
+    at #getAccountValue (../../src.ts/providers/abstract-provider.ts:1061:53)
+    at JsonRpcProvider.getBalance (../../src.ts/providers/abstract-provider.ts:1072:53)
+    at GET (src/app/api/wallet-scanner/route.ts:141:47)
+  139 |           // Get additional chain data
+  140 |           const provider = nowNodes.getProvider(chainId)
+> 141 |           const nativeBalance = await provider.getBalance(walletAddress)
+      |                                               ^
+  142 |           const nativeBalanceFormatted = ethers.formatEther(nativeBalance)
+  143 |           const transactionCount = await provider.getTransactionCount(walletAddress)
+  144 |            {
+  code: 'INVALID_ARGUMENT',
+  argument: 'address',
+  value: '0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a',
+  shortMessage: 'bad address checksum'
+}
+⛓️ Scanning chain 250...
+🔍 Scanning Fantom for wallet 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a...
+Error getting balances for 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a on chain 250: TypeError: bad address checksum (argument="address", value="0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a", code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:691:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at assertArgument (../../src.ts/utils/errors.ts:731:4)
+    at getAddress (../../src.ts/address/address.ts:131:23)
+    at resolveAddress (../../src.ts/address/checks.ts:108:67)
+    at JsonRpcProvider._getAddress (../../src.ts/providers/abstract-provider.ts:718:30)
+    at #getAccountValue (../../src.ts/providers/abstract-provider.ts:1061:53)
+    at JsonRpcProvider.getBalance (../../src.ts/providers/abstract-provider.ts:1072:53)
+    at NOWNodesService.getNativeBalance (src/lib/web3/nownodes-service.ts:147:35)
+    at NOWNodesService.getAllTokenBalances (src/lib/web3/nownodes-service.ts:210:39)
+    at NOWNodesAssetScanner.scanChainAssets (src/lib/web3/nownodes-asset-scanner.ts:61:41)
+    at GET (src/app/api/wallet-scanner/route.ts:135:42)
+  145 |   public async getNativeBalance(address: string, chainId: number): Promise<string> {
+  146 |     const provider = this.getProvider(chainId)
+> 147 |     const balance = await provider.getBalance(address)
+      |                                   ^
+  148 |     return ethers.formatEther(balance)
+  149 |   }
+  150 | {
+  code: 'INVALID_ARGUMENT',
+  argument: 'address',
+  value: '0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a',
+  shortMessage: 'bad address checksum'
+}
+✅ Fantom scan completed in 67ms - Found 0 assets worth $0.00
+❌ Error scanning chain 250: TypeError: bad address checksum (argument="address", value="0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a", code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:691:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at assertArgument (../../src.ts/utils/errors.ts:731:4)
+    at getAddress (../../src.ts/address/address.ts:131:23)
+    at resolveAddress (../../src.ts/address/checks.ts:108:67)
+    at JsonRpcProvider._getAddress (../../src.ts/providers/abstract-provider.ts:718:30)
+    at #getAccountValue (../../src.ts/providers/abstract-provider.ts:1061:53)
+    at JsonRpcProvider.getBalance (../../src.ts/providers/abstract-provider.ts:1072:53)
+    at GET (src/app/api/wallet-scanner/route.ts:141:47)
+  139 |           // Get additional chain data
+  140 |           const provider = nowNodes.getProvider(chainId)
+> 141 |           const nativeBalance = await provider.getBalance(walletAddress)
+      |                                               ^
+  142 |           const nativeBalanceFormatted = ethers.formatEther(nativeBalance)
+  143 |           const transactionCount = await provider.getTransactionCount(walletAddress)
+  144 |            {
+  code: 'INVALID_ARGUMENT',
+  argument: 'address',
+  value: '0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a',
+  shortMessage: 'bad address checksum'
+}
+⛓️ Scanning chain 8453...
+🔍 Scanning Base for wallet 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a...
+Error getting balances for 0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a on chain 8453: TypeError: bad address checksum (argument="address", value="0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a", code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:691:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at assertArgument (../../src.ts/utils/errors.ts:731:4)
+    at getAddress (../../src.ts/address/address.ts:131:23)
+    at resolveAddress (../../src.ts/address/checks.ts:108:67)
+    at JsonRpcProvider._getAddress (../../src.ts/providers/abstract-provider.ts:718:30)
+    at #getAccountValue (../../src.ts/providers/abstract-provider.ts:1061:53)
+    at JsonRpcProvider.getBalance (../../src.ts/providers/abstract-provider.ts:1072:53)
+    at NOWNodesService.getNativeBalance (src/lib/web3/nownodes-service.ts:147:35)
+    at NOWNodesService.getAllTokenBalances (src/lib/web3/nownodes-service.ts:210:39)
+    at NOWNodesAssetScanner.scanChainAssets (src/lib/web3/nownodes-asset-scanner.ts:61:41)
+    at GET (src/app/api/wallet-scanner/route.ts:135:42)
+  145 |   public async getNativeBalance(address: string, chainId: number): Promise<string> {
+  146 |     const provider = this.getProvider(chainId)
+> 147 |     const balance = await provider.getBalance(address)
+      |                                   ^
+  148 |     return ethers.formatEther(balance)
+  149 |   }
+  150 | {
+  code: 'INVALID_ARGUMENT',
+  argument: 'address',
+  value: '0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a',
+  shortMessage: 'bad address checksum'
+}
+✅ Base scan completed in 66ms - Found 0 assets worth $0.00
+❌ Error scanning chain 8453: TypeError: bad address checksum (argument="address", value="0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a", code=INVALID_ARGUMENT, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:691:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at assertArgument (../../src.ts/utils/errors.ts:731:4)
+    at getAddress (../../src.ts/address/address.ts:131:23)
+    at resolveAddress (../../src.ts/address/checks.ts:108:67)
+    at JsonRpcProvider._getAddress (../../src.ts/providers/abstract-provider.ts:718:30)
+    at #getAccountValue (../../src.ts/providers/abstract-provider.ts:1061:53)
+    at JsonRpcProvider.getBalance (../../src.ts/providers/abstract-provider.ts:1072:53)
+    at GET (src/app/api/wallet-scanner/route.ts:141:47)
+  139 |           // Get additional chain data
+  140 |           const provider = nowNodes.getProvider(chainId)
+> 141 |           const nativeBalance = await provider.getBalance(walletAddress)
+      |                                               ^
+  142 |           const nativeBalanceFormatted = ethers.formatEther(nativeBalance)
+  143 |           const transactionCount = await provider.getTransactionCount(walletAddress)
+  144 |            {
+  code: 'INVALID_ARGUMENT',
+  argument: 'address',
+  value: '0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a',
+  shortMessage: 'bad address checksum'
+}
+✅ Wallet scan completed in 1190ms
+📊 Portfolio: $0.00 across 0 chains
+ GET /api/wallet-scanner?address=0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8b8b8bFa0a 200 in 1796ms
+ GET /api/wallet-scanner?address=0x868F6b9b2e8b5C4F8b8b8b8b8b8b8b8bFa0a 400 in 25ms
+🔍 Scanning wallet 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 across 8 chains...
+⛓️ Scanning chain 1...
+🔍 Scanning Ethereum for wallet 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045...
+Error getting token balance for 0xA0b86a33E6441b8C4505B8C4505B8C4505B8C4505: Error: unconfigured name (value="0xA0b86a33E6441b8C4505B8C4505B8C4505B8C4505", code=UNCONFIGURED_NAME, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:698:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at checkAddress (../../src.ts/address/checks.ts:62:15)
+    at async (../../src.ts/providers/abstract-provider.ts:845:72)
+    at async (../../src.ts/providers/abstract-provider.ts:862:16)
+    at async resolveProperties (../../src.ts/utils/properties.ts:35:20)
+    at async JsonRpcProvider.call (../../src.ts/providers/abstract-provider.ts:1051:33)
+    at async staticCallResult (../../src.ts/contract/contract.ts:337:21)
+    at async staticCall (../../src.ts/contract/contract.ts:303:23)
+    at async Proxy.decimals (../../src.ts/contract/contract.ts:351:40)
+    at async NOWNodesService.getTokenBalance (src/lib/web3/nownodes-service.ts:172:48)
+    at async NOWNodesService.getAllTokenBalances (src/lib/web3/nownodes-service.ts:229:29)
+    at async NOWNodesAssetScanner.scanChainAssets (src/lib/web3/nownodes-asset-scanner.ts:61:21)
+    at async GET (src/app/api/wallet-scanner/route.ts:135:28)
+  170 |       const contract = new ethers.Contract(tokenAddress, tokenABI, provider)
+  171 |       
+> 172 |       const [balance, decimals, symbol, name] = await Promise.all([
+      |                                                ^
+  173 |         contract.balanceOf(address),
+  174 |         contract.decimals(),
+  175 |         contract.symbol(), {
+  code: 'UNCONFIGURED_NAME',
+  value: '0xA0b86a33E6441b8C4505B8C4505B8C4505B8C4505',
+  shortMessage: 'unconfigured name'
+}
+No price data available for WBTC
+✅ Ethereum scan completed in 2583ms - Found 3 assets worth $20932.48
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-scanner/route.ts:148:30)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning chain 56...
+🔍 Scanning BNB Smart Chain for wallet 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045...
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+Error getting balances for 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 on chain 56: Error: server response 404 Not Found (request={  }, response={  }, error=null, info={ "requestUrl": "https://bsc.nownodes.io/df832fb4-5c52-4a90-9436-a0ca798883d7", "responseBody": null, "responseStatus": "404 Not Found" }, code=SERVER_ERROR, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:698:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at FetchResponse.assertOk (../../src.ts/utils/fetch.ts:950:15)
+    at JsonRpcProvider._send (../../src.ts/providers/provider-jsonrpc.ts:1272:17)
+    at async (../../src.ts/providers/provider-jsonrpc.ts:545:39) {
+  code: 'SERVER_ERROR',
+  request: FetchRequest {},
+  response: FetchResponse {},
+  error: undefined,
+  info: [Object],
+  shortMessage: 'server response 404 Not Found'
+}
+✅ BNB Smart Chain scan completed in 475ms - Found 0 assets worth $0.00
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+❌ Error scanning chain 56: Error: server response 404 Not Found (request={  }, response={  }, error=null, info={ "requestUrl": "https://bsc.nownodes.io/df832fb4-5c52-4a90-9436-a0ca798883d7", "responseBody": null, "responseStatus": "404 Not Found" }, code=SERVER_ERROR, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:698:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at FetchResponse.assertOk (../../src.ts/utils/fetch.ts:950:15)
+    at JsonRpcProvider._send (../../src.ts/providers/provider-jsonrpc.ts:1272:17)
+    at async (../../src.ts/providers/provider-jsonrpc.ts:545:39) {
+  code: 'SERVER_ERROR',
+  request: FetchRequest {},
+  response: FetchResponse {},
+  error: undefined,
+  info: [Object],
+  shortMessage: 'server response 404 Not Found'
+}
+⛓️ Scanning chain 137...
+🔍 Scanning Polygon for wallet 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async NOWNodesService.getAllTokenBalances (src/lib/web3/nownodes-service.ts:214:28)
+    at async NOWNodesAssetScanner.scanChainAssets (src/lib/web3/nownodes-asset-scanner.ts:61:21)
+    at async GET (src/app/api/wallet-scanner/route.ts:135:28)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+Error getting price for USDC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async NOWNodesService.getTokenBalance (src/lib/web3/nownodes-service.ts:182:20)
+    at async NOWNodesService.getAllTokenBalances (src/lib/web3/nownodes-service.ts:229:29)
+    at async NOWNodesAssetScanner.scanChainAssets (src/lib/web3/nownodes-asset-scanner.ts:61:21)
+    at async GET (src/app/api/wallet-scanner/route.ts:135:28)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+Error getting price for USDT: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async NOWNodesService.getTokenBalance (src/lib/web3/nownodes-service.ts:182:20)
+    at async NOWNodesService.getAllTokenBalances (src/lib/web3/nownodes-service.ts:229:29)
+    at async NOWNodesAssetScanner.scanChainAssets (src/lib/web3/nownodes-asset-scanner.ts:61:21)
+    at async GET (src/app/api/wallet-scanner/route.ts:135:28)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+Error getting price for DAI: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async NOWNodesService.getTokenBalance (src/lib/web3/nownodes-service.ts:182:20)
+    at async NOWNodesService.getAllTokenBalances (src/lib/web3/nownodes-service.ts:229:29)
+    at async NOWNodesAssetScanner.scanChainAssets (src/lib/web3/nownodes-asset-scanner.ts:61:21)
+    at async GET (src/app/api/wallet-scanner/route.ts:135:28)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+Error getting price for WBTC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async NOWNodesService.getTokenBalance (src/lib/web3/nownodes-service.ts:182:20)
+    at async NOWNodesService.getAllTokenBalances (src/lib/web3/nownodes-service.ts:229:29)
+    at async NOWNodesAssetScanner.scanChainAssets (src/lib/web3/nownodes-asset-scanner.ts:61:21)
+    at async GET (src/app/api/wallet-scanner/route.ts:135:28)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Polygon scan completed in 1782ms - Found 5 assets worth $0.00
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-scanner/route.ts:148:30)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning chain 42161...
+🔍 Scanning Arbitrum One for wallet 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045...
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+Error getting balances for 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 on chain 42161: Error: server response 404 Not Found (request={  }, response={  }, error=null, info={ "requestUrl": "https://arb.nownodes.io/df832fb4-5c52-4a90-9436-a0ca798883d7", "responseBody": "<html>\r\n<head><title>404 Not Found</title></head>\r\n<body>\r\n<center><h1>404 Not Found</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n", "responseStatus": "404 Not Found" }, code=SERVER_ERROR, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:698:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at FetchResponse.assertOk (../../src.ts/utils/fetch.ts:950:15)
+    at JsonRpcProvider._send (../../src.ts/providers/provider-jsonrpc.ts:1272:17)
+    at async (../../src.ts/providers/provider-jsonrpc.ts:545:39) {
+  code: 'SERVER_ERROR',
+  request: FetchRequest {},
+  response: FetchResponse {},
+  error: undefined,
+  info: [Object],
+  shortMessage: 'server response 404 Not Found'
+}
+✅ Arbitrum One scan completed in 610ms - Found 0 assets worth $0.00
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+❌ Error scanning chain 42161: Error: server response 404 Not Found (request={  }, response={  }, error=null, info={ "requestUrl": "https://arb.nownodes.io/df832fb4-5c52-4a90-9436-a0ca798883d7", "responseBody": "<html>\r\n<head><title>404 Not Found</title></head>\r\n<body>\r\n<center><h1>404 Not Found</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n", "responseStatus": "404 Not Found" }, code=SERVER_ERROR, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:698:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at FetchResponse.assertOk (../../src.ts/utils/fetch.ts:950:15)
+    at JsonRpcProvider._send (../../src.ts/providers/provider-jsonrpc.ts:1272:17)
+    at async (../../src.ts/providers/provider-jsonrpc.ts:545:39) {
+  code: 'SERVER_ERROR',
+  request: FetchRequest {},
+  response: FetchResponse {},
+  error: undefined,
+  info: [Object],
+  shortMessage: 'server response 404 Not Found'
+}
+⛓️ Scanning chain 10...
+🔍 Scanning Optimism for wallet 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045...
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+Error getting balances for 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 on chain 10: Error: server response 404 Not Found (request={  }, response={  }, error=null, info={ "requestUrl": "https://op.nownodes.io/df832fb4-5c52-4a90-9436-a0ca798883d7", "responseBody": "<html>\r\n<head><title>404 Not Found</title></head>\r\n<body>\r\n<center><h1>404 Not Found</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n", "responseStatus": "404 Not Found" }, code=SERVER_ERROR, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:698:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at FetchResponse.assertOk (../../src.ts/utils/fetch.ts:950:15)
+    at JsonRpcProvider._send (../../src.ts/providers/provider-jsonrpc.ts:1272:17)
+    at async (../../src.ts/providers/provider-jsonrpc.ts:545:39) {
+  code: 'SERVER_ERROR',
+  request: FetchRequest {},
+  response: FetchResponse {},
+  error: undefined,
+  info: [Object],
+  shortMessage: 'server response 404 Not Found'
+}
+✅ Optimism scan completed in 489ms - Found 0 assets worth $0.00
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+❌ Error scanning chain 10: Error: server response 404 Not Found (request={  }, response={  }, error=null, info={ "requestUrl": "https://op.nownodes.io/df832fb4-5c52-4a90-9436-a0ca798883d7", "responseBody": "<html>\r\n<head><title>404 Not Found</title></head>\r\n<body>\r\n<center><h1>404 Not Found</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n", "responseStatus": "404 Not Found" }, code=SERVER_ERROR, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:698:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at FetchResponse.assertOk (../../src.ts/utils/fetch.ts:950:15)
+    at JsonRpcProvider._send (../../src.ts/providers/provider-jsonrpc.ts:1272:17)
+    at async (../../src.ts/providers/provider-jsonrpc.ts:545:39) {
+  code: 'SERVER_ERROR',
+  request: FetchRequest {},
+  response: FetchResponse {},
+  error: undefined,
+  info: [Object],
+  shortMessage: 'server response 404 Not Found'
+}
+⛓️ Scanning chain 43114...
+🔍 Scanning Avalanche for wallet 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045...
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+Error getting balances for 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 on chain 43114: Error: server response 404 Not Found (request={  }, response={  }, error=null, info={ "requestUrl": "https://avax.nownodes.io/df832fb4-5c52-4a90-9436-a0ca798883d7", "responseBody": "404 page not found\n", "responseStatus": "404 Not Found" }, code=SERVER_ERROR, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:698:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at FetchResponse.assertOk (../../src.ts/utils/fetch.ts:950:15)
+    at JsonRpcProvider._send (../../src.ts/providers/provider-jsonrpc.ts:1272:17)
+    at async (../../src.ts/providers/provider-jsonrpc.ts:545:39) {
+  code: 'SERVER_ERROR',
+  request: FetchRequest {},
+  response: FetchResponse {},
+  error: undefined,
+  info: [Object],
+  shortMessage: 'server response 404 Not Found'
+}
+✅ Avalanche scan completed in 290ms - Found 0 assets worth $0.00
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+❌ Error scanning chain 43114: Error: server response 404 Not Found (request={  }, response={  }, error=null, info={ "requestUrl": "https://avax.nownodes.io/df832fb4-5c52-4a90-9436-a0ca798883d7", "responseBody": "404 page not found\n", "responseStatus": "404 Not Found" }, code=SERVER_ERROR, version=6.15.0)
+    at makeError (../../src.ts/utils/errors.ts:698:20)
+    at assert (../../src.ts/utils/errors.ts:719:24)
+    at FetchResponse.assertOk (../../src.ts/utils/fetch.ts:950:15)
+    at JsonRpcProvider._send (../../src.ts/providers/provider-jsonrpc.ts:1272:17)
+    at async (../../src.ts/providers/provider-jsonrpc.ts:545:39) {
+  code: 'SERVER_ERROR',
+  request: FetchRequest {},
+  response: FetchResponse {},
+  error: undefined,
+  info: [Object],
+  shortMessage: 'server response 404 Not Found'
+}
+⛓️ Scanning chain 250...
+🔍 Scanning Fantom for wallet 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045...
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+Error getting price for FTM: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async NOWNodesService.getAllTokenBalances (src/lib/web3/nownodes-service.ts:214:28)
+    at async NOWNodesAssetScanner.scanChainAssets (src/lib/web3/nownodes-asset-scanner.ts:61:21)
+    at async GET (src/app/api/wallet-scanner/route.ts:135:28)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Fantom scan completed in 591ms - Found 1 assets worth $0.00
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+Error getting price for FTM: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-scanner/route.ts:148:30)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning chain 8453...
+🔍 Scanning Base for wallet 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045...
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async NOWNodesService.getAllTokenBalances (src/lib/web3/nownodes-service.ts:214:28)
+    at async NOWNodesAssetScanner.scanChainAssets (src/lib/web3/nownodes-asset-scanner.ts:61:21)
+    at async GET (src/app/api/wallet-scanner/route.ts:135:28)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Base scan completed in 579ms - Found 1 assets worth $0.00
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-scanner/route.ts:148:30)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Wallet scan completed in 10429ms
+📊 Portfolio: $20932.48 across 4 chains
+ GET /api/wallet-scanner?address=0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 200 in 10459ms
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
+JsonRpcProvider failed to detect network and cannot start up; retry in 1s (perhaps the URL is wrong or the node is not started)
