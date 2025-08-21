@@ -12985,3 +12985,2195 @@ Error getting price for MATIC: Error: HTTP error! status: 429
 ✅ Dashboard data generated in 2769ms
 💰 Total portfolio value: $0.0000
  GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2786ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2883ms
+💰 Total portfolio value: $63.9182
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2902ms
+ GET /api/alerts/check 200 in 83ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2582ms
+💰 Total portfolio value: $63.9182
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2603ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2985ms
+💰 Total portfolio value: $63.5164
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3005ms
+ GET /api/alerts/check 200 in 80ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2750ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2771ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2842ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2862ms
+ GET /api/alerts/check 200 in 241ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2559ms
+💰 Total portfolio value: $63.8980
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2578ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2740ms
+💰 Total portfolio value: $63.5183
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2761ms
+ GET /api/alerts/check 200 in 80ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2637ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2657ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2860ms
+💰 Total portfolio value: $6.5833
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2884ms
+ GET /api/alerts/check 200 in 79ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2650ms
+💰 Total portfolio value: $63.9459
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2669ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2711ms
+💰 Total portfolio value: $63.5662
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2732ms
+ GET /api/alerts/check 200 in 78ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2813ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2835ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 3132ms
+💰 Total portfolio value: $0.3791
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3152ms
+ GET /api/alerts/check 200 in 79ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 4626ms
+💰 Total portfolio value: $63.9782
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 4645ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2922ms
+💰 Total portfolio value: $63.6347
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2944ms
+ GET /api/alerts/check 200 in 81ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 3175ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3195ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2916ms
+💰 Total portfolio value: $0.3791
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2941ms
+ GET /api/alerts/check 200 in 399ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 3313ms
+💰 Total portfolio value: $64.0546
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3332ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2858ms
+💰 Total portfolio value: $63.6754
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2879ms
+ GET /api/alerts/check 200 in 82ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2619ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2638ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 3199ms
+💰 Total portfolio value: $0.3792
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3221ms
+ GET /api/alerts/check 200 in 80ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 5754ms
+💰 Total portfolio value: $64.0582
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 5773ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2913ms
+💰 Total portfolio value: $63.6744
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2935ms
+ GET /api/alerts/check 200 in 79ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 3762ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3782ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 4181ms
+💰 Total portfolio value: $6.5857
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 4202ms
+ GET /api/alerts/check 200 in 79ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 3805ms
+💰 Total portfolio value: $64.0721
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3826ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2829ms
+💰 Total portfolio value: $63.6922
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2848ms
+ GET /api/alerts/check 200 in 80ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2775ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2799ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2828ms
+💰 Total portfolio value: $0.3799
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2846ms
+ GET /api/alerts/check 200 in 284ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2841ms
+💰 Total portfolio value: $63.9857
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2860ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2579ms
+💰 Total portfolio value: $63.6059
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2600ms
+ GET /api/alerts/check 200 in 80ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2780ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2798ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 3266ms
+💰 Total portfolio value: $0.3799
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3284ms
+ GET /api/alerts/check 200 in 83ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 35689ms
+💰 Total portfolio value: $63.9566
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 35708ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2546ms
+💰 Total portfolio value: $63.5954
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2568ms
+ GET /api/alerts/check 200 in 79ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2689ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2709ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2985ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3007ms
+ GET /api/alerts/check 200 in 83ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 3082ms
+💰 Total portfolio value: $64.0091
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3103ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2766ms
+💰 Total portfolio value: $63.6302
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2786ms
+ GET /api/alerts/check 200 in 80ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2863ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2884ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2936ms
+💰 Total portfolio value: $0.3789
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2962ms
+ GET /api/alerts/check 200 in 272ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2981ms
+💰 Total portfolio value: $64.0228
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2999ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2975ms
+💰 Total portfolio value: $63.5881
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3011ms
+ GET /api/alerts/check 200 in 90ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2836ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2856ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 3050ms
+💰 Total portfolio value: $0.3789
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3070ms
+ GET /api/alerts/check 200 in 99ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2423ms
+💰 Total portfolio value: $64.0244
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2443ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2857ms
+💰 Total portfolio value: $63.6455
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2875ms
+ GET /api/alerts/check 200 in 90ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2820ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2840ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 3332ms
+💰 Total portfolio value: $0.3788
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3356ms
+ GET /api/alerts/check 200 in 90ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 3607ms
+💰 Total portfolio value: $64.0218
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3625ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2937ms
+💰 Total portfolio value: $63.6743
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2959ms
+ GET /api/alerts/check 200 in 92ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 3024ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3044ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 3188ms
+💰 Total portfolio value: $6.6172
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3207ms
+ GET /api/alerts/check 200 in 280ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2676ms
+💰 Total portfolio value: $64.0662
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2696ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2621ms
+💰 Total portfolio value: $63.6866
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2642ms
+ GET /api/alerts/check 200 in 93ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2822ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2844ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2716ms
+💰 Total portfolio value: $0.3795
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2740ms
+ GET /api/alerts/check 200 in 82ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2963ms
+💰 Total portfolio value: $64.0710
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2982ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2981ms
+💰 Total portfolio value: $63.7128
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3003ms
+ GET /api/alerts/check 200 in 87ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2875ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2896ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 3146ms
+💰 Total portfolio value: $0.3795
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3169ms
+ GET /api/alerts/check 200 in 80ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 4068ms
+💰 Total portfolio value: $64.0697
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 4086ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2856ms
+💰 Total portfolio value: $63.6902
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2879ms
+ GET /api/alerts/check 200 in 81ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2660ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2679ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 3123ms
+💰 Total portfolio value: $0.3788
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3145ms
+ GET /api/alerts/check 200 in 255ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2762ms
+💰 Total portfolio value: $64.1039
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2782ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2619ms
+💰 Total portfolio value: $63.7574
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2641ms
+ GET /api/alerts/check 200 in 87ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2626ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2648ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 3044ms
+💰 Total portfolio value: $0.3788
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3066ms
+ GET /api/alerts/check 200 in 83ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2729ms
+💰 Total portfolio value: $64.1651
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2747ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2684ms
+💰 Total portfolio value: $63.7863
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2707ms
+ GET /api/alerts/check 200 in 88ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2926ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2947ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2744ms
+💰 Total portfolio value: $6.6178
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2768ms
+ GET /api/alerts/check 200 in 84ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2725ms
+💰 Total portfolio value: $64.2426
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2746ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 3179ms
+💰 Total portfolio value: $63.8617
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3196ms
+ GET /api/alerts/check 200 in 83ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2939ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2961ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 3257ms
+💰 Total portfolio value: $0.3790
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 3275ms
+ GET /api/alerts/check 200 in 267ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2767ms
+💰 Total portfolio value: $64.2469
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2784ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2771ms
+💰 Total portfolio value: $63.8678
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2791ms
+ GET /api/alerts/check 200 in 80ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2953ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2972ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2831ms
+💰 Total portfolio value: $0.3791
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2850ms
+ GET /api/alerts/check 200 in 100ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2949ms
+💰 Total portfolio value: $64.2098
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2970ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 4992ms
+💰 Total portfolio value: $63.8306
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 5014ms
+ GET /api/alerts/check 200 in 80ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2565ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2586ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2896ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2919ms
+ GET /api/alerts/check 200 in 84ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2886ms
+💰 Total portfolio value: $64.1854
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2908ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 5869ms
+💰 Total portfolio value: $63.8709
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 5888ms
+ GET /api/alerts/check 200 in 80ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2595ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2614ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2798ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2820ms
+ GET /api/alerts/check 200 in 242ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2682ms
+💰 Total portfolio value: $64.2210
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2701ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2660ms
+💰 Total portfolio value: $63.8416
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2679ms
+ GET /api/alerts/check 200 in 83ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2960ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2982ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2968ms
+💰 Total portfolio value: $0.3797
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2987ms
+ GET /api/alerts/check 200 in 80ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2968ms
+💰 Total portfolio value: $64.1720
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2987ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2749ms
+💰 Total portfolio value: $63.7922
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2770ms
+ GET /api/alerts/check 200 in 85ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 2624ms
+💰 Total portfolio value: $0.0000
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2645ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+Error getting price for ETH: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning BNB Smart Chain...
+Error getting price for BNB: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2641ms
+💰 Total portfolio value: $0.3798
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2666ms
+ GET /api/alerts/check 200 in 82ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+✅ Dashboard data generated in 2791ms
+💰 Total portfolio value: $64.1460
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 2811ms
+📊 Generating dashboard data for wallet: 0xa2232F6250c89Da64475Fd998d96995cf8828f5a
+⛓️ Scanning Ethereum...
+⛓️ Scanning BNB Smart Chain...
+⛓️ Scanning Polygon...
+Error getting price for MATIC: Error: HTTP error! status: 429
+    at NOWNodesService.getTokenPrice (src/lib/web3/nownodes-service.ts:272:14)
+    at async GET (src/app/api/wallet-dashboard/route.ts:71:26)
+  270 |
+  271 |       if (!response.ok) {
+> 272 |         throw new Error(`HTTP error! status: ${response.status}`)
+      |              ^
+  273 |       }
+  274 |
+  275 |       const data = await response.json()
+✅ Dashboard data generated in 5875ms
+💰 Total portfolio value: $63.7689
+ GET /api/wallet-dashboard?address=0xa2232F6250c89Da64475Fd998d96995cf8828f5a 200 in 5896ms

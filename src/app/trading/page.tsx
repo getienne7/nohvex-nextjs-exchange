@@ -1,5 +1,6 @@
 'use client'
 
+// Force deployment update - DEX trading system deployed
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { CrossChainSwap } from '@/components/CrossChainSwap'
