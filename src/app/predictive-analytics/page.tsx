@@ -15,6 +15,7 @@ import {
   ArrowTrendingDownIcon,
   ClockIcon
 } from '@heroicons/react/24/outline'
+import { useWallet } from '@/contexts/WalletContext'
 import { GlobalNavigation } from '@/components/GlobalNavigation'
 import PredictiveAnalytics from '@/components/PredictiveAnalytics'
 
@@ -38,15 +39,20 @@ export default function PredictiveAnalyticsPage() {
   const [loading, setLoading] = useState(true)
 
   // Your real wallet address
-  const WALLET_ADDRESS = '0xa2232F6250c89Da64475Fd998d96995cf8828f5a'
+  const { connectedWallet, manualAddress } = useWallet()
+  const walletAddress = connectedWallet?.address || manualAddress
 
   useEffect(() => {
     loadPortfolioData()
-  }, [])
+  }, [walletAddress])
 
   const loadPortfolioData = async () => {
+    if (!walletAddress) {
+      setLoading(false)
+      return
+    }
     try {
-      const response = await fetch(`/api/wallet-dashboard?address=${WALLET_ADDRESS}`)
+      const response = await fetch(`/api/wallet-dashboard?address=${walletAddress}`)
       const result = await response.json()
       
       if (result.success) {
@@ -104,7 +110,7 @@ export default function PredictiveAnalyticsPage() {
             </p>
             <div className="mt-4 flex items-center justify-center space-x-2">
               <span className="text-sm font-medium text-gray-400">
-                Analyzing {WALLET_ADDRESS.slice(0, 6)}...{WALLET_ADDRESS.slice(-4)}
+                Analyzing {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
               </span>
               {portfolioData && (
                 <>
@@ -368,7 +374,7 @@ export default function PredictiveAnalyticsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <PredictiveAnalytics walletAddress={WALLET_ADDRESS} />
+            <PredictiveAnalytics walletAddress={walletAddress} />
           </motion.div>
 
           {/* Model Performance & Accuracy */}

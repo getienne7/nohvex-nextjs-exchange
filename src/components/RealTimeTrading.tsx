@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useWallet } from '@/contexts/WalletContext'
 import { 
   ArrowsRightLeftIcon,
   ChartBarIcon,
@@ -33,6 +34,7 @@ interface TradingData {
 }
 
 export default function RealTimeTrading() {
+  const { connectedWallet, manualAddress } = useWallet()
   const [tradingData, setTradingData] = useState<TradingData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [selectedFromAsset, setSelectedFromAsset] = useState<AssetData | null>(null)
@@ -57,12 +59,17 @@ export default function RealTimeTrading() {
     clearError
   } = useDEXTrading()
 
-  // Your real wallet address
-  const WALLET_ADDRESS = '0xa2232F6250c89Da64475Fd998d96995cf8828f5a'
+  // Get current wallet address from context
+  const walletAddress = connectedWallet?.address || manualAddress
 
   const fetchTradingData = async () => {
+    if (!walletAddress) {
+      setIsLoading(false)
+      return
+    }
+
     try {
-      const response = await fetch(`/api/wallet-dashboard?address=${WALLET_ADDRESS}`)
+      const response = await fetch(`/api/wallet-dashboard?address=${walletAddress}`)
       const result = await response.json()
       
       if (result.success) {
@@ -85,7 +92,7 @@ export default function RealTimeTrading() {
     fetchTradingData()
     const interval = setInterval(fetchTradingData, 30000)
     return () => clearInterval(interval)
-  }, [])
+  }, [walletAddress])
 
   // Convert AssetData to Token format for DEX trading
   const assetToToken = (asset: AssetData): Token => ({

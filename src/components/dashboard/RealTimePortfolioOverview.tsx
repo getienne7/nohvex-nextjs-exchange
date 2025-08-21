@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useWallet } from '@/contexts/WalletContext'
 import { 
   ChevronUpIcon, 
   ChevronDownIcon, 
@@ -48,18 +49,25 @@ interface PortfolioData {
 }
 
 export default function RealTimePortfolioOverview() {
+  const { connectedWallet, manualAddress, isConnected } = useWallet()
   const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  // Your real wallet address
-  const WALLET_ADDRESS = '0xa2232F6250c89Da64475Fd998d96995cf8828f5a'
+  // Get current wallet address from context
+  const walletAddress = connectedWallet?.address || manualAddress
 
   const fetchPortfolioData = async () => {
+    if (!walletAddress) {
+      setError('No wallet address available')
+      setIsLoading(false)
+      return
+    }
+
     try {
       setError(null)
-      const response = await fetch(`/api/wallet-dashboard?address=${WALLET_ADDRESS}`)
+      const response = await fetch(`/api/wallet-dashboard?address=${walletAddress}`)
       
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`)
@@ -87,7 +95,7 @@ export default function RealTimePortfolioOverview() {
     // Update every 30 seconds
     const interval = setInterval(fetchPortfolioData, 30000)
     return () => clearInterval(interval)
-  }, [])
+  }, [walletAddress])
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {

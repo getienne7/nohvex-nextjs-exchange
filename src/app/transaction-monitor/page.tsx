@@ -10,6 +10,7 @@ import {
   ExclamationTriangleIcon,
   InformationCircleIcon
 } from '@heroicons/react/24/outline'
+import { useWallet } from '@/contexts/WalletContext'
 import { GlobalNavigation } from '@/components/GlobalNavigation'
 import TransactionMonitor from '@/components/TransactionMonitor'
 
@@ -34,15 +35,20 @@ export default function TransactionMonitorPage() {
   const [monitoringActive, setMonitoringActive] = useState(false)
 
   // Your real wallet address
-  const WALLET_ADDRESS = '0xa2232F6250c89Da64475Fd998d96995cf8828f5a'
+  const { connectedWallet, manualAddress } = useWallet()
+  const walletAddress = connectedWallet?.address || manualAddress
 
   useEffect(() => {
     loadPortfolioData()
-  }, [])
+  }, [walletAddress])
 
   const loadPortfolioData = async () => {
+    if (!walletAddress) {
+      setLoading(false)
+      return
+    }
     try {
-      const response = await fetch(`/api/wallet-dashboard?address=${WALLET_ADDRESS}`)
+      const response = await fetch(`/api/wallet-dashboard?address=${walletAddress}`)
       const result = await response.json()
       
       if (result.success) {
@@ -101,7 +107,7 @@ export default function TransactionMonitorPage() {
             <div className="mt-4 flex items-center justify-center space-x-2">
               <div className={`w-2 h-2 rounded-full ${monitoringActive ? 'bg-green-400 animate-pulse' : 'bg-gray-400'}`}></div>
               <span className={`text-sm font-medium ${monitoringActive ? 'text-green-400' : 'text-gray-400'}`}>
-                {monitoringActive ? 'Monitoring Active' : 'Monitoring Inactive'} - {WALLET_ADDRESS.slice(0, 6)}...{WALLET_ADDRESS.slice(-4)}
+                {monitoringActive ? 'Monitoring Active' : 'Monitoring Inactive'} - {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
               </span>
             </div>
           </motion.div>
@@ -209,7 +215,7 @@ export default function TransactionMonitorPage() {
             transition={{ delay: 0.3 }}
           >
             <TransactionMonitor 
-              walletAddress={WALLET_ADDRESS}
+              walletAddress={walletAddress}
               onStartMonitoring={() => setMonitoringActive(true)}
               onStopMonitoring={() => setMonitoringActive(false)}
             />

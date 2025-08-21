@@ -13,6 +13,7 @@ import {
   InformationCircleIcon,
   SparklesIcon
 } from '@heroicons/react/24/outline'
+import { useWallet } from '@/contexts/WalletContext'
 import { GlobalNavigation } from '@/components/GlobalNavigation'
 
 interface YieldOpportunity {
@@ -80,7 +81,8 @@ export default function YieldOptimizerPage() {
   const [optimizing, setOptimizing] = useState(false)
 
   // Your real wallet address
-  const WALLET_ADDRESS = '0xa2232F6250c89Da64475Fd998d96995cf8828f5a'
+  const { connectedWallet, manualAddress } = useWallet()
+  const walletAddress = connectedWallet?.address || manualAddress
 
   const supportedChains = [
     { id: 1, name: 'Ethereum', symbol: 'ETH', icon: '⟠' },
@@ -104,8 +106,12 @@ export default function YieldOptimizerPage() {
   }, [selectedChain])
 
   const loadPortfolioData = async () => {
+    if (!walletAddress) {
+      setLoading(false)
+      return
+    }
     try {
-      const response = await fetch(`/api/wallet-dashboard?address=${WALLET_ADDRESS}`)
+      const response = await fetch(`/api/wallet-dashboard?address=${walletAddress}`)
       const result = await response.json()
       
       if (result.success) {
@@ -358,7 +364,7 @@ export default function YieldOptimizerPage() {
             <div className="mt-4 flex items-center justify-center space-x-2">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
               <span className="text-green-400 text-sm font-medium">
-                Live data from wallet: {WALLET_ADDRESS.slice(0, 6)}...{WALLET_ADDRESS.slice(-4)}
+                Live data from wallet: {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
               </span>
             </div>
           </motion.div>

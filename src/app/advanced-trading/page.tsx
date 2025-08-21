@@ -14,6 +14,7 @@ import {
   ShieldCheckIcon,
   CogIcon
 } from '@heroicons/react/24/outline'
+import { useWallet } from '@/contexts/WalletContext'
 import { GlobalNavigation } from '@/components/GlobalNavigation'
 import AdvancedTrading from '@/components/AdvancedTrading'
 
@@ -37,15 +38,20 @@ export default function AdvancedTradingPage() {
   const [loading, setLoading] = useState(true)
 
   // Your real wallet address
-  const WALLET_ADDRESS = '0xa2232F6250c89Da64475Fd998d96995cf8828f5a'
+  const { connectedWallet, manualAddress } = useWallet()
+  const walletAddress = connectedWallet?.address || manualAddress
 
   useEffect(() => {
     loadPortfolioData()
-  }, [])
+  }, [walletAddress])
 
   const loadPortfolioData = async () => {
+    if (!walletAddress) {
+      setLoading(false)
+      return
+    }
     try {
-      const response = await fetch(`/api/wallet-dashboard?address=${WALLET_ADDRESS}`)
+      const response = await fetch(`/api/wallet-dashboard?address=${walletAddress}`)
       const result = await response.json()
       
       if (result.success) {
@@ -103,7 +109,7 @@ export default function AdvancedTradingPage() {
             </p>
             <div className="mt-4 flex items-center justify-center space-x-2">
               <span className="text-sm font-medium text-gray-400">
-                Trading with {WALLET_ADDRESS.slice(0, 6)}...{WALLET_ADDRESS.slice(-4)}
+                Trading with {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
               </span>
               {portfolioData && (
                 <>
@@ -308,7 +314,7 @@ export default function AdvancedTradingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <AdvancedTrading walletAddress={WALLET_ADDRESS} />
+            <AdvancedTrading walletAddress={walletAddress} />
           </motion.div>
 
           {/* Trading Disclaimer */}

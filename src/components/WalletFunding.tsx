@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useWallet } from '@/contexts/WalletContext'
 import { 
   CreditCardIcon,
   BanknotesIcon,
@@ -22,13 +23,14 @@ interface FundingMethod {
 }
 
 export default function WalletFunding() {
+  const { connectedWallet, manualAddress } = useWallet()
   const [selectedMethod, setSelectedMethod] = useState<string>('crypto')
   const [amount, setAmount] = useState('')
   const [selectedChain, setSelectedChain] = useState('ethereum')
   const [copied, setCopied] = useState(false)
 
-  // Your real wallet address
-  const WALLET_ADDRESS = '0xa2232F6250c89Da64475Fd998d96995cf8828f5a'
+  // Get current wallet address from context
+  const walletAddress = connectedWallet?.address || manualAddress
 
   const fundingMethods: FundingMethod[] = [
     {
@@ -187,14 +189,14 @@ export default function WalletFunding() {
             <div className="flex items-center space-x-3 p-4 bg-gray-700/50 rounded-lg border border-gray-600">
               <div className="flex-1">
                 <div className="font-mono text-white text-sm break-all">
-                  {WALLET_ADDRESS}
+                  {walletAddress || 'No wallet connected'}
                 </div>
                 <div className="text-xs text-gray-400 mt-1">
                   Only send {getChainInfo(selectedChain).symbol} on {getChainInfo(selectedChain).name} network
                 </div>
               </div>
               <button
-                onClick={() => copyToClipboard(WALLET_ADDRESS)}
+                onClick={() => copyToClipboard(walletAddress || '')}
                 className="p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
               >
                 {copied ? (
@@ -215,7 +217,7 @@ export default function WalletFunding() {
               <div className="text-center">
                 <QrCodeIcon className="w-32 h-32 text-gray-400 mx-auto mb-2" />
                 <p className="text-sm text-gray-600">
-                  QR Code for {formatAddress(WALLET_ADDRESS)}
+                  QR Code for {walletAddress ? formatAddress(walletAddress) : 'No wallet'}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   {getChainInfo(selectedChain).name} Network
