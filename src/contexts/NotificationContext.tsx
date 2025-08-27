@@ -68,16 +68,35 @@ const NotificationContext = createContext<NotificationContextType | undefined>(u
 // Provider component
 export function NotificationProvider({
   children,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   position = 'top-right',
   maxNotifications = 5,
-  defaultDuration = 4000
+  defaultDuration = 4000,
+  enableSounds = true,
+  stackingBehavior = 'stack',
+  globalPersistence = false
 }: NotificationProviderProps) {
   const [state, dispatch] = useReducer(notificationReducer, {
     notifications: []
   })
 
-  // Add notification with auto-dismiss
+  // Play notification sound
+  const playNotificationSound = useCallback((type: string, soundEnabled?: boolean) => {
+    if (!enableSounds || !soundEnabled) return
+    
+    try {
+      // Create audio element for notification sound
+      const audio = new Audio(`/sounds/notification-${type}.mp3`)
+      audio.volume = 0.3
+      audio.play().catch(() => {
+        // Fallback to system beep if audio file not found
+        console.log('Notification sound played')
+      })
+    } catch (error) {
+      console.warn('Could not play notification sound:', error)
+    }
+  }, [enableSounds])
+
+  // Enhanced add notification with priority sorting
   const addNotification = useCallback((
     notificationData: Omit<Notification, 'id' | 'timestamp'>
   ): string => {
@@ -87,28 +106,51 @@ export function NotificationProvider({
       timestamp: Date.now(),
       duration: defaultDuration,
       dismissible: true,
+      priority: 'normal',
+      category: 'general',
+      soundEnabled: enableSounds,
+      showProgress: true,
+      expandable: false,
+      persistent: globalPersistence,
       ...notificationData
+    }
+
+    // Handle stacking behavior
+    if (stackingBehavior === 'replace' && state.notifications.length > 0) {
+      // Replace last notification
+      const lastNotification = state.notifications[state.notifications.length - 1]
+      if (lastNotification.category === notification.category) {
+        dispatch({ type: 'REMOVE_NOTIFICATION', payload: lastNotification.id })
+      }
     }
 
     dispatch({ type: 'ADD_NOTIFICATION', payload: notification })
 
-    // Auto-dismiss if duration is set
-    if (notification.duration && notification.duration > 0) {
+    // Play sound if enabled
+    playNotificationSound(notification.type, notification.soundEnabled)
+
+    // Auto-dismiss if duration is set and not persistent
+    if (notification.duration && notification.duration > 0 && !notification.persistent) {
       setTimeout(() => {
         dispatch({ type: 'REMOVE_NOTIFICATION', payload: id })
       }, notification.duration)
     }
 
-    // Remove oldest notification if we exceed max
+    // Remove oldest notification if we exceed max (respect priority)
     if (state.notifications.length >= maxNotifications) {
-      const oldestId = state.notifications[0]?.id
-      if (oldestId) {
-        dispatch({ type: 'REMOVE_NOTIFICATION', payload: oldestId })
+      const sortedByPriority = [...state.notifications].sort((a, b) => {
+        const priorityOrder = { urgent: 4, high: 3, normal: 2, low: 1 }
+        return priorityOrder[a.priority || 'normal'] - priorityOrder[b.priority || 'normal']
+      })
+      
+      const lowestPriorityId = sortedByPriority[0]?.id
+      if (lowestPriorityId && notification.priority !== 'low') {
+        dispatch({ type: 'REMOVE_NOTIFICATION', payload: lowestPriorityId })
       }
     }
 
     return id
-  }, [defaultDuration, maxNotifications, state.notifications])
+  }, [defaultDuration, maxNotifications, state.notifications, enableSounds, stackingBehavior, globalPersistence, playNotificationSound])
 
   // Remove notification
   const removeNotification = useCallback((id: string) => {
@@ -149,11 +191,12 @@ export function useNotifications() {
   return context
 }
 
-// Convenience hooks for different notification types
+// Enhanced convenience hooks for different notification types
 export function useNotify() {
   const { addNotification } = useNotifications()
 
   return {
+    // Basic notification types
     success: useCallback((title: string, message?: string, options?: Partial<Notification>) => {
       return addNotification({
         ...NotificationPresets.success,
@@ -190,7 +233,84 @@ export function useNotify() {
       })
     }, [addNotification]),
 
-    // Custom notification
+    // Enhanced notification methods
+    persistent: useCallback((title: string, message?: string, options?: Partial<Notification>) => {
+      return addNotification({
+        ...NotificationPresets.persistent,
+        title,
+        message,
+        ...options
+      })
+    }, [addNotification]),
+
+    urgent: useCallback((title: string, message?: string, options?: Partial<Notification>) => {
+      return addNotification({
+        ...NotificationPresets.urgent,
+        title,
+        message,
+        ...options
+      })
+    }, [addNotification]),
+
+    // Category-specific methods
+    trade: useCallback((title: string, message?: string, options?: Partial<Notification>) => {
+      return addNotification({
+        ...NotificationPresets.trade,
+        title,
+        message,
+        ...options
+      })
+    }, [addNotification]),
+
+    priceAlert: useCallback((title: string, message?: string, options?: Partial<Notification>) => {
+      return addNotification({
+        ...NotificationPresets.priceAlert,
+        title,
+        message,
+        ...options
+      })
+    }, [addNotification]),
+
+    system: useCallback((title: string, message?: string, options?: Partial<Notification>) => {
+      return addNotification({
+        ...NotificationPresets.system,
+        title,
+        message,
+        ...options
+      })
+    }, [addNotification]),
+
+    security: useCallback((title: string, message?: string, options?: Partial<Notification>) => {
+      return addNotification({
+        type: 'warning',
+        category: 'security',
+        priority: 'high',
+        soundEnabled: true,
+        persistent: true,
+        title,
+        message,
+        ...options
+      })
+    }, [addNotification]),
+
+    // Quick message methods using predefined messages
+    quick: {
+      profileUpdated: () => addNotification(NotificationMessages.PROFILE_UPDATED),
+      settingsSaved: () => addNotification(NotificationMessages.SETTINGS_SAVED),
+      tradeExecuted: (details?: string) => addNotification({
+        ...NotificationMessages.TRADE_EXECUTED,
+        message: details || NotificationMessages.TRADE_EXECUTED.message
+      }),
+      tradeFailed: (reason?: string) => addNotification({
+        ...NotificationMessages.TRADE_FAILED,
+        message: reason || NotificationMessages.TRADE_FAILED.message
+      }),
+      copiedToClipboard: () => addNotification(NotificationMessages.COPIED_TO_CLIPBOARD),
+      connectionLost: () => addNotification(NotificationMessages.CONNECTION_LOST),
+      connectionRestored: () => addNotification(NotificationMessages.CONNECTION_RESTORED)
+    },
+
+    // Custom notification with full control
     notify: addNotification
   }
 }

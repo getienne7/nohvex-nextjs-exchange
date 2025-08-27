@@ -1,0 +1,76 @@
+# NOHVEX Project Code Owners
+# This file defines who should be automatically assigned as reviewers for different parts of the codebase
+
+# Global code owners - These users will be assigned to all pull requests
+# Replace with actual GitHub usernames
+# * @username @team-lead
+
+# Frontend Components and UI
+/src/components/ @frontend-team
+/src/app/**/page.tsx @frontend-team  
+/src/app/**/layout.tsx @frontend-team
+
+# Backend API Routes
+/src/app/api/ @backend-team
+/src/lib/ @backend-team
+
+# Web3 and Blockchain Integration  
+/src/lib/web3/ @blockchain-team @backend-team
+/src/contexts/WalletContext.tsx @blockchain-team
+/src/components/web3/ @blockchain-team @frontend-team
+/src/hooks/useDEXTrading.tsx @blockchain-team
+
+# Database and Schema
+/prisma/ @database-admin @backend-team
+/src/lib/db-service.ts @database-admin @backend-team
+
+# Infrastructure and Deployment
+Dockerfile* @devops-team
+docker-compose*.yml @devops-team  
+/.github/ @devops-team
+/scripts/ @devops-team
+/nginx/ @devops-team
+
+# Configuration Files
+*.config.* @devops-team
+package*.json @team-lead @devops-team
+tsconfig.json @team-lead @backend-team
+eslint.config.mjs @team-lead @backend-team
+
+# Environment and Secrets
+.env* @devops-team @team-lead
+vercel.json @devops-team
+
+# Testing
+/tests/ @qa-team @backend-team
+jest.config.js @qa-team @backend-team
+playwright.config.ts @qa-team @frontend-team
+
+# Documentation
+/docs/ @tech-writer
+README.md @tech-writer @team-lead
+*.md @tech-writer
+
+# Security and Authentication
+/src/lib/auth/ @security-team @backend-team
+/src/middleware.ts @security-team @backend-team
+/src/app/api/auth/ @security-team @backend-team
+
+# CI/CD and Workflows
+/.github/workflows/ @devops-team @team-lead
+/scripts/setup-* @devops-team
+/scripts/deploy-* @devops-team
+
+# High-risk changes that require additional review
+package-lock.json @team-lead @devops-team
+/prisma/migrations/ @database-admin @team-lead @backend-team
+
+# Critical configuration files
+next.config.ts @team-lead @devops-team @backend-team
+middleware.ts @security-team @team-lead
+
+# Example actual usernames (uncomment and replace with real usernames):
+# * @your-github-username
+# /src/components/ @frontend-dev-username  
+# /src/app/api/ @backend-dev-username
+# /scripts/ @devops-username

@@ -61,11 +61,22 @@ export interface RiskMetrics {
   portfolioVolatility: number
   valueAtRisk95: number // 95% VaR
   valueAtRisk99: number // 99% VaR
+  conditionalVaR95: number // Expected Shortfall
+  conditionalVaR99: number // Expected Shortfall
   beta: number // Relative to market
   correlation: CorrelationMatrix
   diversificationRatio: number
   concentrationRisk: number
   liquidityScore: number
+  tailRisk: number // Extreme downside risk
+  skewness: number // Distribution asymmetry
+  kurtosis: number // Distribution tail heaviness
+  informationRatio: number // Risk-adjusted alpha
+  trackingError: number // Volatility of excess returns
+  maximumDrawdownDuration: number // Days in drawdown
+  downSideDeviation: number // Volatility of negative returns
+  calmarRatio: number // Return to max drawdown ratio
+  sortinoRatio: number // Return to downside deviation ratio
 }
 
 export interface CorrelationMatrix {
@@ -75,8 +86,15 @@ export interface CorrelationMatrix {
 export interface PerformanceAttribution {
   assetContributions: AssetContribution[]
   chainContributions: ChainContribution[]
+  sectorContributions: SectorContribution[]
+  factorContributions: FactorContribution[]
   totalAttribution: number
   unexplainedReturn: number
+  allocationEffect: number // Pure allocation impact
+  selectionEffect: number // Security selection impact
+  interactionEffect: number // Allocation-selection interaction
+  currencyEffect: number // Multi-chain currency impact
+  timingEffect: number // Market timing impact
 }
 
 export interface AssetContribution {
@@ -93,6 +111,24 @@ export interface ChainContribution {
   return: number
   contribution: number
   contributionPercent: number
+}
+
+export interface SectorContribution {
+  sectorName: string
+  weight: number
+  return: number
+  contribution: number
+  contributionPercent: number
+  riskContribution: number
+}
+
+export interface FactorContribution {
+  factorName: string
+  exposure: number
+  return: number
+  contribution: number
+  contributionPercent: number
+  riskContribution: number
 }
 
 export interface RebalancingRecommendation {
@@ -185,15 +221,27 @@ export class PortfolioAnalytics {
     }
   }
 
-  // Get portfolio data from NOWNodes
+  // Get portfolio data from NOWNodes and wallet services
   private async getPortfolioData(walletAddress: string): Promise<{
     totalValue: number
     assets: AssetSnapshot[]
     chains: ChainSnapshot[]
   }> {
     try {
-      // This would normally call your wallet-dashboard API
-      // For now, using mock data based on your real portfolio
+      // Try to get real portfolio data from wallet-dashboard API
+      try {
+        const response = await fetch(`/api/wallet-dashboard?address=${walletAddress}`)
+        if (response.ok) {
+          const realData = await response.json()
+          if (realData.success && realData.data) {
+            return this.transformWalletDataToPortfolioData(realData.data)
+          }
+        }
+      } catch (error) {
+        console.warn('Could not fetch real portfolio data, using mock data:', error)
+      }
+      
+      // Fallback to enhanced mock data based on your real portfolio
       const mockData = {
         totalValue: 63.88,
         assets: [
@@ -281,6 +329,78 @@ export class PortfolioAnalytics {
     }
   }
 
+  private transformWalletDataToPortfolioData(walletData: any): {
+    totalValue: number
+    assets: AssetSnapshot[]
+    chains: ChainSnapshot[]
+  } {
+    // Transform real wallet data to portfolio analytics format
+    const totalValue = walletData.totalBalance || 0
+    
+    const assets: AssetSnapshot[] = (walletData.tokens || []).map((token: any) => ({
+      symbol: token.symbol,
+      name: token.name,
+      balance: token.balance,
+      usdValue: token.usdValue || 0,
+      price: token.price || 0,
+      chainId: token.chainId || 1,
+      chainName: token.chainName || 'Unknown',
+      weight: totalValue > 0 ? (token.usdValue / totalValue) * 100 : 0,
+      change24h: token.change24h || 0,
+      change7d: token.change7d || 0,
+      change30d: token.change30d || 0,
+      volatility: this.estimateVolatility(token.symbol),
+      sharpeRatio: this.estimateSharpeRatio(token.symbol)
+    }))
+    
+    // Group by chains
+    const chainMap = new Map()
+    assets.forEach(asset => {
+      if (!chainMap.has(asset.chainId)) {
+        chainMap.set(asset.chainId, {
+          chainId: asset.chainId,
+          name: asset.chainName,
+          symbol: asset.symbol,
+          totalValue: 0,
+          weight: 0,
+          assetCount: 0,
+          performance24h: 0
+        })
+      }
+      
+      const chain = chainMap.get(asset.chainId)
+      chain.totalValue += asset.usdValue
+      chain.assetCount++
+    })
+    
+    const chains: ChainSnapshot[] = Array.from(chainMap.values()).map(chain => ({
+      ...chain,
+      weight: totalValue > 0 ? (chain.totalValue / totalValue) * 100 : 0,
+      performance24h: chain.totalValue > 0 ? 
+        assets
+          .filter(a => a.chainId === chain.chainId)
+          .reduce((sum, a) => sum + (a.weight / chain.weight) * a.change24h, 0) : 0
+    }))
+    
+    return { totalValue, assets, chains }
+  }
+
+  private estimateVolatility(symbol: string): number {
+    const volatilityMap: { [key: string]: number } = {
+      'ETH': 0.65, 'BTC': 0.55, 'BNB': 0.58, 'MATIC': 0.82, 'ADA': 0.70,
+      'USDC': 0.05, 'USDT': 0.05, 'DAI': 0.08
+    }
+    return volatilityMap[symbol] || 0.60
+  }
+
+  private estimateSharpeRatio(symbol: string): number {
+    const sharpeMap: { [key: string]: number } = {
+      'ETH': 1.2, 'BTC': 1.1, 'BNB': 0.9, 'MATIC': 0.3, 'ADA': 0.7,
+      'USDC': 0.1, 'USDT': 0.1, 'DAI': 0.1
+    }
+    return sharpeMap[symbol] || 0.5
+  }
+
   // Calculate performance metrics
   private async calculatePerformanceMetrics(
     walletAddress: string, 
@@ -332,6 +452,8 @@ export class PortfolioAnalytics {
   // Calculate risk metrics
   private async calculateRiskMetrics(portfolioData: any): Promise<RiskMetrics> {
     const assets = portfolioData.assets
+    const walletKey = portfolioData.walletAddress?.toLowerCase() || 'default'
+    const snapshots = this.snapshots.get(walletKey) || []
     
     // Portfolio volatility (weighted average)
     const portfolioVolatility = assets.reduce((sum: number, asset: any) => 
@@ -342,6 +464,32 @@ export class PortfolioAnalytics {
     const portfolioValue = portfolioData.totalValue
     const valueAtRisk95 = portfolioValue * portfolioVolatility * 1.645 // 95% confidence
     const valueAtRisk99 = portfolioValue * portfolioVolatility * 2.326 // 99% confidence
+    
+    // Calculate returns for advanced metrics
+    const returns = this.calculateReturns(snapshots)
+    
+    // Conditional VaR (Expected Shortfall)
+    const conditionalVaR95 = this.calculateConditionalVaR(returns, portfolioValue, 0.95)
+    const conditionalVaR99 = this.calculateConditionalVaR(returns, portfolioValue, 0.99)
+    
+    // Statistical moments
+    const skewness = this.calculateSkewness(returns)
+    const kurtosis = this.calculateKurtosis(returns)
+    
+    // Downside risk metrics
+    const downSideDeviation = this.calculateDownsideDeviation(returns)
+    const sortinoRatio = this.calculateSortinoRatio(returns, downSideDeviation)
+    
+    // Advanced risk metrics
+    const tailRisk = this.calculateTailRisk(returns)
+    const maxDrawdown = this.calculateMaxDrawdown(snapshots)
+    const calmarRatio = this.calculateCalmarRatio(returns, maxDrawdown)
+    const maximumDrawdownDuration = this.calculateMaxDrawdownDuration(snapshots)
+    
+    // Market-relative metrics
+    const marketReturns = this.getMarketReturns() // Mock market data
+    const trackingError = this.calculateTrackingError(returns, marketReturns)
+    const informationRatio = this.calculateInformationRatio(returns, marketReturns, trackingError)
     
     // Correlation matrix
     const correlation = this.calculateCorrelationMatrix(assets)
@@ -354,15 +502,29 @@ export class PortfolioAnalytics {
       sum + Math.pow(asset.weight / 100, 2), 0
     )
     
+    // Liquidity scoring with enhanced algorithm
+    const liquidityScore = this.calculateLiquidityScore(assets)
+    
     return {
       portfolioVolatility,
       valueAtRisk95,
       valueAtRisk99,
+      conditionalVaR95,
+      conditionalVaR99,
       beta: 1.1, // Estimated relative to crypto market
       correlation,
       diversificationRatio,
       concentrationRisk,
-      liquidityScore: 0.85 // High liquidity for major assets
+      liquidityScore,
+      tailRisk,
+      skewness,
+      kurtosis,
+      informationRatio,
+      trackingError,
+      maximumDrawdownDuration,
+      downSideDeviation,
+      calmarRatio,
+      sortinoRatio
     }
   }
 
@@ -425,27 +587,48 @@ export class PortfolioAnalytics {
         throw new Error('No portfolio data available')
       }
       
-      const assetContributions: AssetContribution[] = currentSnapshot.assets.map(asset => ({
-        symbol: asset.symbol,
-        weight: asset.weight,
-        return: asset.change24h,
-        contribution: (asset.weight / 100) * asset.change24h,
-        contributionPercent: ((asset.weight / 100) * asset.change24h) / currentSnapshot.performance.dailyReturn * 100
-      }))
+      const assetContributions: AssetContribution[] = currentSnapshot.assets.map(asset => {
+        const contribution = (asset.weight / 100) * asset.change24h
+        return {
+          symbol: asset.symbol,
+          weight: asset.weight,
+          return: asset.change24h,
+          contribution,
+          contributionPercent: (contribution / currentSnapshot.performance.dailyReturn) * 100
+        }
+      })
       
-      const chainContributions: ChainContribution[] = currentSnapshot.chains.map(chain => ({
-        chainName: chain.name,
-        weight: chain.weight,
-        return: chain.performance24h,
-        contribution: (chain.weight / 100) * chain.performance24h,
-        contributionPercent: ((chain.weight / 100) * chain.performance24h) / currentSnapshot.performance.dailyReturn * 100
-      }))
+      const chainContributions: ChainContribution[] = currentSnapshot.chains.map(chain => {
+        const contribution = (chain.weight / 100) * chain.performance24h
+        return {
+          chainName: chain.name,
+          weight: chain.weight,
+          return: chain.performance24h,
+          contribution,
+          contributionPercent: (contribution / currentSnapshot.performance.dailyReturn) * 100
+        }
+      })
+      
+      // Sector analysis
+      const sectorContributions = this.calculateSectorContributions(currentSnapshot.assets)
+      
+      // Factor analysis
+      const factorContributions = this.calculateFactorContributions(currentSnapshot.assets)
+      
+      const totalAttribution = assetContributions.reduce((sum, contrib) => sum + contrib.contribution, 0)
       
       return {
         assetContributions,
         chainContributions,
-        totalAttribution: assetContributions.reduce((sum, contrib) => sum + contrib.contribution, 0),
-        unexplainedReturn: 0
+        sectorContributions,
+        factorContributions,
+        totalAttribution,
+        unexplainedReturn: 0,
+        allocationEffect: this.calculateAllocationEffect(assetContributions),
+        selectionEffect: this.calculateSelectionEffect(assetContributions),
+        interactionEffect: 0,
+        currencyEffect: this.calculateCurrencyEffect(chainContributions),
+        timingEffect: 0
       }
     }
     
@@ -459,13 +642,14 @@ export class PortfolioAnalytics {
       const prevAsset = previousSnapshot.assets.find(a => a.symbol === asset.symbol)
       const assetReturn = prevAsset ? 
         ((asset.usdValue - prevAsset.usdValue) / prevAsset.usdValue) * 100 : 0
+      const contribution = (asset.weight / 100) * assetReturn
       
       return {
         symbol: asset.symbol,
         weight: asset.weight,
         return: assetReturn,
-        contribution: (asset.weight / 100) * assetReturn,
-        contributionPercent: ((asset.weight / 100) * assetReturn) / totalReturn * 100
+        contribution,
+        contributionPercent: (contribution / totalReturn) * 100
       }
     })
     
@@ -473,23 +657,42 @@ export class PortfolioAnalytics {
       const prevChain = previousSnapshot.chains.find(c => c.chainId === chain.chainId)
       const chainReturn = prevChain ? 
         ((chain.totalValue - prevChain.totalValue) / prevChain.totalValue) * 100 : 0
+      const contribution = (chain.weight / 100) * chainReturn
       
       return {
         chainName: chain.name,
         weight: chain.weight,
         return: chainReturn,
-        contribution: (chain.weight / 100) * chainReturn,
-        contributionPercent: ((chain.weight / 100) * chainReturn) / totalReturn * 100
+        contribution,
+        contributionPercent: (contribution / totalReturn) * 100
       }
     })
     
+    // Enhanced attribution analysis
+    const sectorContributions = this.calculateSectorContributions(latestSnapshot.assets)
+    const factorContributions = this.calculateFactorContributions(latestSnapshot.assets)
+    
     const totalAttribution = assetContributions.reduce((sum, contrib) => sum + contrib.contribution, 0)
+    
+    // Decompose performance effects
+    const allocationEffect = this.calculateAllocationEffect(assetContributions)
+    const selectionEffect = this.calculateSelectionEffect(assetContributions)
+    const interactionEffect = this.calculateInteractionEffect(latestSnapshot, previousSnapshot)
+    const currencyEffect = this.calculateCurrencyEffect(chainContributions)
+    const timingEffect = this.calculateTimingEffect(snapshots)
     
     return {
       assetContributions,
       chainContributions,
+      sectorContributions,
+      factorContributions,
       totalAttribution,
-      unexplainedReturn: totalReturn - totalAttribution
+      unexplainedReturn: totalReturn - totalAttribution,
+      allocationEffect,
+      selectionEffect,
+      interactionEffect,
+      currencyEffect,
+      timingEffect
     }
   }
 
@@ -505,92 +708,395 @@ export class PortfolioAnalytics {
     const currentSnapshot = snapshots[0]
     const recommendations: RebalancingRecommendation[] = []
     
-    // Risk reduction recommendation
-    if (currentSnapshot.riskMetrics.concentrationRisk > 0.5) {
+    // 1. Risk-based recommendations
+    recommendations.push(...this.generateRiskRecommendations(currentSnapshot))
+    
+    // 2. Performance optimization recommendations
+    recommendations.push(...this.generatePerformanceRecommendations(currentSnapshot, snapshots))
+    
+    // 3. Tax optimization recommendations
+    recommendations.push(...this.generateTaxOptimizationRecommendations(currentSnapshot, snapshots))
+    
+    // 4. Strategic rebalancing recommendations
+    recommendations.push(...this.generateStrategicRebalancingRecommendations(currentSnapshot))
+    
+    // 5. Momentum and trend recommendations
+    recommendations.push(...this.generateMomentumRecommendations(currentSnapshot))
+    
+    // 6. Diversification recommendations
+    recommendations.push(...this.generateDiversificationRecommendations(currentSnapshot))
+    
+    // Sort by priority and confidence
+    return recommendations
+      .filter(rec => rec.confidence > 0.3) // Filter low confidence recommendations
+      .sort((a, b) => {
+        const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 }
+        const priorityDiff = priorityOrder[b.priority] - priorityOrder[a.priority]
+        if (priorityDiff !== 0) return priorityDiff
+        return b.confidence - a.confidence
+      })
+      .slice(0, 10) // Limit to top 10 recommendations
+  }
+
+  private generateRiskRecommendations(snapshot: PortfolioSnapshot): RebalancingRecommendation[] {
+    const recommendations: RebalancingRecommendation[] = []
+    
+    // Concentration risk
+    if (snapshot.riskMetrics.concentrationRisk > 0.5) {
+      const dominantAsset = snapshot.assets.reduce((max, asset) => 
+        asset.weight > max.weight ? asset : max
+      )
+      
       recommendations.push({
-        id: `rebalance_${Date.now()}_1`,
+        id: `concentration_risk_${Date.now()}`,
         type: 'risk_reduction',
-        priority: 'high',
+        priority: snapshot.riskMetrics.concentrationRisk > 0.7 ? 'critical' : 'high',
         title: 'Reduce Concentration Risk',
-        description: `Your portfolio is heavily concentrated in ${currentSnapshot.assets[0].symbol} (${currentSnapshot.assets[0].weight.toFixed(1)}%). Consider diversifying to reduce risk.`,
+        description: `Portfolio is heavily concentrated in ${dominantAsset.symbol} (${dominantAsset.weight.toFixed(1)}%). Diversification recommended to reduce risk.`,
         actions: [
           {
             type: 'sell',
-            fromAsset: currentSnapshot.assets[0].symbol,
+            fromAsset: dominantAsset.symbol,
             toAsset: 'USDC',
-            amount: currentSnapshot.assets[0].usdValue * 0.2,
-            amountUSD: currentSnapshot.assets[0].usdValue * 0.2,
-            reason: 'Reduce concentration risk',
+            amount: dominantAsset.usdValue * 0.25,
+            amountUSD: dominantAsset.usdValue * 0.25,
+            reason: 'Reduce concentration to improve risk-adjusted returns',
+            urgency: 'high'
+          },
+          {
+            type: 'buy',
+            toAsset: snapshot.assets.length > 1 ? snapshot.assets[1].symbol : 'BTC',
+            amount: dominantAsset.usdValue * 0.15,
+            amountUSD: dominantAsset.usdValue * 0.15,
+            reason: 'Diversify into other quality assets',
+            urgency: 'medium'
+          }
+        ],
+        expectedImpact: {
+          riskReduction: 20,
+          returnImprovement: -3,
+          costEstimate: snapshot.totalValue * 0.005
+        },
+        confidence: 0.85
+      })
+    }
+    
+    // High volatility portfolio
+    if (snapshot.riskMetrics.portfolioVolatility > 0.8) {
+      const highVolAssets = snapshot.assets.filter(asset => asset.volatility > 0.7)
+      
+      recommendations.push({
+        id: `volatility_reduction_${Date.now()}`,
+        type: 'risk_reduction',
+        priority: 'medium',
+        title: 'Reduce Portfolio Volatility',
+        description: `Portfolio volatility is ${(snapshot.riskMetrics.portfolioVolatility * 100).toFixed(1)}%. Consider reducing exposure to high-volatility assets.`,
+        actions: highVolAssets.map(asset => ({
+          type: 'sell' as const,
+          fromAsset: asset.symbol,
+          toAsset: 'USDC',
+          amount: asset.usdValue * 0.3,
+          amountUSD: asset.usdValue * 0.3,
+          reason: 'Reduce volatility and improve stability',
+          urgency: 'low' as const
+        })),
+        expectedImpact: {
+          riskReduction: 25,
+          returnImprovement: -5,
+          costEstimate: snapshot.totalValue * 0.003
+        },
+        confidence: 0.75
+      })
+    }
+    
+    // VaR threshold exceeded
+    if (snapshot.riskMetrics.valueAtRisk95 > snapshot.totalValue * 0.15) {
+      recommendations.push({
+        id: `var_reduction_${Date.now()}`,
+        type: 'risk_reduction',
+        priority: 'high',
+        title: 'Reduce Value at Risk',
+        description: `Daily VaR (95%) is ${((snapshot.riskMetrics.valueAtRisk95 / snapshot.totalValue) * 100).toFixed(1)}% of portfolio. Consider hedging strategies.`,
+        actions: [
+          {
+            type: 'buy',
+            toAsset: 'USDC',
+            amount: snapshot.totalValue * 0.1,
+            amountUSD: snapshot.totalValue * 0.1,
+            reason: 'Add stable assets to reduce downside risk',
             urgency: 'medium'
           }
         ],
         expectedImpact: {
           riskReduction: 15,
           returnImprovement: -2,
-          costEstimate: 25
+          costEstimate: snapshot.totalValue * 0.002
         },
         confidence: 0.8
       })
     }
     
-    // Volatility reduction recommendation
-    const highVolAssets = currentSnapshot.assets.filter(asset => asset.volatility > 0.7)
-    if (highVolAssets.length > 0) {
-      recommendations.push({
-        id: `rebalance_${Date.now()}_2`,
-        type: 'risk_reduction',
-        priority: 'medium',
-        title: 'Reduce Portfolio Volatility',
-        description: `Consider reducing exposure to high-volatility assets like ${highVolAssets.map(a => a.symbol).join(', ')}.`,
-        actions: highVolAssets.map(asset => ({
-          type: 'sell' as const,
-          fromAsset: asset.symbol,
-          toAsset: 'ETH',
-          amount: asset.usdValue * 0.3,
-          amountUSD: asset.usdValue * 0.3,
-          reason: 'Reduce volatility',
-          urgency: 'low' as const
-        })),
-        expectedImpact: {
-          riskReduction: 20,
-          returnImprovement: -5,
-          costEstimate: 15
-        },
-        confidence: 0.7
-      })
-    }
+    return recommendations
+  }
+
+  private generatePerformanceRecommendations(snapshot: PortfolioSnapshot, snapshots: PortfolioSnapshot[]): RebalancingRecommendation[] {
+    const recommendations: RebalancingRecommendation[] = []
     
-    // Opportunity recommendation
-    if (currentSnapshot.performance.sharpeRatio < 1.0) {
+    // Poor Sharpe ratio
+    if (snapshot.performance.sharpeRatio < 0.8) {
+      const bestPerformingAsset = snapshot.assets.reduce((best, asset) => 
+        (asset.sharpeRatio || 0) > (best.sharpeRatio || 0) ? asset : best
+      )
+      
       recommendations.push({
-        id: `rebalance_${Date.now()}_3`,
+        id: `sharpe_improvement_${Date.now()}`,
         type: 'opportunity',
         priority: 'medium',
         title: 'Improve Risk-Adjusted Returns',
-        description: 'Your portfolio\'s Sharpe ratio could be improved by rebalancing towards higher-performing assets.',
+        description: `Portfolio Sharpe ratio is ${snapshot.performance.sharpeRatio.toFixed(2)}. Reallocate to assets with better risk-adjusted performance.`,
         actions: [
           {
             type: 'buy',
-            toAsset: 'ETH',
-            amount: 100,
-            amountUSD: 100,
-            reason: 'Improve Sharpe ratio',
+            toAsset: bestPerformingAsset.symbol,
+            amount: snapshot.totalValue * 0.1,
+            amountUSD: snapshot.totalValue * 0.1,
+            reason: 'Increase allocation to best risk-adjusted performer',
             urgency: 'low'
           }
         ],
         expectedImpact: {
           riskReduction: 5,
+          returnImprovement: 12,
+          costEstimate: snapshot.totalValue * 0.003
+        },
+        confidence: 0.65
+      })
+    }
+    
+    // Underperforming assets
+    const underperformers = snapshot.assets.filter(asset => 
+      asset.change30d < -15 && asset.weight > 5
+    )
+    
+    if (underperformers.length > 0) {
+      recommendations.push({
+        id: `underperformer_reallocation_${Date.now()}`,
+        type: 'opportunity',
+        priority: 'medium',
+        title: 'Reallocate Underperforming Assets',
+        description: `Assets ${underperformers.map(a => a.symbol).join(', ')} have underperformed significantly over the last 30 days.`,
+        actions: underperformers.map(asset => ({
+          type: 'sell' as const,
+          fromAsset: asset.symbol,
+          toAsset: 'ETH',
+          amount: asset.usdValue * 0.2,
+          amountUSD: asset.usdValue * 0.2,
+          reason: 'Reduce exposure to underperforming assets',
+          urgency: 'low' as const
+        })),
+        expectedImpact: {
+          riskReduction: 10,
           returnImprovement: 8,
-          costEstimate: 20
+          costEstimate: snapshot.totalValue * 0.004
         },
         confidence: 0.6
       })
     }
     
-    return recommendations.sort((a, b) => {
-      const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 }
-      return priorityOrder[b.priority] - priorityOrder[a.priority]
+    return recommendations
+  }
+
+  private generateTaxOptimizationRecommendations(snapshot: PortfolioSnapshot, snapshots: PortfolioSnapshot[]): RebalancingRecommendation[] {
+    const recommendations: RebalancingRecommendation[] = []
+    
+    if (snapshots.length < 2) return recommendations
+    
+    // Tax loss harvesting opportunities
+    const lossAssets = snapshot.assets.filter(asset => {
+      const previousSnapshot = snapshots[1]
+      const prevAsset = previousSnapshot?.assets.find(a => a.symbol === asset.symbol)
+      if (!prevAsset) return false
+      
+      const unrealizedLoss = ((asset.usdValue - prevAsset.usdValue) / prevAsset.usdValue) * 100
+      return unrealizedLoss < -10 // More than 10% loss
     })
+    
+    if (lossAssets.length > 0) {
+      const totalLossValue = lossAssets.reduce((sum, asset) => sum + asset.usdValue, 0)
+      
+      recommendations.push({
+        id: `tax_loss_harvest_${Date.now()}`,
+        type: 'tax_loss_harvest',
+        priority: 'medium',
+        title: 'Tax Loss Harvesting Opportunity',
+        description: `Harvest tax losses from ${lossAssets.map(a => a.symbol).join(', ')} to offset capital gains.`,
+        actions: lossAssets.map(asset => ({
+          type: 'sell' as const,
+          fromAsset: asset.symbol,
+          toAsset: 'USDC',
+          amount: asset.usdValue,
+          amountUSD: asset.usdValue,
+          reason: 'Realize tax losses while maintaining market exposure',
+          urgency: 'low' as const
+        })),
+        expectedImpact: {
+          riskReduction: 0,
+          returnImprovement: 0,
+          taxSavings: totalLossValue * 0.25, // Assume 25% tax rate
+          costEstimate: totalLossValue * 0.005
+        },
+        confidence: 0.9
+      })
+    }
+    
+    return recommendations
+  }
+
+  private generateStrategicRebalancingRecommendations(snapshot: PortfolioSnapshot): RebalancingRecommendation[] {
+    const recommendations: RebalancingRecommendation[] = []
+    
+    // Target allocation analysis
+    const targetAllocations = {
+      'ETH': 40,
+      'BTC': 30,
+      'Stablecoins': 20,
+      'Other': 10
+    }
+    
+    const currentAllocations = {
+      'ETH': snapshot.assets.find(a => a.symbol === 'ETH')?.weight || 0,
+      'BTC': snapshot.assets.find(a => a.symbol === 'BTC')?.weight || 0,
+      'Stablecoins': snapshot.assets.filter(a => ['USDC', 'USDT', 'DAI'].includes(a.symbol))
+        .reduce((sum, asset) => sum + asset.weight, 0),
+      'Other': snapshot.assets.filter(a => !['ETH', 'BTC', 'USDC', 'USDT', 'DAI'].includes(a.symbol))
+        .reduce((sum, asset) => sum + asset.weight, 0)
+    }
+    
+    const significantDeviations = Object.entries(targetAllocations).filter(([category, target]) => {
+      const current = currentAllocations[category as keyof typeof currentAllocations]
+      return Math.abs(current - target) > 10 // More than 10% deviation
+    })
+    
+    if (significantDeviations.length > 0) {
+      recommendations.push({
+        id: `strategic_rebalance_${Date.now()}`,
+        type: 'rebalance',
+        priority: 'medium',
+        title: 'Strategic Portfolio Rebalancing',
+        description: `Portfolio allocation deviates from optimal targets. Rebalancing recommended for ${significantDeviations.map(([cat]) => cat).join(', ')}.`,
+        actions: significantDeviations.map(([category, target]) => {
+          const current = currentAllocations[category as keyof typeof currentAllocations]
+          const deviation = target - current
+          const adjustmentAmount = (Math.abs(deviation) / 100) * snapshot.totalValue * 0.5
+          
+          return {
+            type: deviation > 0 ? 'buy' as const : 'sell' as const,
+            toAsset: category === 'ETH' ? 'ETH' : category === 'BTC' ? 'BTC' : 'USDC',
+            amount: adjustmentAmount,
+            amountUSD: adjustmentAmount,
+            reason: `Rebalance ${category} allocation closer to ${target}% target`,
+            urgency: 'low' as const
+          }
+        }),
+        expectedImpact: {
+          riskReduction: 8,
+          returnImprovement: 5,
+          costEstimate: snapshot.totalValue * 0.004
+        },
+        confidence: 0.7
+      })
+    }
+    
+    return recommendations
+  }
+
+  private generateMomentumRecommendations(snapshot: PortfolioSnapshot): RebalancingRecommendation[] {
+    const recommendations: RebalancingRecommendation[] = []
+    
+    // Momentum-based recommendations
+    const strongMomentumAssets = snapshot.assets.filter(asset => 
+      asset.change7d > 10 && asset.change30d > 15
+    )
+    
+    const weakMomentumAssets = snapshot.assets.filter(asset => 
+      asset.change7d < -5 && asset.change30d < -10
+    )
+    
+    if (strongMomentumAssets.length > 0 && weakMomentumAssets.length > 0) {
+      recommendations.push({
+        id: `momentum_rotation_${Date.now()}`,
+        type: 'opportunity',
+        priority: 'low',
+        title: 'Momentum-Based Rotation',
+        description: `Rotate from weak momentum assets (${weakMomentumAssets.map(a => a.symbol).join(', ')}) to strong momentum assets (${strongMomentumAssets.map(a => a.symbol).join(', ')}).`,
+        actions: [
+          ...weakMomentumAssets.map(asset => ({
+            type: 'sell' as const,
+            fromAsset: asset.symbol,
+            toAsset: strongMomentumAssets[0].symbol,
+            amount: asset.usdValue * 0.15,
+            amountUSD: asset.usdValue * 0.15,
+            reason: 'Rotate from weak to strong momentum',
+            urgency: 'low' as const
+          }))
+        ],
+        expectedImpact: {
+          riskReduction: -5,
+          returnImprovement: 15,
+          costEstimate: snapshot.totalValue * 0.006
+        },
+        confidence: 0.5
+      })
+    }
+    
+    return recommendations
+  }
+
+  private generateDiversificationRecommendations(snapshot: PortfolioSnapshot): RebalancingRecommendation[] {
+    const recommendations: RebalancingRecommendation[] = []
+    
+    // Check chain diversification
+    const chainConcentration = snapshot.chains.reduce((max, chain) => 
+      chain.weight > max ? chain.weight : max, 0
+    )
+    
+    if (chainConcentration > 80) {
+      const dominantChain = snapshot.chains.find(chain => chain.weight > 80)
+      
+      recommendations.push({
+        id: `chain_diversification_${Date.now()}`,
+        type: 'risk_reduction',
+        priority: 'medium',
+        title: 'Improve Cross-Chain Diversification',
+        description: `Portfolio is heavily concentrated on ${dominantChain?.name} (${chainConcentration.toFixed(1)}%). Consider diversifying across multiple chains.`,
+        actions: [
+          {
+            type: 'buy',
+            toAsset: 'BNB',
+            amount: snapshot.totalValue * 0.1,
+            amountUSD: snapshot.totalValue * 0.1,
+            reason: 'Add exposure to BNB Smart Chain ecosystem',
+            urgency: 'low'
+          },
+          {
+            type: 'buy',
+            toAsset: 'MATIC',
+            amount: snapshot.totalValue * 0.05,
+            amountUSD: snapshot.totalValue * 0.05,
+            reason: 'Add exposure to Polygon ecosystem',
+            urgency: 'low'
+          }
+        ],
+        expectedImpact: {
+          riskReduction: 12,
+          returnImprovement: 3,
+          costEstimate: snapshot.totalValue * 0.003
+        },
+        confidence: 0.75
+      })
+    }
+    
+    return recommendations
   }
 
   // Helper methods
@@ -640,6 +1146,301 @@ export class PortfolioAnalytics {
     }
     
     return maxDrawdown
+  }
+
+  // Advanced risk calculation methods
+  private calculateConditionalVaR(returns: number[], portfolioValue: number, confidence: number): number {
+    if (returns.length === 0) return 0
+    
+    const sortedReturns = returns.sort((a, b) => a - b)
+    const cutoffIndex = Math.floor((1 - confidence) * sortedReturns.length)
+    const tailReturns = sortedReturns.slice(0, cutoffIndex)
+    
+    if (tailReturns.length === 0) return 0
+    
+    const expectedShortfall = tailReturns.reduce((sum, r) => sum + r, 0) / tailReturns.length
+    return Math.abs(expectedShortfall * portfolioValue / 100)
+  }
+
+  private calculateSkewness(returns: number[]): number {
+    if (returns.length < 3) return 0
+    
+    const mean = returns.reduce((sum, r) => sum + r, 0) / returns.length
+    const variance = returns.reduce((sum, r) => sum + Math.pow(r - mean, 2), 0) / returns.length
+    const stdDev = Math.sqrt(variance)
+    
+    if (stdDev === 0) return 0
+    
+    const skewness = returns.reduce((sum, r) => sum + Math.pow((r - mean) / stdDev, 3), 0) / returns.length
+    return skewness
+  }
+
+  private calculateKurtosis(returns: number[]): number {
+    if (returns.length < 4) return 0
+    
+    const mean = returns.reduce((sum, r) => sum + r, 0) / returns.length
+    const variance = returns.reduce((sum, r) => sum + Math.pow(r - mean, 2), 0) / returns.length
+    const stdDev = Math.sqrt(variance)
+    
+    if (stdDev === 0) return 0
+    
+    const kurtosis = returns.reduce((sum, r) => sum + Math.pow((r - mean) / stdDev, 4), 0) / returns.length
+    return kurtosis - 3 // Excess kurtosis
+  }
+
+  private calculateDownsideDeviation(returns: number[]): number {
+    const negativeReturns = returns.filter(r => r < 0)
+    if (negativeReturns.length === 0) return 0
+    
+    const variance = negativeReturns.reduce((sum, r) => sum + Math.pow(r, 2), 0) / negativeReturns.length
+    return Math.sqrt(variance)
+  }
+
+  private calculateSortinoRatio(returns: number[], downsideDeviation: number): number {
+    if (downsideDeviation === 0) return 0
+    
+    const meanReturn = returns.reduce((sum, r) => sum + r, 0) / returns.length
+    const riskFreeRate = 0.05
+    return (meanReturn - riskFreeRate) / downsideDeviation
+  }
+
+  private calculateTailRisk(returns: number[]): number {
+    if (returns.length === 0) return 0
+    
+    const sortedReturns = returns.sort((a, b) => a - b)
+    const tail5Percent = sortedReturns.slice(0, Math.floor(returns.length * 0.05))
+    
+    if (tail5Percent.length === 0) return 0
+    
+    return Math.abs(tail5Percent.reduce((sum, r) => sum + r, 0) / tail5Percent.length)
+  }
+
+  private calculateCalmarRatio(returns: number[], maxDrawdown: number): number {
+    if (maxDrawdown === 0) return 0
+    
+    const annualizedReturn = returns.reduce((sum, r) => sum + r, 0) * 252 / returns.length // Assuming daily returns
+    return annualizedReturn / maxDrawdown
+  }
+
+  private calculateMaxDrawdownDuration(snapshots: PortfolioSnapshot[]): number {
+    if (snapshots.length < 2) return 0
+    
+    let maxDuration = 0
+    let currentDuration = 0
+    let peak = snapshots[snapshots.length - 1].totalValue
+    
+    for (let i = snapshots.length - 2; i >= 0; i--) {
+      const current = snapshots[i].totalValue
+      if (current > peak) {
+        peak = current
+        maxDuration = Math.max(maxDuration, currentDuration)
+        currentDuration = 0
+      } else {
+        currentDuration++
+      }
+    }
+    
+    return Math.max(maxDuration, currentDuration)
+  }
+
+  private getMarketReturns(): number[] {
+    // Mock market returns - in production, this would fetch real market data
+    return [-1.5, 2.3, -0.8, 1.2, -2.1, 3.4, 0.7, -1.9, 2.8, -0.3]
+  }
+
+  private calculateTrackingError(portfolioReturns: number[], marketReturns: number[]): number {
+    const minLength = Math.min(portfolioReturns.length, marketReturns.length)
+    const excessReturns = portfolioReturns.slice(0, minLength).map((r, i) => r - marketReturns[i])
+    
+    return this.calculateVolatility(excessReturns)
+  }
+
+  private calculateInformationRatio(portfolioReturns: number[], marketReturns: number[], trackingError: number): number {
+    if (trackingError === 0) return 0
+    
+    const minLength = Math.min(portfolioReturns.length, marketReturns.length)
+    const excessReturns = portfolioReturns.slice(0, minLength).map((r, i) => r - marketReturns[i])
+    const averageExcessReturn = excessReturns.reduce((sum, r) => sum + r, 0) / excessReturns.length
+    
+    return averageExcessReturn / trackingError
+  }
+
+  private calculateLiquidityScore(assets: AssetSnapshot[]): number {
+    // Enhanced liquidity scoring based on market cap, volume, and asset type
+    const liquidityScores = {
+      'ETH': 0.95,
+      'BTC': 0.95,
+      'BNB': 0.85,
+      'USDC': 0.98,
+      'USDT': 0.98,
+      'MATIC': 0.75,
+      'ADA': 0.80
+    }
+    
+    const weightedLiquidity = assets.reduce((sum, asset) => {
+      const score = liquidityScores[asset.symbol as keyof typeof liquidityScores] || 0.5
+      return sum + (asset.weight / 100) * score
+    }, 0)
+    
+    return weightedLiquidity
+  }
+
+  // Attribution calculation methods
+  private calculateSectorContributions(assets: AssetSnapshot[]): SectorContribution[] {
+    // Categorize assets by sector
+    const sectorMap: { [key: string]: { assets: AssetSnapshot[], weight: number, return: number } } = {}
+    
+    const sectorClassification: { [key: string]: string } = {
+      'ETH': 'Smart Contract Platforms',
+      'BTC': 'Store of Value',
+      'BNB': 'Exchange Tokens',
+      'MATIC': 'Layer 2 Solutions',
+      'ADA': 'Smart Contract Platforms',
+      'USDC': 'Stablecoins',
+      'USDT': 'Stablecoins'
+    }
+    
+    assets.forEach(asset => {
+      const sector = sectorClassification[asset.symbol] || 'Other'
+      if (!sectorMap[sector]) {
+        sectorMap[sector] = { assets: [], weight: 0, return: 0 }
+      }
+      sectorMap[sector].assets.push(asset)
+      sectorMap[sector].weight += asset.weight
+    })
+    
+    return Object.entries(sectorMap).map(([sectorName, data]) => {
+      const sectorReturn = data.assets.reduce((sum, asset) => 
+        sum + (asset.weight / data.weight) * asset.change24h, 0
+      )
+      const contribution = (data.weight / 100) * sectorReturn
+      const riskContribution = data.assets.reduce((sum, asset) => 
+        sum + (asset.weight / 100) * asset.volatility, 0
+      )
+      
+      return {
+        sectorName,
+        weight: data.weight,
+        return: sectorReturn,
+        contribution,
+        contributionPercent: contribution * 100,
+        riskContribution
+      }
+    })
+  }
+
+  private calculateFactorContributions(assets: AssetSnapshot[]): FactorContribution[] {
+    // Factor exposure analysis
+    const factors = [
+      { name: 'Market Beta', exposure: this.calculateMarketExposure(assets) },
+      { name: 'Size Factor', exposure: this.calculateSizeExposure(assets) },
+      { name: 'Momentum', exposure: this.calculateMomentumExposure(assets) },
+      { name: 'Volatility', exposure: this.calculateVolatilityExposure(assets) },
+      { name: 'Liquidity', exposure: this.calculateLiquidityExposure(assets) }
+    ]
+    
+    return factors.map(factor => {
+      const factorReturn = factor.exposure * 2.5 // Mock factor return
+      const contribution = factor.exposure * factorReturn
+      
+      return {
+        factorName: factor.name,
+        exposure: factor.exposure,
+        return: factorReturn,
+        contribution,
+        contributionPercent: contribution * 100,
+        riskContribution: Math.abs(factor.exposure) * 0.15
+      }
+    })
+  }
+
+  private calculateMarketExposure(assets: AssetSnapshot[]): number {
+    // Market cap weighted exposure
+    const marketCaps: { [key: string]: number } = {
+      'ETH': 0.4, 'BTC': 0.6, 'BNB': 0.15, 'MATIC': 0.08, 'ADA': 0.12
+    }
+    
+    return assets.reduce((sum, asset) => {
+      const marketWeight = marketCaps[asset.symbol] || 0.05
+      return sum + (asset.weight / 100) * marketWeight
+    }, 0)
+  }
+
+  private calculateSizeExposure(assets: AssetSnapshot[]): number {
+    // Large cap vs small cap exposure
+    const sizeFactors: { [key: string]: number } = {
+      'ETH': 1.0, 'BTC': 1.0, 'BNB': 0.5, 'MATIC': -0.3, 'ADA': 0.2
+    }
+    
+    return assets.reduce((sum, asset) => {
+      const sizeFactor = sizeFactors[asset.symbol] || 0
+      return sum + (asset.weight / 100) * sizeFactor
+    }, 0)
+  }
+
+  private calculateMomentumExposure(assets: AssetSnapshot[]): number {
+    return assets.reduce((sum, asset) => {
+      const momentum = asset.change30d / 30 // 30-day momentum
+      return sum + (asset.weight / 100) * momentum
+    }, 0) / 100
+  }
+
+  private calculateVolatilityExposure(assets: AssetSnapshot[]): number {
+    return assets.reduce((sum, asset) => {
+      return sum + (asset.weight / 100) * asset.volatility
+    }, 0)
+  }
+
+  private calculateLiquidityExposure(assets: AssetSnapshot[]): number {
+    const liquidityScores = this.calculateLiquidityScore(assets)
+    return liquidityScores
+  }
+
+  // Attribution effect calculations
+  private calculateAllocationEffect(assetContributions: AssetContribution[]): number {
+    // Pure allocation effect - impact of asset allocation decisions
+    return assetContributions.reduce((sum, contrib) => {
+      const benchmarkWeight = 0.25 // Equal weight benchmark
+      const allocationDifference = (contrib.weight / 100) - benchmarkWeight
+      return sum + allocationDifference * 1.5 // Mock benchmark return
+    }, 0)
+  }
+
+  private calculateSelectionEffect(assetContributions: AssetContribution[]): number {
+    // Security selection effect - impact of choosing specific assets
+    return assetContributions.reduce((sum, contrib) => {
+      const benchmarkReturn = 1.5 // Mock benchmark return
+      const selectionDifference = contrib.return - benchmarkReturn
+      return sum + (contrib.weight / 100) * selectionDifference
+    }, 0)
+  }
+
+  private calculateInteractionEffect(latest: PortfolioSnapshot, previous: PortfolioSnapshot): number {
+    // Interaction between allocation and selection effects
+    return 0.1 // Simplified calculation
+  }
+
+  private calculateCurrencyEffect(chainContributions: ChainContribution[]): number {
+    // Multi-chain currency exposure effect
+    return chainContributions.reduce((sum, contrib) => {
+      const currencyFactor = contrib.chainName === 'Ethereum' ? 0.05 : -0.02
+      return sum + contrib.contribution * currencyFactor
+    }, 0)
+  }
+
+  private calculateTimingEffect(snapshots: PortfolioSnapshot[]): number {
+    // Market timing effect based on entry/exit timing
+    if (snapshots.length < 3) return 0
+    
+    let timingEffect = 0
+    for (let i = 0; i < snapshots.length - 2; i++) {
+      const current = snapshots[i]
+      const next = snapshots[i + 1]
+      const marketMovement = (current.totalValue - next.totalValue) / next.totalValue
+      timingEffect += marketMovement * 0.1 // Simplified timing calculation
+    }
+    
+    return timingEffect / (snapshots.length - 2)
   }
 
   // Public methods

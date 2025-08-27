@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Enable standalone output for production Docker builds
+  output: 'standalone',
   serverExternalPackages: ['@prisma/client', 'bcryptjs'],
   images: {
     domains: ['localhost'],
@@ -10,16 +12,12 @@ const nextConfig: NextConfig = {
   trailingSlash: false,
   generateEtags: false,
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
+    // Production builds must check for ESLint errors
+    ignoreDuringBuilds: process.env.NODE_ENV === 'test',
   },
   typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
-    ignoreBuildErrors: true,
+    // Production builds must check for TypeScript errors
+    ignoreBuildErrors: process.env.NODE_ENV === 'test',
   },
   async headers() {
     return [

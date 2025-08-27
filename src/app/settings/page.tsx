@@ -77,7 +77,17 @@ function PriceAlertsSection() {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-white font-medium">Price Alerts</h3>
+      <div className="flex items-center justify-between">
+        <h3 className="text-white font-medium">Price Alerts</h3>
+        <div className="flex space-x-2">
+          <a
+            href="/alerts/enhanced"
+            className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded-lg transition-colors"
+          >
+            Enhanced Alerts
+          </a>
+        </div>
+      </div>
       <form onSubmit={create} className="grid grid-cols-1 md:grid-cols-5 gap-3">
         <input className="px-3 py-2 bg-white/5 border border-gray-600 rounded-lg text-white" value={symbol} onChange={e=>setSymbol(e.target.value.toUpperCase())} placeholder="Symbol e.g. BTC"/>
         <select className="px-3 py-2 bg-white/5 border border-gray-600 rounded-lg text-white" value={operator} onChange={e=>setOperator(e.target.value as Operator)}>

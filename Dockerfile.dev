@@ -1,17 +1,53 @@
 FROM node:20-alpine
 
+# Set working directory
 WORKDIR /app
-ENV NEXT_TELEMETRY_DISABLED=1
 
-# Install dependencies first (leverages Docker cache)
-# Copy package manifests and Prisma schema so postinstall can run `prisma generate`
+# Install system dependencies for native packages and development tools
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    git \
+    curl \
+    bash \
+    redis \
+    postgresql-client \
+    && rm -rf /var/cache/apk/*
+
+# Create non-root user for security
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+# Copy package files first for better caching
 COPY package*.json ./
-COPY prisma ./prisma
-RUN npm ci
+COPY prisma ./prisma/
 
-# Expose Next.js dev port
+# Install dependencies with npm ci for faster, reliable builds
+RUN npm ci --only=production=false && \
+    npm cache clean --force
+
+# Generate Prisma Client
+RUN npx prisma generate
+
+# Copy project files
+COPY . .
+
+# Set proper permissions
+RUN chown -R nextjs:nodejs /app
+USER nextjs
+
+# Create directories for development
+RUN mkdir -p .next/cache && \
+    mkdir -p node_modules/.cache
+
+# Expose ports
 EXPOSE 3000
+EXPOSE 9229
 
-# Default command runs dev server (Turbopack as configured in package.json)
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:3000/api/health || exit 1
+
+# Start development server with Turbopack and debugging support
 CMD ["npm", "run", "dev"]
-

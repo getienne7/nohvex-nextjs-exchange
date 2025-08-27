@@ -1,350 +1,411 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { ArrowsUpDownIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
+import React, { useState, useEffect, useCallback } from 'react'
+import { ArrowUpDown, Clock, Zap, AlertTriangle, CheckCircle, ExternalLink, RefreshCw } from 'lucide-react'
+import { DEXAggregator, CrossChainSwapParams, CrossChainSwapResult } from '@/lib/dex/aggregator'
+import { Token } from '@/lib/dex/index'
 
-interface Currency {
-  ticker: string
+interface CrossChainSwapProps {
+  onSwapComplete?: (result: CrossChainSwapResult) => void
+  className?: string
+}
+
+interface ChainConfig {
+  chainId: number
   name: string
-  image: string
-  hasExternalId: boolean
-  isFiat: boolean
-  featured: boolean
-  isStable: boolean
-  supportsFixedRate: boolean
+  symbol: string
+  icon: string
+  rpcUrl: string
 }
 
-interface ExchangeAmount {
-  estimatedAmount: number
-  transactionSpeedForecast: string
-  warningMessage?: string
+const SUPPORTED_CHAINS: ChainConfig[] = [
+  { chainId: 1, name: 'Ethereum', symbol: 'ETH', icon: '🔷', rpcUrl: 'https://ethereum-rpc.publicnode.com' },
+  { chainId: 56, name: 'BSC', symbol: 'BNB', icon: '🟡', rpcUrl: 'https://bsc-rpc.publicnode.com' },
+  { chainId: 137, name: 'Polygon', symbol: 'MATIC', icon: '🟣', rpcUrl: 'https://polygon-rpc.com' },
+  { chainId: 42161, name: 'Arbitrum', symbol: 'ETH', icon: '🔵', rpcUrl: 'https://arbitrum-one.publicnode.com' },
+  { chainId: 10, name: 'Optimism', symbol: 'ETH', icon: '🔴', rpcUrl: 'https://optimism.publicnode.com' },
+  { chainId: 43114, name: 'Avalanche', symbol: 'AVAX', icon: '❄️', rpcUrl: 'https://avalanche-c-chain.publicnode.com' }
+]
+
+const POPULAR_TOKENS: { [chainId: number]: Token[] } = {
+  1: [
+    { address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', symbol: 'WETH', name: 'Wrapped Ether', decimals: 18, chainId: 1 },
+    { address: '0xA0b86a33E6417c4c6b8c4c6b8c4c6b8c4c6b8c4c', symbol: 'USDC', name: 'USD Coin', decimals: 6, chainId: 1 }
+  ],
+  56: [
+    { address: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', symbol: 'WBNB', name: 'Wrapped BNB', decimals: 18, chainId: 56 },
+    { address: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d', symbol: 'USDC', name: 'USD Coin', decimals: 18, chainId: 56 }
+  ],
+  137: [
+    { address: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270', symbol: 'WMATIC', name: 'Wrapped Matic', decimals: 18, chainId: 137 },
+    { address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', symbol: 'USDC', name: 'USD Coin', decimals: 6, chainId: 137 }
+  ]
 }
 
-interface ExchangeData {
-  fromCurrency: string
-  toCurrency: string
-  fromNetwork: string
-  toNetwork: string
-  fromAmount: number
-  toAmount: number
-  address: string
-  extraId?: string
-  userId?: string
-  contactEmail?: string
-  refundAddress?: string
-  refundExtraId?: string
+// UI Components
+const Card = ({ children, className = '' }: { children: React.ReactNode, className?: string }) => (
+  <div className={`bg-white rounded-lg border shadow-sm ${className}`}>{children}</div>
+)
+
+const CardHeader = ({ children }: { children: React.ReactNode }) => (
+  <div className="p-6 pb-4">{children}</div>
+)
+
+const CardTitle = ({ children, className = '' }: { children: React.ReactNode, className?: string }) => (
+  <h3 className={`text-lg font-semibold ${className}`}>{children}</h3>
+)
+
+const CardContent = ({ children, className = '' }: { children: React.ReactNode, className?: string }) => (
+  <div className={`p-6 pt-0 ${className}`}>{children}</div>
+)
+
+const Button = ({ children, onClick, disabled = false, className = '', variant = 'default', size = 'default' }: {
+  children: React.ReactNode
+  onClick?: () => void
+  disabled?: boolean
+  className?: string
+  variant?: string
+  size?: string
+}) => {
+  const baseClasses = 'px-4 py-2 rounded-md font-medium'
+  const stateClasses = disabled ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-80'
+  const variantClasses = variant === 'outline' ? 'border border-gray-300 bg-white text-gray-700' : 'bg-blue-600 text-white'
+  const sizeClasses = size === 'lg' ? 'px-6 py-3 text-lg' : size === 'icon' ? 'p-2' : ''
+  
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`${baseClasses} ${stateClasses} ${variantClasses} ${sizeClasses} ${className}`}
+    >
+      {children}
+    </button>
+  )
 }
 
-export function CrossChainSwap() {
-  const [currencies, setCurrencies] = useState<Currency[]>([])
-  const [fromCurrency, setFromCurrency] = useState<Currency | null>(null)
-  const [toCurrency, setToCurrency] = useState<Currency | null>(null)
-  const [fromAmount, setFromAmount] = useState('')
-  const [toAmount, setToAmount] = useState('')
-  const [recipientAddress, setRecipientAddress] = useState('')
+const Input = ({ type = 'text', placeholder = '', value, onChange, className = '' }: {
+  type?: string
+  placeholder?: string
+  value: string
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  className?: string
+}) => (
+  <input
+    type={type}
+    placeholder={placeholder}
+    value={value}
+    onChange={onChange}
+    className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
+  />
+)
+
+const Select = ({ value, onValueChange, children, className = '' }: {
+  value: string
+  onValueChange: (value: string) => void
+  children: React.ReactNode
+  className?: string
+}) => (
+  <select
+    value={value}
+    onChange={(e) => onValueChange(e.target.value)}
+    className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
+  >
+    {children}
+  </select>
+)
+
+const Alert = ({ children, className = '' }: { children: React.ReactNode, className?: string }) => (
+  <div className={`p-4 border border-red-200 bg-red-50 rounded-md ${className}`}>{children}</div>
+)
+
+const Badge = ({ children, variant = 'default' }: { children: React.ReactNode, variant?: string }) => {
+  const variantClasses = variant === 'secondary' ? 'bg-gray-100 text-gray-800' : 'bg-blue-100 text-blue-800'
+  
+  return (
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${variantClasses}`}>
+      {children}
+    </span>
+  )
+}
+
+const Progress = ({ value, className = '' }: { value: number, className?: string }) => (
+  <div className={`w-full bg-gray-200 rounded-full h-2 ${className}`}>
+    <div
+      className="bg-blue-600 h-2 rounded-full transition-all"
+      style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
+    />
+  </div>
+)
+
+export default function CrossChainSwap({ onSwapComplete, className }: CrossChainSwapProps) {
+  const [dexAggregator] = useState(() => new DEXAggregator())
+  
+  // Form state
+  const [fromChain, setFromChain] = useState<number>(1)
+  const [toChain, setToChain] = useState<number>(56)
+  const [fromToken, setFromToken] = useState<Token | null>(null)
+  const [toToken, setToToken] = useState<Token | null>(null)
+  const [amountIn, setAmountIn] = useState('')
+  const [slippage, setSlippage] = useState(0.5)
+  const [prioritizeSpeed, setPrioritizeSpeed] = useState(false)
+  
+  // Quote and execution state
+  const [quote, setQuote] = useState<CrossChainSwapResult | null>(null)
+  const [comparison, setComparison] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [exchangeData, setExchangeData] = useState<ExchangeAmount | null>(null)
-  const [showFromDropdown, setShowFromDropdown] = useState(false)
-  const [showToDropdown, setShowToDropdown] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  
+  // Execution tracking
+  const [isExecuting, setIsExecuting] = useState(false)
+  const [executionResult, setExecutionResult] = useState<CrossChainSwapResult | null>(null)
 
-  // Load available currencies
+  // Initialize default tokens
   useEffect(() => {
-    const loadCurrencies = async () => {
-      try {
-        const response = await fetch('/api/changenow/currencies')
-        if (response.ok) {
-          const data = await response.json()
-          setCurrencies(data.slice(0, 50)) // Limit to top 50 for performance
-          
-          // Set default currencies
-          const btc = data.find((c: Currency) => c.ticker === 'btc')
-          const eth = data.find((c: Currency) => c.ticker === 'eth')
-          if (btc) setFromCurrency(btc)
-          if (eth) setToCurrency(eth)
-        }
-      } catch (error) {
-        console.error('Failed to load currencies:', error)
-        setError('Failed to load available currencies')
-      }
+    if (!fromToken && POPULAR_TOKENS[fromChain]) {
+      setFromToken(POPULAR_TOKENS[fromChain][0])
     }
-
-    loadCurrencies()
-  }, [])
-
-  // Get exchange estimate
-  useEffect(() => {
-    if (fromCurrency && toCurrency && fromAmount && parseFloat(fromAmount) > 0) {
-      const getEstimate = async () => {
-        setIsLoading(true)
-        try {
-          const response = await fetch('/api/changenow/estimate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              fromCurrency: fromCurrency.ticker,
-              toCurrency: toCurrency.ticker,
-              fromAmount: parseFloat(fromAmount)
-            })
-          })
-
-          if (response.ok) {
-            const data = await response.json()
-            setExchangeData(data)
-            setToAmount(data.estimatedAmount.toString())
-            setError('')
-          } else {
-            setError('Failed to get exchange estimate')
-          }
-        } catch (error) {
-          setError('Network error occurred')
-        } finally {
-          setIsLoading(false)
-        }
-      }
-
-      const debounceTimer = setTimeout(getEstimate, 500)
-      return () => clearTimeout(debounceTimer)
+    if (!toToken && POPULAR_TOKENS[toChain]) {
+      setToToken(POPULAR_TOKENS[toChain][0])
     }
-  }, [fromCurrency, toCurrency, fromAmount])
+  }, [fromChain, toChain, fromToken, toToken])
 
-  const handleSwapCurrencies = () => {
-    const temp = fromCurrency
-    setFromCurrency(toCurrency)
-    setToCurrency(temp)
-    setFromAmount(toAmount)
-    setToAmount('')
-  }
-
-  const handleCreateExchange = async () => {
-    if (!fromCurrency || !toCurrency || !fromAmount || !recipientAddress) {
-      setError('Please fill in all required fields')
+  // Get quote when parameters change
+  const getQuote = useCallback(async () => {
+    if (!fromToken || !toToken || !amountIn || parseFloat(amountIn) <= 0) {
+      setQuote(null)
+      setComparison(null)
       return
     }
 
     setIsLoading(true)
-    try {
-      const response = await fetch('/api/changenow/exchange', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fromCurrency: fromCurrency.ticker,
-          toCurrency: toCurrency.ticker,
-          fromAmount: parseFloat(fromAmount),
-          address: recipientAddress
-        })
-      })
+    setError(null)
 
-      if (response.ok) {
-        const data = await response.json()
-        // Handle successful exchange creation
-        console.log('Exchange created:', data)
-        // You can redirect to a transaction status page or show success message
-      } else {
-        setError('Failed to create exchange')
+    try {
+      const params: CrossChainSwapParams = {
+        fromChain,
+        toChain,
+        tokenIn: fromToken,
+        tokenOut: toToken,
+        amountIn,
+        slippageTolerance: slippage * 100,
+        recipient: '0x0000000000000000000000000000000000000000',
+        prioritizeSpeed
       }
-    } catch (error) {
-      setError('Network error occurred')
+
+      const [crossChainQuote, optionsComparison] = await Promise.all([
+        dexAggregator.getCrossChainQuote(params),
+        dexAggregator.compareSwapOptions(params)
+      ])
+
+      setQuote(crossChainQuote)
+      setComparison(optionsComparison)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to get quote')
     } finally {
       setIsLoading(false)
     }
+  }, [fromToken, toToken, amountIn, slippage, fromChain, toChain, prioritizeSpeed, dexAggregator])
+
+  const handleSwapChains = () => {
+    const tempChain = fromChain
+    const tempToken = fromToken
+    setFromChain(toChain)
+    setToChain(tempChain)
+    setFromToken(toToken)
+    setToToken(tempToken)
   }
 
-  const CurrencySelector = ({ 
-    currency, 
-    onSelect, 
-    isOpen, 
-    onToggle, 
-    label 
-  }: {
-    currency: Currency | null
-    onSelect: (currency: Currency) => void
-    isOpen: boolean
-    onToggle: () => void
-    label: string
-  }) => (
-    <div className="relative">
-      <label className="block text-sm font-medium text-gray-300 mb-2">{label}</label>
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center justify-between p-3 bg-white/5 border border-gray-600 rounded-lg hover:bg-white/10 transition-colors"
-      >
-        {currency ? (
-          <div className="flex items-center space-x-3">
-            <img 
-              src={currency.image} 
-              alt={currency.name}
-              className="w-6 h-6 rounded-full"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = `https://via.placeholder.com/24x24/3B82F6/FFFFFF?text=${currency.ticker.charAt(0).toUpperCase()}`
-              }}
-            />
-            <div className="text-left">
-              <div className="text-white font-medium">{currency.ticker.toUpperCase()}</div>
-              <div className="text-xs text-gray-400">{currency.name}</div>
-            </div>
-          </div>
-        ) : (
-          <span className="text-gray-400">Select currency</span>
-        )}
-        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
-
-      {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-xl z-50 max-h-60 overflow-y-auto">
-          {currencies.map((curr) => (
-            <button
-              key={curr.ticker}
-              onClick={() => {
-                onSelect(curr)
-                onToggle()
-              }}
-              className="w-full flex items-center space-x-3 p-3 hover:bg-white/10 transition-colors"
-            >
-              <img 
-                src={curr.image} 
-                alt={curr.name}
-                className="w-6 h-6 rounded-full"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = `https://via.placeholder.com/24x24/3B82F6/FFFFFF?text=${curr.ticker.charAt(0).toUpperCase()}`
-                }}
-              />
-              <div className="text-left">
-                <div className="text-white font-medium">{curr.ticker.toUpperCase()}</div>
-                <div className="text-xs text-gray-400">{curr.name}</div>
-              </div>
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="max-w-md mx-auto rounded-2xl bg-white/10 p-6 backdrop-blur-sm ring-1 ring-white/20"
-    >
-      <div className="mb-6">
-        <h3 className="text-xl font-bold text-white mb-2">
-          Cross-Chain Swap
-        </h3>
-        <p className="text-sm text-gray-400">
-          Swap 900+ cryptocurrencies instantly • No KYC • Fixed rates
-        </p>
-      </div>
-
-      {error && (
-        <div className="mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg">
-          <p className="text-red-300 text-sm">{error}</p>
-        </div>
-      )}
-
-      <div className="space-y-4">
-        {/* From Currency */}
-        <div>
-          <CurrencySelector
-            currency={fromCurrency}
-            onSelect={setFromCurrency}
-            isOpen={showFromDropdown}
-            onToggle={() => setShowFromDropdown(!showFromDropdown)}
-            label="From"
-          />
-          <div className="mt-2">
-            <input
-              type="number"
-              value={fromAmount}
-              onChange={(e) => setFromAmount(e.target.value)}
-              placeholder="0.00"
-              className="w-full p-3 bg-white/5 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
-            />
-          </div>
-        </div>
-
-        {/* Swap Button */}
-        <div className="flex justify-center">
-          <button
-            onClick={handleSwapCurrencies}
-            className="p-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded-lg transition-colors"
-          >
-            <ArrowsUpDownIcon className="w-5 h-5 text-blue-400" />
-          </button>
-        </div>
-
-        {/* To Currency */}
-        <div>
-          <CurrencySelector
-            currency={toCurrency}
-            onSelect={setToCurrency}
-            isOpen={showToDropdown}
-            onToggle={() => setShowToDropdown(!showToDropdown)}
-            label="To"
-          />
-          <div className="mt-2">
-            <input
-              type="number"
-              value={toAmount}
-              readOnly
-              placeholder="0.00"
-              className="w-full p-3 bg-white/5 border border-gray-600 rounded-lg text-white placeholder-gray-400 cursor-not-allowed"
-            />
-          </div>
-        </div>
-
-        {/* Recipient Address */}
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Recipient Address
-          </label>
-          <input
-            type="text"
-            value={recipientAddress}
-            onChange={(e) => setRecipientAddress(e.target.value)}
-            placeholder="Enter wallet address"
-            className="w-full p-3 bg-white/5 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none"
-          />
-        </div>
-
-        {/* Exchange Info */}
-        {exchangeData && (
-          <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-            <div className="flex items-center space-x-2 text-blue-300 text-sm">
-              <InformationCircleIcon className="w-4 h-4" />
-              <span>Estimated time: {exchangeData.transactionSpeedForecast}</span>
+    <div className={`space-y-6 ${className}`}>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <ArrowUpDown className="h-5 w-5" />
+            Cross-Chain Swap
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Chain and Token Selection */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* From */}
+            <div className="space-y-3">
+              <label className="text-sm font-medium">From</label>
+              <Select value={fromChain.toString()} onValueChange={(value) => setFromChain(parseInt(value))}>
+                {SUPPORTED_CHAINS.map(chain => (
+                  <option key={chain.chainId} value={chain.chainId.toString()}>
+                    {chain.icon} {chain.name}
+                  </option>
+                ))}
+              </Select>
+              
+              <Select 
+                value={fromToken?.address || ''} 
+                onValueChange={(address) => {
+                  const token = POPULAR_TOKENS[fromChain]?.find(t => t.address === address)
+                  setFromToken(token || null)
+                }}
+              >
+                <option value="">Select token</option>
+                {POPULAR_TOKENS[fromChain]?.map(token => (
+                  <option key={token.address} value={token.address}>
+                    {token.symbol} - {token.name}
+                  </option>
+                ))}
+              </Select>
+              
+              <Input
+                type="number"
+                placeholder="Amount"
+                value={amountIn}
+                onChange={(e) => setAmountIn(e.target.value)}
+              />
             </div>
-            {exchangeData.warningMessage && (
-              <p className="text-yellow-300 text-xs mt-1">{exchangeData.warningMessage}</p>
-            )}
-          </div>
-        )}
 
-        {/* Swap Button */}
-        <button
-          onClick={handleCreateExchange}
-          disabled={isLoading || !fromCurrency || !toCurrency || !fromAmount || !recipientAddress}
-          className="w-full py-3 bg-gradient-to-r from-blue-500 to-emerald-500 text-white font-medium rounded-lg hover:from-blue-600 hover:to-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-        >
-          {isLoading ? (
-            <div className="flex items-center justify-center space-x-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-              <span>Processing...</span>
+            {/* Swap Button */}
+            <div className="flex items-center justify-center">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleSwapChains}
+                className="rounded-full"
+              >
+                <ArrowUpDown className="h-4 w-4" />
+              </Button>
             </div>
-          ) : (
-            'Create Exchange'
+
+            {/* To */}
+            <div className="space-y-3">
+              <label className="text-sm font-medium">To</label>
+              <Select value={toChain.toString()} onValueChange={(value) => setToChain(parseInt(value))}>
+                {SUPPORTED_CHAINS.map(chain => (
+                  <option key={chain.chainId} value={chain.chainId.toString()}>
+                    {chain.icon} {chain.name}
+                  </option>
+                ))}
+              </Select>
+              
+              <Select 
+                value={toToken?.address || ''} 
+                onValueChange={(address) => {
+                  const token = POPULAR_TOKENS[toChain]?.find(t => t.address === address)
+                  setToToken(token || null)
+                }}
+              >
+                <option value="">Select token</option>
+                {POPULAR_TOKENS[toChain]?.map(token => (
+                  <option key={token.address} value={token.address}>
+                    {token.symbol} - {token.name}
+                  </option>
+                ))}
+              </Select>
+              
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <div className="text-sm text-gray-600">You'll receive</div>
+                <div className="text-lg font-semibold">
+                  {isLoading ? (
+                    <div className="flex items-center gap-2">
+                      <RefreshCw className="h-4 w-4 animate-spin" />
+                      Loading...
+                    </div>
+                  ) : quote ? (
+                    <span>~{parseFloat(amountIn || '0') * 0.99} {toToken?.symbol}</span>
+                  ) : (
+                    '-'
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {error && (
+            <Alert>
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4" />
+                <span>{error}</span>
+              </div>
+            </Alert>
           )}
-        </button>
-      </div>
 
-      <div className="mt-4 text-xs text-gray-500">
-        <p>• Fixed exchange rates guaranteed for 15 minutes</p>
-        <p>• No hidden fees • Anonymous transactions</p>
-        <p>• Powered by ChangeNOW • 900+ assets supported</p>
-      </div>
-    </motion.div>
+          {/* Settings */}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <label className="text-sm font-medium">Slippage:</label>
+              <Select value={slippage.toString()} onValueChange={(value) => setSlippage(parseFloat(value))} className="w-20">
+                <option value="0.1">0.1%</option>
+                <option value="0.5">0.5%</option>
+                <option value="1.0">1.0%</option>
+                <option value="3.0">3.0%</option>
+              </Select>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="prioritize-speed"
+                checked={prioritizeSpeed}
+                onChange={(e) => setPrioritizeSpeed(e.target.checked)}
+              />
+              <label htmlFor="prioritize-speed" className="text-sm font-medium cursor-pointer">
+                Prioritize Speed
+              </label>
+            </div>
+          </div>
+
+          {/* Execute Button */}
+          <Button 
+            className="w-full" 
+            size="lg"
+            onClick={getQuote}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div className="flex items-center gap-2">
+                <RefreshCw className="h-4 w-4 animate-spin" />
+                Getting Quote...
+              </div>
+            ) : (
+              'Get Cross-Chain Quote'
+            )}
+          </Button>
+
+          {/* Quote Display */}
+          {quote && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
+                <div className="text-center">
+                  <div className="text-sm text-gray-600">Estimated Time</div>
+                  <div className="flex items-center justify-center gap-1">
+                    <Clock className="h-4 w-4" />
+                    <span className="font-medium">{quote.estimatedTime} min</span>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="text-sm text-gray-600">Gas Cost</div>
+                  <div className="font-medium">{quote.totalGasEstimate} ETH</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-sm text-gray-600">Steps</div>
+                  <div className="font-medium">{quote.steps.length}</div>
+                </div>
+              </div>
+              
+              {comparison && (
+                <div className="p-4 border rounded-lg">
+                  <h4 className="font-medium mb-2">Recommendation</h4>
+                  <div className="flex items-center gap-2">
+                    <Badge variant={comparison.recommendation === 'cross-chain' ? 'default' : 'secondary'}>
+                      {comparison.recommendation === 'cross-chain' ? 'Cross-Chain' : 'Same-Chain'}
+                    </Badge>
+                    <span className="text-sm text-gray-600">
+                      {comparison.reasoning}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   )
 }

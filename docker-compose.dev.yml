@@ -1,28 +1,146 @@
 services:
+  postgres:
+    image: postgres:16
+    container_name: nohvex-exchange-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-nohvex}
+      POSTGRES_USER: ${POSTGRES_USER:-nohvex}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme-override-in-your-env}
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db-dev.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-nohvex} -d ${POSTGRES_DB:-nohvex}",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - nohvex-dev-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: nohvex-exchange-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-dev-redis-password}
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - nohvex-dev-network
+
   web:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: nohvex-web
+    container_name: nohvex-exchange-web
     env_file:
-      - .env.local
       - .env.docker
     environment:
-      # Hardcoded for local dev to ensure Prisma connects inside the container
-      DATABASE_URL: postgresql://nohvex:changeme-override-in-your-env@postgres:5432/nohvex?schema=public
-      DIRECT_URL: postgresql://nohvex:changeme-override-in-your-env@postgres:5432/nohvex?schema=public
-      CHOKIDAR_USEPOLLING: '1'
-      WATCHPACK_POLLING: 'true'
-      NEXT_TELEMETRY_DISABLED: '1'
+      # Database connections for container network
+      DATABASE_URL: postgresql://${POSTGRES_USER:-nohvex}:${POSTGRES_PASSWORD:-changeme-override-in-your-env}@postgres:5432/${POSTGRES_DB:-nohvex}?schema=public
+      DIRECT_URL: postgresql://${POSTGRES_USER:-nohvex}:${POSTGRES_PASSWORD:-changeme-override-in-your-env}@postgres:5432/${POSTGRES_DB:-nohvex}?schema=public
+      # Redis connection
+      REDIS_URL: redis://:${REDIS_PASSWORD:-dev-redis-password}@redis:6379
+      # Development optimizations
+      CHOKIDAR_USEPOLLING: "1"
+      WATCHPACK_POLLING: "true"
+      NEXT_TELEMETRY_DISABLED: "1"
+      # Development mode
+      NODE_ENV: development
+      # Hot reload settings
+      FAST_REFRESH: "true"
     ports:
-      - "3000:3000"
+      - "3010:3000"
     volumes:
       - .:/app
       - node_modules:/app/node_modules
       - next_cache:/app/.next
+      - /app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - nohvex-dev-network
+    # Development resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: "1.0"
+        reservations:
+          memory: 512M
+          cpus: "0.25"
+
+  # Optional: Database admin interface
+  adminer:
+    image: adminer:latest
+    container_name: nohvex-exchange-adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+      ADMINER_DESIGN: hydra
     depends_on:
       - postgres
+    networks:
+      - nohvex-dev-network
+    profiles:
+      - admin # Use with: docker-compose --profile admin up
+
+  # Optional: Redis admin interface
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: nohvex-exchange-redis-admin
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      REDIS_HOSTS: local:redis:6379:0:${REDIS_PASSWORD:-dev-redis-password}
+      HTTP_USER: admin
+      HTTP_PASSWORD: ${REDIS_ADMIN_PASSWORD:-admin}
+    depends_on:
+      - redis
+    networks:
+      - nohvex-dev-network
+    profiles:
+      - admin # Use with: docker-compose --profile admin up
+
 volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
   node_modules:
   next_cache:
 
+networks:
+  nohvex-dev-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16

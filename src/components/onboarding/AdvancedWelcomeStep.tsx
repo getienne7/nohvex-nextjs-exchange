@@ -1,0 +1,51 @@
+'use client'
+
+import React from 'react'
+import { motion } from 'framer-motion'
+import { RocketLaunchIcon } from '@heroicons/react/24/outline'
+import { OnboardingStep, UserProgress } from '@/lib/onboarding'
+
+interface AdvancedWelcomeStepProps {
+  step: OnboardingStep
+  userProgress: UserProgress | null
+  walletAddress?: string
+  onComplete: () => void
+  onSkip: () => void
+}
+
+export default function AdvancedWelcomeStep({
+  step,
+  userProgress,
+  walletAddress,
+  onComplete,
+  onSkip
+}: AdvancedWelcomeStepProps) {
+  return (
+    <div className="max-w-4xl mx-auto text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-8"
+      >
+        <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <RocketLaunchIcon className="w-8 h-8 text-purple-600" />
+        </div>
+        
+        <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          Advanced Features Overview
+        </h1>
+        
+        <p className="text-lg text-gray-600 mb-8">
+          Explore institutional-grade tools and analytics
+        </p>
+        
+        <button
+          onClick={onComplete}
+          className="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700"
+        >
+          Continue
+        </button>
+      </motion.div>
+    </div>
+  )
+}

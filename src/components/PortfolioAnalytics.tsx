@@ -340,7 +340,7 @@ export default function PortfolioAnalytics({ walletAddress }: PortfolioAnalytics
           {selectedTab === 'attribution' && attribution && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Attribution</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance Attribution Analysis</h3>
                 <div className="bg-blue-50 p-4 rounded-lg mb-6">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-blue-900">
@@ -350,6 +350,64 @@ export default function PortfolioAnalytics({ walletAddress }: PortfolioAnalytics
                   </div>
                 </div>
               </div>
+
+              {/* Attribution Effects Summary */}
+              {(attribution.allocationEffect !== undefined || attribution.selectionEffect !== undefined) && (
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-3">Attribution Effects</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    {attribution.allocationEffect !== undefined && (
+                      <div className="p-3 bg-green-50 rounded-lg border border-green-200">
+                        <h5 className="text-sm font-semibold text-green-900 mb-1">Allocation Effect</h5>
+                        <div className={`text-lg font-bold ${getPerformanceColor(attribution.allocationEffect)}`}>
+                          {attribution.allocationEffect > 0 ? '+' : ''}{attribution.allocationEffect.toFixed(2)}%
+                        </div>
+                        <div className="text-xs text-green-700">Asset allocation impact</div>
+                      </div>
+                    )}
+
+                    {attribution.selectionEffect !== undefined && (
+                      <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <h5 className="text-sm font-semibold text-blue-900 mb-1">Selection Effect</h5>
+                        <div className={`text-lg font-bold ${getPerformanceColor(attribution.selectionEffect)}`}>
+                          {attribution.selectionEffect > 0 ? '+' : ''}{attribution.selectionEffect.toFixed(2)}%
+                        </div>
+                        <div className="text-xs text-blue-700">Security selection impact</div>
+                      </div>
+                    )}
+
+                    {attribution.currencyEffect !== undefined && (
+                      <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
+                        <h5 className="text-sm font-semibold text-purple-900 mb-1">Currency Effect</h5>
+                        <div className={`text-lg font-bold ${getPerformanceColor(attribution.currencyEffect)}`}>
+                          {attribution.currencyEffect > 0 ? '+' : ''}{attribution.currencyEffect.toFixed(2)}%
+                        </div>
+                        <div className="text-xs text-purple-700">Multi-chain exposure</div>
+                      </div>
+                    )}
+
+                    {attribution.timingEffect !== undefined && (
+                      <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                        <h5 className="text-sm font-semibold text-yellow-900 mb-1">Timing Effect</h5>
+                        <div className={`text-lg font-bold ${getPerformanceColor(attribution.timingEffect)}`}>
+                          {attribution.timingEffect > 0 ? '+' : ''}{attribution.timingEffect.toFixed(2)}%
+                        </div>
+                        <div className="text-xs text-yellow-700">Market timing impact</div>
+                      </div>
+                    )}
+
+                    {attribution.interactionEffect !== undefined && (
+                      <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                        <h5 className="text-sm font-semibold text-gray-900 mb-1">Interaction Effect</h5>
+                        <div className={`text-lg font-bold ${getPerformanceColor(attribution.interactionEffect)}`}>
+                          {attribution.interactionEffect > 0 ? '+' : ''}{attribution.interactionEffect.toFixed(2)}%
+                        </div>
+                        <div className="text-xs text-gray-700">Cross-effect impact</div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Asset Contributions */}
               <div>
@@ -416,6 +474,76 @@ export default function PortfolioAnalytics({ walletAddress }: PortfolioAnalytics
                   ))}
                 </div>
               </div>
+
+              {/* Sector Analysis */}
+              {attribution.sectorContributions && attribution.sectorContributions.length > 0 && (
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-3">Sector Analysis</h4>
+                  <div className="space-y-2">
+                    {attribution.sectorContributions.map((sector, index) => (
+                      <motion.div
+                        key={sector.sectorName}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                        className="flex items-center justify-between p-3 bg-purple-50 rounded-lg border border-purple-200"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                            {sector.sectorName.slice(0, 2)}
+                          </div>
+                          <div>
+                            <span className="font-medium text-gray-900">{sector.sectorName}</span>
+                            <div className="text-sm text-gray-600">Weight: {sector.weight.toFixed(1)}%</div>
+                          </div>
+                        </div>
+                        
+                        <div className="text-right">
+                          <div className={`font-semibold ${getPerformanceColor(sector.contribution)}`}>
+                            {sector.contribution > 0 ? '+' : ''}{sector.contribution.toFixed(2)}%
+                          </div>
+                          <div className="text-xs text-gray-600">
+                            Risk: {(sector.riskContribution * 100).toFixed(1)}%
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Factor Analysis */}
+              {attribution.factorContributions && attribution.factorContributions.length > 0 && (
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-3">Factor Analysis</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {attribution.factorContributions.map((factor, index) => (
+                      <motion.div
+                        key={factor.factorName}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="p-4 bg-indigo-50 rounded-lg border border-indigo-200"
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <h5 className="font-semibold text-indigo-900">{factor.factorName}</h5>
+                          <span className="text-sm text-indigo-700">
+                            Exposure: {factor.exposure.toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className={`text-lg font-bold ${getPerformanceColor(factor.contribution)}`}>
+                            {factor.contribution > 0 ? '+' : ''}{factor.contribution.toFixed(2)}%
+                          </div>
+                          <div className="text-sm text-indigo-700">
+                            Risk: {(factor.riskContribution * 100).toFixed(1)}%
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -527,9 +655,9 @@ export default function PortfolioAnalytics({ walletAddress }: PortfolioAnalytics
 
           {selectedTab === 'risk' && (
             <div className="space-y-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Risk Analysis</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Advanced Risk Analysis</h3>
               
-              {/* Risk Metrics Grid */}
+              {/* Primary Risk Metrics Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div className="p-4 bg-gray-50 rounded-lg">
                   <div className="flex items-center space-x-2 mb-2">
@@ -619,14 +747,100 @@ export default function PortfolioAnalytics({ walletAddress }: PortfolioAnalytics
                 </div>
               </div>
 
-              {/* Risk Assessment */}
+              {/* Advanced Risk Metrics */}
+              {currentSnapshot.riskMetrics.conditionalVaR95 !== undefined && (
+                <div>
+                  <h4 className="text-md font-semibold text-gray-900 mb-4">Advanced Risk Metrics</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="p-3 bg-red-50 rounded-lg border border-red-200">
+                      <h5 className="text-sm font-semibold text-red-900 mb-1">Conditional VaR (95%)</h5>
+                      <div className="text-lg font-bold text-red-900">
+                        {formatCurrency(currentSnapshot.riskMetrics.conditionalVaR95)}
+                      </div>
+                      <div className="text-xs text-red-700">Expected shortfall</div>
+                    </div>
+
+                    <div className="p-3 bg-red-50 rounded-lg border border-red-200">
+                      <h5 className="text-sm font-semibold text-red-900 mb-1">Conditional VaR (99%)</h5>
+                      <div className="text-lg font-bold text-red-900">
+                        {formatCurrency(currentSnapshot.riskMetrics.conditionalVaR99)}
+                      </div>
+                      <div className="text-xs text-red-700">Extreme shortfall</div>
+                    </div>
+
+                    <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                      <h5 className="text-sm font-semibold text-blue-900 mb-1">Sortino Ratio</h5>
+                      <div className="text-lg font-bold text-blue-900">
+                        {currentSnapshot.riskMetrics.sortinoRatio?.toFixed(2) || 'N/A'}
+                      </div>
+                      <div className="text-xs text-blue-700">Downside risk-adjusted</div>
+                    </div>
+
+                    <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
+                      <h5 className="text-sm font-semibold text-purple-900 mb-1">Tail Risk</h5>
+                      <div className="text-lg font-bold text-purple-900">
+                        {(currentSnapshot.riskMetrics.tailRisk * 100)?.toFixed(1) || 'N/A'}%
+                      </div>
+                      <div className="text-xs text-purple-700">5% worst outcomes</div>
+                    </div>
+
+                    <div className="p-3 bg-green-50 rounded-lg border border-green-200">
+                      <h5 className="text-sm font-semibold text-green-900 mb-1">Calmar Ratio</h5>
+                      <div className="text-lg font-bold text-green-900">
+                        {currentSnapshot.riskMetrics.calmarRatio?.toFixed(2) || 'N/A'}
+                      </div>
+                      <div className="text-xs text-green-700">Return/max drawdown</div>
+                    </div>
+
+                    <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                      <h5 className="text-sm font-semibold text-yellow-900 mb-1">Skewness</h5>
+                      <div className="text-lg font-bold text-yellow-900">
+                        {currentSnapshot.riskMetrics.skewness?.toFixed(2) || 'N/A'}
+                      </div>
+                      <div className="text-xs text-yellow-700">
+                        {(currentSnapshot.riskMetrics.skewness || 0) < 0 ? 'Left tail risk' : 
+                         (currentSnapshot.riskMetrics.skewness || 0) > 0 ? 'Right tail bias' : 'Symmetric'}
+                      </div>
+                    </div>
+
+                    <div className="p-3 bg-indigo-50 rounded-lg border border-indigo-200">
+                      <h5 className="text-sm font-semibold text-indigo-900 mb-1">Kurtosis</h5>
+                      <div className="text-lg font-bold text-indigo-900">
+                        {currentSnapshot.riskMetrics.kurtosis?.toFixed(2) || 'N/A'}
+                      </div>
+                      <div className="text-xs text-indigo-700">
+                        {(currentSnapshot.riskMetrics.kurtosis || 0) > 0 ? 'Heavy tails' : 'Light tails'}
+                      </div>
+                    </div>
+
+                    <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                      <h5 className="text-sm font-semibold text-gray-900 mb-1">Information Ratio</h5>
+                      <div className="text-lg font-bold text-gray-900">
+                        {currentSnapshot.riskMetrics.informationRatio?.toFixed(2) || 'N/A'}
+                      </div>
+                      <div className="text-xs text-gray-700">Alpha per unit risk</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Risk Assessment Summary */}
               <div className="p-6 bg-blue-50 rounded-lg">
-                <h4 className="font-semibold text-blue-900 mb-3">Risk Assessment Summary</h4>
+                <h4 className="font-semibold text-blue-900 mb-3">Comprehensive Risk Assessment</h4>
                 <div className="space-y-2 text-blue-800">
                   <p>• Your portfolio shows <strong>{currentSnapshot.riskMetrics.portfolioVolatility < 0.5 ? 'low' : currentSnapshot.riskMetrics.portfolioVolatility < 0.8 ? 'moderate' : 'high'}</strong> volatility at {(currentSnapshot.riskMetrics.portfolioVolatility * 100).toFixed(1)}%</p>
                   <p>• Concentration risk is <strong>{currentSnapshot.riskMetrics.concentrationRisk > 0.5 ? 'high' : currentSnapshot.riskMetrics.concentrationRisk > 0.3 ? 'moderate' : 'low'}</strong> with {(currentSnapshot.riskMetrics.concentrationRisk * 100).toFixed(0)}% concentration</p>
                   <p>• Liquidity is <strong>{currentSnapshot.riskMetrics.liquidityScore > 0.8 ? 'excellent' : currentSnapshot.riskMetrics.liquidityScore > 0.6 ? 'good' : 'limited'}</strong> at {(currentSnapshot.riskMetrics.liquidityScore * 100).toFixed(0)}%</p>
                   <p>• In a 95% confidence scenario, you could lose up to <strong>{formatCurrency(currentSnapshot.riskMetrics.valueAtRisk95)}</strong> in a single day</p>
+                  {currentSnapshot.riskMetrics.conditionalVaR95 && (
+                    <p>• Expected shortfall (tail risk) in worst 5% scenarios: <strong>{formatCurrency(currentSnapshot.riskMetrics.conditionalVaR95)}</strong></p>
+                  )}
+                  {currentSnapshot.riskMetrics.skewness !== undefined && (
+                    <p>• Return distribution shows <strong>{currentSnapshot.riskMetrics.skewness < -0.5 ? 'significant left tail risk' : currentSnapshot.riskMetrics.skewness > 0.5 ? 'upside bias' : 'balanced symmetry'}</strong></p>
+                  )}
+                  {currentSnapshot.riskMetrics.maximumDrawdownDuration !== undefined && currentSnapshot.riskMetrics.maximumDrawdownDuration > 0 && (
+                    <p>• Maximum drawdown period: <strong>{currentSnapshot.riskMetrics.maximumDrawdownDuration} periods</strong></p>
+                  )}
                 </div>
               </div>
             </div>

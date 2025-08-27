@@ -7,6 +7,7 @@ import { CrossChainSwap } from '@/components/CrossChainSwap'
 import { PortfolioTrading } from '@/components/PortfolioTrading'
 import RealTimeTrading from '@/components/RealTimeTrading'
 import { GlobalNavigation } from '@/components/GlobalNavigation'
+import CrossChainSwapComponent from '@/components/CrossChainSwap'
 
 export default function TradingPage() {
   const [activeTab, setActiveTab] = useState<'portfolio' | 'realtime' | 'exchange'>('realtime')
@@ -105,11 +106,11 @@ export default function TradingPage() {
             </div>
           ) : (
             <div>
-              <CrossChainSwap />
+              <CrossChainSwapComponent />
               <div className="mt-6 text-center">
                 <p className="text-sm text-gray-500">
-                  🚀 <strong>Cross-Chain Swap:</strong> Swap real cryptocurrencies across chains. 
-                  900+ assets • No KYC • Fixed rates guaranteed.
+                  🚀 <strong>Cross-Chain Swap:</strong> Advanced cross-chain swaps with bridge aggregation. 
+                  Multi-chain DEX routing • Bridge optimization • Real-time quotes.
                 </p>
               </div>
             </div>
@@ -136,14 +137,14 @@ export default function TradingPage() {
           </div>
           
           <div className="rounded-2xl bg-white/5 p-6 backdrop-blur-sm ring-1 ring-white/10">
-            <h3 className="text-lg font-semibold text-white mb-4">🔄 Cross-Chain Swap</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">🔄 Advanced Cross-Chain Swap</h3>
             <ul className="space-y-2 text-sm text-gray-400">
-              <li>✅ Real cryptocurrency swaps</li>
-              <li>✅ 900+ supported assets</li>
-              <li>✅ Cross-chain exchanges</li>
-              <li>✅ Fixed rates guaranteed</li>
-              <li>✅ No KYC required</li>
-              <li>✅ Decentralized execution</li>
+              <li>✅ Multi-chain bridge aggregation</li>
+              <li>✅ DEX routing optimization</li>
+              <li>✅ LayerZero, Hop, Synapse bridges</li>
+              <li>✅ Real-time cost comparison</li>
+              <li>✅ Transaction tracking</li>
+              <li>✅ Gas optimization</li>
             </ul>
           </div>
         </motion.div>

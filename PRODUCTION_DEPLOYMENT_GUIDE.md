@@ -1,310 +1,460 @@
-# 🚀 Production Deployment Guide - Nohvex Exchange
+# Production Deployment Guide - NOHVEX Exchange
 
-## 📋 Deployment Overview
+This guide provides comprehensive instructions for deploying NOHVEX Exchange to production using Docker.
 
-Your Nohvex Exchange platform is **production-ready** with all Phase 1 features implemented. Here's everything involved in deploying to production:
+## 📋 Prerequisites
 
-## 🛠️ What's Involved in Deployment
+### System Requirements
 
-### 1. **Platform Setup** (5-10 minutes)
-- Vercel account and project setup
-- Database provisioning (Neon PostgreSQL)
-- Environment variable configuration
-- Domain configuration (optional)
+- **OS**: Linux (Ubuntu 20.04+ recommended) or Windows Server 2019+
+- **RAM**: Minimum 4GB, Recommended 8GB+
+- **Storage**: Minimum 50GB SSD
+- **CPU**: 2+ cores recommended
+- **Network**: HTTPS-capable domain (for SSL)
 
-### 2. **Database Setup** (5 minutes)
-- PostgreSQL database creation
-- Schema deployment
-- Initial data seeding
+### Required Software
 
-### 3. **Environment Configuration** (10 minutes)
-- Production environment variables
-- API keys and secrets
-- Authentication configuration
+- **Docker**: Version 20.10+
+- **Docker Compose**: Version 2.0+
+- **Git**: For code deployment
+- **Nginx**: For reverse proxy (optional but recommended)
 
-### 4. **Deployment & Testing** (5-10 minutes)
-- Code deployment
-- Production testing
-- Feature verification
+### Required Services
 
-**Total Time: 25-35 minutes**
+- **Domain Name**: With DNS configured
+- **SSL Certificate**: For HTTPS (Let's Encrypt recommended)
+- **NOWNodes API Key**: For blockchain data
+- **Email Service**: AWS SES or similar
+- **PostgreSQL**: (Containerized or external)
 
-## 🎯 Step-by-Step Deployment Process
+## 🚀 Quick Start
 
-### **Step 1: Database Setup (Neon PostgreSQL)**
+### 1. Initial Setup
 
-1. **Create Neon Account**
-   ```bash
-   # Visit: https://neon.tech
-   # Sign up with GitHub account
-   ```
-
-2. **Create Database**
-   - Project name: `nohvex-exchange-prod`
-   - Region: Choose closest to your users
-   - PostgreSQL version: 15 (recommended)
-
-3. **Get Connection String**
-   ```
-   # Copy the connection string (looks like):
-   postgresql://username:password@ep-xxx.us-east-1.aws.neon.tech/nohvex_exchange?sslmode=require
-   ```
-
-### **Step 2: Vercel Deployment Setup**
-
-1. **Connect Repository to Vercel**
-   ```bash
-   # Visit: https://vercel.com
-   # Click "New Project"
-   # Import from GitHub: nohvex-nextjs-exchange-complete
-   ```
-
-2. **Configure Build Settings**
-   - Framework Preset: **Next.js**
-   - Build Command: `npm run build`
-   - Output Directory: `.next`
-   - Install Command: `npm ci`
-
-### **Step 3: Environment Variables Configuration**
-
-Add these environment variables in Vercel Dashboard:
-
-#### **Required Variables:**
-```env
-# Database
-DATABASE_URL=postgresql://username:password@ep-xxx.us-east-1.aws.neon.tech/nohvex_exchange?sslmode=require
-
-# Authentication
-NEXTAUTH_SECRET=your-super-secret-key-min-32-chars
-NEXTAUTH_URL=https://your-domain.vercel.app
-
-# External APIs (Optional but recommended)
-NOWNODES_API_KEY=your-nownodes-api-key
-NEXT_PUBLIC_CHANGENOW_API_KEY=your-changenow-api-key
-NEXT_PUBLIC_CHANGENOW_REFERRAL=your-referral-id
-
-# Email (Optional)
-EMAIL_SERVER_HOST=smtp.gmail.com
-EMAIL_SERVER_PORT=587
-EMAIL_SERVER_USER=your-email@gmail.com
-EMAIL_SERVER_PASSWORD=your-app-password
-EMAIL_FROM=noreply@nohvex.com
-```
-
-#### **How to Generate Secrets:**
 ```bash
-# Generate NEXTAUTH_SECRET
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+# Clone the repository
+git clone <repository-url>
+cd nohvex-nextjs-exchange
+
+# Copy and configure environment
+cp .env.production .env.production.local
+nano .env.production.local  # Configure your production values
 ```
 
-### **Step 4: Deploy Database Schema**
+### 2. Configure Environment Variables
 
-After first deployment, run database migration:
+Edit `.env.production.local` with your production values:
 
-1. **Access Vercel Functions**
-   ```bash
-   # The postbuild script will automatically run:
-   # npx prisma generate && npx prisma db push
-   ```
-
-2. **Verify Database**
-   - Check Neon dashboard for tables
-   - Should see: User, Account, Session, VerificationToken, PriceAlert, Notification tables
-
-### **Step 5: Custom Domain (Optional)**
-
-1. **Add Domain in Vercel**
-   - Go to Project Settings → Domains
-   - Add your custom domain
-   - Configure DNS records
-
-2. **Update Environment Variables**
-   ```env
-   NEXTAUTH_URL=https://your-custom-domain.com
-   ```
-
-## 🔧 Required External Services
-
-### **Essential Services:**
-
-1. **Neon PostgreSQL** (Free tier available)
-   - Purpose: Database storage
-   - Cost: Free for development, $19/month for production
-   - Setup time: 5 minutes
-
-2. **Vercel** (Free tier available)
-   - Purpose: Hosting and deployment
-   - Cost: Free for personal projects
-   - Setup time: 10 minutes
-
-### **Optional Services:**
-
-3. **NowNodes API** (Optional)
-   - Purpose: Real-time crypto prices
-   - Cost: Free tier available
-   - Fallback: CoinGecko API (built-in)
-
-4. **ChangeNow API** (Optional)
-   - Purpose: Crypto trading functionality
-   - Cost: Revenue sharing model
-   - Fallback: Trading disabled without API
-
-5. **Email Service** (Optional)
-   - Purpose: Password reset emails
-   - Options: Gmail SMTP (free), SendGrid, AWS SES
-   - Fallback: Email features disabled
-
-## 📊 Current Feature Status
-
-### **✅ Production Ready Features:**
-- ✅ User Authentication (NextAuth.js)
-- ✅ User Registration & Login
-- ✅ User Profile Management
-- ✅ Real-time Notifications
-- ✅ Price Alerts System
-- ✅ User Onboarding Tour
-- ✅ 2FA Testing Infrastructure
-- ✅ Responsive Design
-- ✅ Database Persistence
-- ✅ API Rate Limiting
-- ✅ Error Handling
-
-### **🔧 Features Requiring API Keys:**
-- 🔧 Real-time Price Data (NowNodes API)
-- 🔧 Crypto Trading (ChangeNow API)
-- 🔧 Email Notifications (SMTP)
-
-## 🚀 Quick Deployment Commands
-
-If you want to deploy right now, here's the fastest path:
-
-### **Option 1: One-Click Vercel Deploy**
 ```bash
-# Click this button in your GitHub README:
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/getienne7/nohvex-nextjs-exchange-complete)
+# Critical - Must be changed
+POSTGRES_PASSWORD=your-very-strong-database-password
+NEXTAUTH_SECRET=your-production-nextauth-secret-very-long-random-string
+NOWNODES_API_KEY=your-production-nownodes-api-key
+NEXTAUTH_URL=https://yourdomain.com
+
+# Required for functionality
+AWS_ACCESS_KEY_ID=your-aws-access-key
+AWS_SECRET_ACCESS_KEY=your-aws-secret-key
+WALLETCONNECT_PROJECT_ID=your-walletconnect-project-id
 ```
 
-### **Option 2: Manual Vercel CLI**
+### 3. Deploy
+
 ```bash
-# Install Vercel CLI
-npm i -g vercel
+# Linux/macOS
+chmod +x scripts/deploy-production.sh
+./scripts/deploy-production.sh
 
-# Deploy from your local machine
-cd /workspace/project/nohvex-nextjs-exchange-complete
-vercel --prod
+# Windows
+scripts\deploy-production.bat
 ```
 
-## 🧪 Post-Deployment Testing
+## 🔧 Detailed Configuration
 
-### **Test Checklist:**
-1. **Homepage** - Loads correctly with crypto tickers
-2. **Authentication** - Sign up/sign in works
-3. **Dashboard** - User dashboard displays
-4. **Profile** - User profile management
-5. **Notifications** - Toast notifications work
-6. **Price Alerts** - Alert creation and management
-7. **Onboarding** - New user tour functions
-8. **Database** - Data persists between sessions
+### Environment Configuration
 
-### **Test URLs:**
-```
-https://your-domain.vercel.app/                    # Homepage
-https://your-domain.vercel.app/auth/signin         # Sign In
-https://your-domain.vercel.app/auth/signup         # Sign Up
-https://your-domain.vercel.app/dashboard           # Dashboard
-https://your-domain.vercel.app/profile             # Profile
-https://your-domain.vercel.app/deployment-test     # Test Page
+#### Critical Settings (Must Configure)
+
+```bash
+# Database Security
+POSTGRES_PASSWORD=<generate-strong-password>
+
+# Application Security
+NEXTAUTH_SECRET=<generate-64-char-random-string>
+
+# Domain Configuration
+NEXTAUTH_URL=https://yourdomain.com
+
+# API Keys
+NOWNODES_API_KEY=<your-nownodes-api-key>
 ```
 
-## 💰 Cost Breakdown
+#### Email Configuration
 
-### **Free Tier (Recommended for Launch):**
-- **Vercel**: Free (Hobby plan)
-- **Neon**: Free (512MB storage)
-- **Total**: $0/month
+```bash
+# AWS SES Configuration
+AWS_REGION=us-east-1
+AWS_ACCESS_KEY_ID=<your-access-key>
+AWS_SECRET_ACCESS_KEY=<your-secret-key>
+FROM_EMAIL=noreply@yourdomain.com
+```
 
-### **Production Tier:**
-- **Vercel Pro**: $20/month (better performance)
-- **Neon Scale**: $19/month (better database)
-- **Total**: $39/month
+#### Security Configuration
 
-## 🔒 Security Considerations
+```bash
+# Rate Limiting (Adjust based on traffic)
+RATE_LIMIT_MAX_REQUESTS=60
+RATE_LIMIT_WINDOW_MS=900000
 
-### **Pre-Launch Security:**
-- ✅ Environment variables secured
-- ✅ Database connections encrypted
-- ✅ API rate limiting enabled
-- ✅ CORS properly configured
-- ✅ Authentication tokens secured
+# Session Security
+SESSION_MAX_AGE=43200  # 12 hours
+SESSION_UPDATE_AGE=3600  # 1 hour
 
-### **Post-Launch Monitoring:**
-- Set up error tracking (Sentry)
+# CORS
+ALLOWED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
+```
+
+### SSL/HTTPS Setup
+
+#### Option 1: Let's Encrypt (Recommended)
+
+```bash
+# Install Certbot
+sudo apt install certbot python3-certbot-nginx
+
+# Generate certificate
+sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+
+# Configure auto-renewal
+sudo crontab -e
+# Add: 0 12 * * * /usr/bin/certbot renew --quiet
+```
+
+#### Option 2: Custom Certificate
+
+```bash
+# Place certificates
+mkdir -p nginx/ssl
+cp your-certificate.crt nginx/ssl/cert.pem
+cp your-private-key.key nginx/ssl/private.key
+
+# Update nginx configuration
+nano nginx/nginx.conf
+```
+
+### Database Configuration
+
+#### Internal PostgreSQL (Default)
+
+The included PostgreSQL container handles all database needs automatically.
+
+#### External PostgreSQL
+
+```bash
+# Update environment
+DATABASE_URL=postgresql://user:password@external-host:5432/database
+DIRECT_URL=postgresql://user:password@external-host:5432/database
+
+# Remove postgres service from docker-compose.yml
+```
+
+## 🐳 Docker Configuration
+
+### Service Architecture
+
+The production deployment includes:
+
+1. **Web Application** (`nohvex-exchange-web`)
+
+   - Next.js application with optimized production build
+   - Health checks and resource limits
+   - Automatic restarts
+
+2. **PostgreSQL Database** (`nohvex-exchange-postgres`)
+
+   - Persistent data storage
+   - Automated backups
+   - Health monitoring
+
+3. **Redis Cache** (`nohvex-exchange-redis`)
+
+   - Session storage
+   - Application caching
+   - Optional but recommended
+
+4. **Nginx Proxy** (`nohvex-exchange-nginx`)
+   - SSL termination
+   - Rate limiting
+   - Static file serving
+   - Optional (use profile: nginx)
+
+### Container Management
+
+```bash
+# Start all services
+docker-compose up -d
+
+# Start with Nginx
+docker-compose --profile nginx up -d
+
+# Scale web application (if needed)
+docker-compose up -d --scale web=2
+
+# View logs
+docker-compose logs -f web
+docker-compose logs -f postgres
+
+# Stop services
+docker-compose down
+
+# Complete cleanup (removes volumes)
+docker-compose down -v
+```
+
+### Resource Limits
+
+Production containers include resource limits:
+
+```yaml
+web:
+  deploy:
+    resources:
+      limits:
+        memory: 1G
+        cpus: "0.5"
+      reservations:
+        memory: 512M
+        cpus: "0.25"
+```
+
+## 📊 Monitoring & Maintenance
+
+### Health Checks
+
+#### Application Health
+
+```bash
+# Check application health
+curl -f http://localhost:3000/api/health
+
+# Expected response
+{
+  "status": "healthy",
+  "timestamp": "2024-01-01T00:00:00.000Z",
+  "uptime": 3600,
+  "memory": {
+    "used": 256,
+    "total": 512
+  },
+  "environment": "production"
+}
+```
+
+#### Service Health
+
+```bash
+# Check all services
+docker-compose ps
+
+# Expected output: All services "Up" and "healthy"
+```
+
+### Logs
+
+```bash
+# View all logs
+docker-compose logs -f
+
+# View specific service logs
+docker-compose logs -f web
+docker-compose logs -f postgres
+docker-compose logs -f redis
+
+# Save logs to file
+docker-compose logs --no-color > deployment-$(date +%Y%m%d).log
+```
+
+### Backup Strategy
+
+#### Automated Backups
+
+```bash
+# Database backup script (add to crontab)
+#!/bin/bash
+BACKUP_DIR="/backups"
+DATE=$(date +%Y%m%d_%H%M%S)
+docker-compose exec -T postgres pg_dump -U nohvex nohvex_production > "$BACKUP_DIR/db_backup_$DATE.sql"
+
+# Retention: Keep last 30 days
+find "$BACKUP_DIR" -name "db_backup_*.sql" -mtime +30 -delete
+```
+
+#### Manual Backup
+
+```bash
+# Create backup
+./scripts/deploy-production.sh backup
+
+# Restore from backup
+docker-compose exec -T postgres psql -U nohvex nohvex_production < backup_file.sql
+```
+
+## 🔄 Updates & Maintenance
+
+### Application Updates
+
+```bash
+# 1. Pull latest code
+git pull origin main
+
+# 2. Backup current deployment
+./scripts/deploy-production.sh backup
+
+# 3. Deploy updates
+./scripts/deploy-production.sh deploy
+
+# 4. Verify deployment
+./scripts/deploy-production.sh health
+```
+
+### Database Migrations
+
+```bash
+# Run migrations
+docker-compose exec web npm run db:push
+
+# Reset database (destructive)
+docker-compose exec web npm run db:reset
+```
+
+### Security Updates
+
+```bash
+# Update base images
+docker-compose pull
+
+# Rebuild application
+docker-compose build --no-cache web
+
+# Deploy updates
+docker-compose up -d
+```
+
+## 🚨 Troubleshooting
+
+### Common Issues
+
+#### 1. Application Won't Start
+
+```bash
+# Check logs
+docker-compose logs web
+
+# Common causes:
+# - Environment variables not set
+# - Database connection failed
+# - Port conflicts
+```
+
+#### 2. Database Connection Failed
+
+```bash
+# Check PostgreSQL status
+docker-compose exec postgres pg_isready -U nohvex
+
+# Check environment variables
+docker-compose exec web env | grep DATABASE
+
+# Reset database container
+docker-compose restart postgres
+```
+
+#### 3. SSL Certificate Issues
+
+```bash
+# Check certificate validity
+openssl x509 -in nginx/ssl/cert.pem -text -noout
+
+# Renew Let's Encrypt certificate
+sudo certbot renew
+
+# Restart Nginx
+docker-compose restart nginx
+```
+
+#### 4. Performance Issues
+
+```bash
+# Check resource usage
+docker stats
+
+# Scale web application
+docker-compose up -d --scale web=2
+
+# Increase resource limits in docker-compose.yml
+```
+
+### Emergency Procedures
+
+#### Rollback Deployment
+
+```bash
+# Stop current deployment
+docker-compose down
+
+# Restore from backup
+# (Follow backup restoration steps)
+
+# Start with previous configuration
+docker-compose up -d
+```
+
+#### Database Recovery
+
+```bash
+# Stop application
+docker-compose stop web
+
+# Restore database
+docker-compose exec -T postgres psql -U nohvex nohvex_production < latest_backup.sql
+
+# Start application
+docker-compose start web
+```
+
+## 📞 Support
+
+### Log Collection
+
+When reporting issues, collect:
+
+1. `docker-compose logs --no-color > logs.txt`
+2. `docker-compose ps > status.txt`
+3. Environment configuration (redacted)
+4. Steps to reproduce
+
+### Performance Monitoring
+
+- Monitor container resource usage
+- Track application response times
 - Monitor database performance
-- Track API usage and limits
-- Monitor user authentication patterns
-
-## 📈 Performance Optimization
-
-### **Built-in Optimizations:**
-- ✅ Next.js automatic code splitting
-- ✅ Image optimization
-- ✅ Static generation where possible
-- ✅ API route optimization
-- ✅ Database query optimization
-
-### **Production Enhancements:**
-- CDN via Vercel Edge Network
-- Automatic HTTPS
-- Global deployment
-- Serverless functions
-
-## 🎯 Launch Strategy
-
-### **Soft Launch (Recommended):**
-1. Deploy to production
-2. Test all features thoroughly
-3. Invite 5-10 beta users
-4. Gather feedback and fix issues
-5. Public launch
-
-### **Public Launch:**
-1. Announce on social media
-2. Submit to product directories
-3. Create launch blog post
-4. Monitor performance and user feedback
-
-## 🆘 Troubleshooting
-
-### **Common Issues:**
-
-1. **Build Failures**
-   - Check environment variables
-   - Verify database connection
-   - Review build logs in Vercel
-
-2. **Database Connection Issues**
-   - Verify DATABASE_URL format
-   - Check Neon database status
-   - Ensure SSL mode is enabled
-
-3. **Authentication Issues**
-   - Verify NEXTAUTH_SECRET is set
-   - Check NEXTAUTH_URL matches domain
-   - Ensure callback URLs are correct
-
-## 📞 Support Resources
-
-- **Vercel Documentation**: https://vercel.com/docs
-- **Neon Documentation**: https://neon.tech/docs
-- **Next.js Documentation**: https://nextjs.org/docs
-- **Repository Issues**: https://github.com/getienne7/nohvex-nextjs-exchange-complete/issues
+- Set up alerts for critical metrics
 
 ---
 
-## 🚀 Ready to Deploy?
+## 🔐 Security Checklist
 
-Your application is **100% ready for production deployment**. All Phase 1 features are implemented and tested. 
+- [ ] Strong passwords for all services
+- [ ] SSL certificate configured and valid
+- [ ] Firewall configured (ports 80, 443, 22 only)
+- [ ] Regular security updates applied
+- [ ] Backup strategy implemented
+- [ ] Monitoring and alerting configured
+- [ ] Rate limiting configured
+- [ ] CORS properly configured
+- [ ] Security headers implemented
+- [ ] Database access restricted
 
-**Recommended next step**: Start with the free tier deployment to test everything, then upgrade to production tier based on usage.
+---
 
-Would you like me to help you with any specific part of the deployment process?
+This deployment guide ensures a secure, scalable, and maintainable production environment for NOHVEX Exchange.
