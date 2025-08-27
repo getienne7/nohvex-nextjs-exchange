@@ -4,7 +4,7 @@
 # =============================================================================
 # Stage 1: Dependencies (Base for both builder and runner)
 # =============================================================================
-FROM node:20-alpine AS base
+FROM node:24-alpine AS base
 
 # Install dependencies only when needed
 RUN apk add --no-cache \
@@ -42,7 +42,7 @@ RUN npm run build
 # =============================================================================
 # Stage 3: Production Runner (Final production image)
 # =============================================================================
-FROM node:20-alpine AS runner
+FROM node:24-alpine AS runner
 
 # Install runtime dependencies
 RUN apk add --no-cache \
