@@ -1,4 +1,4 @@
-import { defineConfig } from '@prisma/client/scripts'
+import { defineConfig } from '@prisma/client/scripts/default'
 
 export default defineConfig({
   // Define the schema file location
