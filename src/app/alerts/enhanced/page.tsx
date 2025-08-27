@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { GlobalNavigation } from '@/components/GlobalNavigation'
 import { EnhancedPriceAlerts } from '@/components/alerts/EnhancedPriceAlerts'
-import { AlertsWatcher } from '@/components/alerts/AlertsWatcher'
+import AlertsWatcher from '@/components/alerts/AlertsWatcher'
 import { BellIcon, SparklesIcon, ChartBarIcon } from '@heroicons/react/24/outline'
 
 export default function EnhancedPriceAlertsPage() {

@@ -23,9 +23,9 @@ export async function GET(request: NextRequest) {
       environment: process.env.NODE_ENV || 'unknown',
       services: {
         application: { status: 'healthy', latency: 0 },
-        database: { status: 'unknown', latency: 0, provider?: string, error?: string },
-        redis: { status: 'unknown', latency: 0, provider?: string, error?: string },
-        external_apis: { status: 'unknown', latency: 0, provider?: string, error?: string, note?: string }
+        database: { status: 'unknown', latency: 0 } as { status: string; latency: number; provider?: string; error?: string },
+        redis: { status: 'unknown', latency: 0 } as { status: string; latency: number; provider?: string; error?: string },
+        external_apis: { status: 'unknown', latency: 0 } as { status: string; latency: number; provider?: string; error?: string; note?: string }
       },
       features: {
         wallet_connection: process.env.WALLETCONNECT_PROJECT_ID ? 'configured' : 'not_configured',
@@ -141,7 +141,7 @@ export async function GET(request: NextRequest) {
         error: 'Health check failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       }, 
-      { status: 500 }
+      { status: 503 }
     );
   } finally {
     // Clean up Prisma connection

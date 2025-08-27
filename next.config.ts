@@ -13,11 +13,11 @@ const nextConfig: NextConfig = {
   generateEtags: false,
   eslint: {
     // Production builds must check for ESLint errors
-    ignoreDuringBuilds: process.env.NODE_ENV === 'test',
+    ignoreDuringBuilds: false,
   },
   typescript: {
     // Production builds must check for TypeScript errors
-    ignoreBuildErrors: process.env.NODE_ENV === 'test',
+    ignoreBuildErrors: false,
   },
   async headers() {
     return [

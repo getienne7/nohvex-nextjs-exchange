@@ -2,17 +2,15 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import {
-  ChartBarIcon,
-  ShieldCheckIcon,
-  DocumentChartBarIcon,
-  CogIcon,
-  ExclamationTriangleIcon,
-  CheckCircleIcon,
-  UserGroupIcon,
-  TrendingUpIcon,
-  TrendingDownIcon
-} from '@heroicons/react/24/outline'
+import { ChartBarIcon } from '@heroicons/react/24/outline'
+import { ShieldCheckIcon } from '@heroicons/react/24/outline'
+import { DocumentChartBarIcon } from '@heroicons/react/24/outline'
+import { CogIcon } from '@heroicons/react/24/outline'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { CheckCircleIcon } from '@heroicons/react/24/outline'
+import { UserGroupIcon } from '@heroicons/react/24/outline'
+import { TrendingUpIcon } from '@heroicons/react/24/outline'
+import { TrendingDownIcon } from '@heroicons/react/24/outline'
 import {
   LineChart,
   Line,
