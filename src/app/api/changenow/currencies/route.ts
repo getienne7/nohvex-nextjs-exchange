@@ -1,5 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+// Define types for ChangeNOW currency data
+interface ChangeNowCurrency {
+  ticker: string
+  name: string
+  image: string
+  hasExternalId?: boolean
+  isFiat?: boolean
+  featured?: boolean
+  isStable?: boolean
+  supportsFixedRate?: boolean
+}
+
 const CHANGENOW_API_KEY = process.env.CHANGENOW_API_KEY || 'demo-key'
 const CHANGENOW_BASE_URL = 'https://api.changenow.io/v1'
 
@@ -17,12 +29,12 @@ export async function GET() {
       throw new Error(`ChangeNOW API error: ${response.status}`)
     }
 
-    const currencies = await response.json()
+    const currencies: ChangeNowCurrency[] = await response.json()
     console.log(`Received ${currencies.length} currencies from ChangeNOW`)
     
     // Filter and enhance currency data - remove isAvailable filter as it might not exist
     const enhancedCurrencies = currencies
-      .map((currency: any) => ({
+      .map((currency: ChangeNowCurrency) => ({
         ticker: currency.ticker,
         name: currency.name,
         image: currency.image || `https://changenow.io/images/sprite/currencies/${currency.ticker}.svg`,
@@ -32,7 +44,7 @@ export async function GET() {
         isStable: currency.isStable || false,
         supportsFixedRate: currency.supportsFixedRate || false,
       }))
-      .sort((a: any, b: any) => {
+      .sort((a: { featured: boolean; name: string }, b: { featured: boolean; name: string }) => {
         // Sort by featured first, then by name
         if (a.featured && !b.featured) return -1
         if (!a.featured && b.featured) return 1

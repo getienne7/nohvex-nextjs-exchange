@@ -12,11 +12,11 @@ const nextConfig: NextConfig = {
   trailingSlash: false,
   generateEtags: false,
   eslint: {
-    // Production builds must check for ESLint errors
+    // Re-enable ESLint checks now that we've fixed the major issues
     ignoreDuringBuilds: false,
   },
   typescript: {
-    // Production builds must check for TypeScript errors
+    // Re-enable TypeScript checks now that we've fixed the major issues
     ignoreBuildErrors: false,
   },
   async headers() {

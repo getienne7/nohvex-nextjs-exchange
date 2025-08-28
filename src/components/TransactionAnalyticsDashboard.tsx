@@ -231,4 +231,95 @@ export default function TransactionAnalyticsDashboard({
                 className={`py-2 px-1 border-b-2 font-medium text-sm ${
                   selectedTab === tab.key
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:text-gray-700
+                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+        </div>
+
+        {/* Tab Content */}
+        <div>
+          {selectedTab === 'overview' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h3 className="text-lg font-semibold text-gray-900">Wallet Behavior</h3>
+                <div className="mt-2">
+                  <div className="text-sm text-gray-600">Transaction Volume (24h): <span className="font-bold">${behaviorAnalysis ? behaviorAnalysis.transactionVolume24h.toLocaleString() : '0'}</span></div>
+                  <div className="text-sm text-gray-600">Risk Score: <span className="font-bold">{behaviorAnalysis ? behaviorAnalysis.riskScore.toFixed(0) : '0'}/100</span></div>
+                  <div className="text-sm text-gray-600">DeFi Engagement: <span className="font-bold">{behaviorAnalysis ? behaviorAnalysis.defiEngagement.toFixed(1) : '0'}%</span></div>
+                </div>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h3 className="text-lg font-semibold text-gray-900">Security Alerts</h3>
+                <div className="mt-2">
+                  {securityAlerts.length > 0 ? (
+                    securityAlerts.map((alert, index) => (
+                      <div key={index} className="flex items-center justify-between">
+                        <div className="text-sm text-gray-600">{alert.description}</div>
+                        <div className={`p-2 rounded-lg ${getRiskColor(alert.risk)}`}>
+                          <ExclamationTriangleIcon className="w-4 h-4" />
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-sm text-gray-600">No active security alerts</div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+          {selectedTab === 'patterns' && (
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Transaction Patterns</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {behaviorAnalysis ? behaviorAnalysis.patterns.map((pattern, index) => (
+                  <div key={index} className="bg-gray-50 rounded-lg p-4">
+                    <div className="flex items-center">
+                      <div className={`p-2 rounded-lg ${getRiskColor(pattern.risk)}`}>
+                        {getPatternIcon(pattern.type)}
+                      </div>
+                      <div className="ml-2">
+                        <div className="text-sm text-gray-600">{pattern.description}</div>
+                        <div className="text-sm text-gray-600 mt-1">Risk: <span className="font-bold">{pattern.risk}</span></div>
+                      </div>
+                    </div>
+                  </div>
+                )) : (
+                  <div className="text-sm text-gray-600">No transaction patterns detected</div>
+                )}
+              </div>
+            </div>
+          )}
+          {selectedTab === 'security' && (
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Security Summary</h3>
+              <div className="bg-gray-50 rounded-lg p-4">
+                <div className="text-sm text-gray-600">Total Security Alerts: <span className="font-bold">{securityAlerts.length}</span></div>
+                <div className="text-sm text-gray-600 mt-2">High Risk Alerts: <span className="font-bold">{securityAlerts.filter(alert => alert.risk === 'high').length}</span></div>
+                <div className="text-sm text-gray-600 mt-2">Medium Risk Alerts: <span className="font-bold">{securityAlerts.filter(alert => alert.risk === 'medium').length}</span></div>
+                <div className="text-sm text-gray-600 mt-2">Low Risk Alerts: <span className="font-bold">{securityAlerts.filter(alert => alert.risk === 'low').length}</span></div>
+              </div>
+            </div>
+          )}
+          {selectedTab === 'insights' && (
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Transaction Insights</h3>
+              {insights ? (
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="text-sm text-gray-600">Total Transactions: <span className="font-bold">{insights.totalTransactions}</span></div>
+                  <div className="text-sm text-gray-600 mt-2">Average Transaction Value: <span className="font-bold">${insights.averageTransactionValue.toLocaleString()}</span></div>
+                  <div className="text-sm text-gray-600 mt-2">Largest Transaction: <span className="font-bold">${insights.largestTransaction.toLocaleString()}</span></div>
+                </div>
+              ) : (
+                <div className="text-sm text-gray-600">No transaction insights available</div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}

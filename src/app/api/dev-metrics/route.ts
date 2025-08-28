@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
             current_database() as database_name,
             version() as postgres_version,
             pg_database_size(current_database()) as database_size
-        ` as any[];
+        ` as Array<{ database_name: string; postgres_version: string; database_size: bigint }>;
         const dbLatency = Date.now() - dbStart;
 
         // Get connection stats
@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
             count(*) FILTER (WHERE state = 'idle') as idle_connections
           FROM pg_stat_activity
           WHERE datname = current_database()
-        ` as any[];
+        ` as Array<{ total_connections: bigint; active_connections: bigint; idle_connections: bigint }>;
 
         metrics.metrics.database = {
           status: 'healthy',

@@ -135,7 +135,7 @@ best_performer = df.loc[df['pnl_percentage'].idxmax()]
 
 print(f"Total Portfolio Value: ${total_value:,.2f}")
 print(f"Average PnL: {average_pnl:.2f}%")
-print(f"Best Performer: {best_performer['name']} (+{best_performer['pnl_percentage']:.2f}%)")`
+print(f"Best Performer: {best_performer['name']} (+{best_performer['pnl_percentage']:.2f}%)")
       }
     ]
   },
