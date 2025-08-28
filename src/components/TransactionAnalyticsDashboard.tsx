@@ -227,7 +227,7 @@ export default function TransactionAnalyticsDashboard({
             ].map((tab) => (
               <button
                 key={tab.key}
-                onClick={() => setSelectedTab(tab.key as any)}
+                onClick={() => setSelectedTab(tab.key as 'overview' | 'patterns' | 'security' | 'insights')}
                 className={`py-2 px-1 border-b-2 font-medium text-sm ${
                   selectedTab === tab.key
                     ? 'border-blue-500 text-blue-600'

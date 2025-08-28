@@ -1,6 +1,131 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
+// Define interfaces for metrics
+interface SystemMetrics {
+  nodejs: {
+    version: string;
+    platform: NodeJS.Platform;
+    arch: string;
+    uptime: number;
+    memory: {
+      rss: number;
+      heapTotal: number;
+      heapUsed: number;
+      external: number;
+      arrayBuffers: number;
+    };
+    cpu: {
+      usage: NodeJS.CpuUsage;
+      loadAverage: number[];
+    };
+  };
+  container: {
+    hostname: string;
+    type: string;
+    network: string;
+  };
+}
+
+interface DatabaseMetrics {
+  status: string;
+  latency?: number;
+  info?: {
+    database_name: string;
+    postgres_version: string;
+    database_size: bigint;
+  };
+  connections?: {
+    total_connections: bigint;
+    active_connections: bigint;
+    idle_connections: bigint;
+  };
+  prisma?: {
+    version: string;
+    engine: string;
+  };
+  error?: string;
+}
+
+interface RedisMetrics {
+  status: string;
+  url?: string;
+  note: string;
+}
+
+interface PerformanceMetrics {
+  response_times: {
+    note: string;
+  };
+  endpoints: {
+    health: string;
+    monitoring: string;
+    development_metrics: string;
+    nownodes_test: string;
+  };
+}
+
+interface FeatureMetrics {
+  authentication: {
+    nextauth: string;
+    providers: string[];
+  };
+  blockchain: {
+    nownodes: string;
+    walletconnect: string;
+    supported_chains: string[];
+  };
+  trading: {
+    dex_aggregator: string;
+    changenow: string;
+    supported_dexs: string[];
+  };
+  notifications: {
+    email: string;
+    slack: string;
+  };
+}
+
+interface DevelopmentMetrics {
+  hot_reload: boolean | string | undefined;
+  polling: string | undefined;
+  turbopack: boolean;
+  typescript: boolean;
+  eslint: boolean;
+  prettier: boolean;
+  testing: {
+    jest: boolean;
+    playwright: boolean;
+    coverage: boolean;
+  };
+  docker: {
+    compose_file: string;
+    services: string[];
+    network: string;
+  };
+}
+
+interface EnvironmentMetrics {
+  status: string;
+  required: {
+    configured: number;
+    total: number;
+    missing: number;
+    variables: Record<string, boolean>;
+  };
+  optional: {
+    configured: number;
+    total: number;
+    variables: Record<string, boolean>;
+  };
+  development: {
+    NODE_ENV: string | undefined;
+    NEXT_TELEMETRY_DISABLED: string | undefined;
+    CHOKIDAR_USEPOLLING: string | undefined;
+    WATCHPACK_POLLING: string | undefined;
+  };
+}
+
 // Initialize Prisma client
 const prisma = new PrismaClient();
 
@@ -19,13 +144,13 @@ export async function GET(request: NextRequest) {
       environment: string;
       uptime: number;
       metrics: {
-        system?: any;
-        database?: any;
-        redis?: any;
-        performance?: any;
-        features?: any;
-        development?: any;
-        environment?: any;
+        system?: SystemMetrics;
+        database?: DatabaseMetrics;
+        redis?: RedisMetrics;
+        performance?: PerformanceMetrics;
+        features?: FeatureMetrics;
+        development?: DevelopmentMetrics;
+        environment?: EnvironmentMetrics;
       };
     } = {
       timestamp: new Date().toISOString(),
