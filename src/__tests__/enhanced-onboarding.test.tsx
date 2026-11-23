@@ -124,8 +124,6 @@ describe('Enhanced Onboarding Integration', () => {
   })
 
   test('tracks completed tours', async () => {
-    const user = userEvent.setup()
-    
     // Set up user with completed onboarding
     enhancedOnboardingService.initializeUserOnboarding(mockUserId)
     enhancedOnboardingService.completeWelcomeWizard(mockUserId, {

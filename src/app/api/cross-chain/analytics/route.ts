@@ -1,6 +1,66 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { crossChainAggregator } from '@/lib/cross-chain-aggregator'
 
+// Define interfaces for the analytics data
+interface TimeSeriesData {
+  date: string;
+  volume: number;
+  transactions: number;
+  avgCost: number;
+  avgTime: number;
+  successRate: number;
+}
+
+interface BridgeAnalytics {
+  totalVolume: number;
+  totalTransactions: number;
+  averageTime: number;
+  successRate: number;
+  topProtocols: Array<{ name: string; volume: number; transactions: number }>;
+  topChains: Array<{ name: string; volume: number; transactions: number }>;
+}
+
+interface EnhancedAnalytics extends BridgeAnalytics {
+  timeframe: string;
+  timeSeries: TimeSeriesData[];
+  summary: {
+    totalVolume: number;
+    totalTransactions: number;
+    averageTime: number;
+    successRate: number;
+    growthMetrics: {
+      volumeGrowth: number;
+      transactionGrowth: number;
+      efficiencyImprovement: number;
+    };
+  };
+  topRoutes: Array<{ 
+    from: string; 
+    to: string; 
+    volume: number; 
+    transactions: number; 
+    avgCost: number 
+  }>;
+  userStats?: {
+    totalBridged: number;
+    transactionCount: number;
+    favoriteRoute: string;
+    avgTransactionSize: number;
+    totalSaved: number;
+  };
+}
+
+interface AnalyticsResponse {
+  success: boolean;
+  data: EnhancedAnalytics;
+  metadata: {
+    timeframe: string;
+    userId: string | null;
+    generatedAt: string;
+    dataPoints: number;
+  };
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -32,10 +92,10 @@ export async function GET(request: NextRequest) {
     }
 
     const days = timeframeDays[timeframe as keyof typeof timeframeDays] || 7
-    const timeSeriesData = generateTimeSeriesData(days)
+    const timeSeriesData: TimeSeriesData[] = generateTimeSeriesData(days)
 
     // Enhanced analytics with time-series data
-    const enhancedAnalytics = {
+    const enhancedAnalytics: EnhancedAnalytics = {
       ...analytics,
       timeframe,
       timeSeries: timeSeriesData,
@@ -61,7 +121,7 @@ export async function GET(request: NextRequest) {
 
     // Add user-specific analytics if userId provided
     if (userId) {
-      (enhancedAnalytics as any).userStats = {
+      enhancedAnalytics.userStats = {
         totalBridged: Math.floor(Math.random() * 100000) + 10000,
         transactionCount: Math.floor(Math.random() * 50) + 5,
         favoriteRoute: 'ethereum → polygon',
@@ -70,7 +130,7 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({
+    const response: AnalyticsResponse = {
       success: true,
       data: enhancedAnalytics,
       metadata: {
@@ -79,7 +139,9 @@ export async function GET(request: NextRequest) {
         generatedAt: new Date().toISOString(),
         dataPoints: timeSeriesData.length
       }
-    })
+    }
+
+    return NextResponse.json(response)
   } catch (error) {
     console.error('Cross-chain analytics API error:', error)
     return NextResponse.json(

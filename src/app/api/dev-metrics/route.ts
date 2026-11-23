@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import os from 'os';
 
 // Define interfaces for metrics
 interface SystemMetrics {
@@ -176,11 +177,11 @@ export async function GET(request: NextRequest) {
           },
           cpu: {
             usage: process.cpuUsage(),
-            loadAverage: process.platform !== 'win32' ? require('os').loadavg() : [0, 0, 0]
+            loadAverage: process.platform !== 'win32' ? os.loadavg() : [0, 0, 0]
           }
         },
         container: {
-          hostname: require('os').hostname(),
+          hostname: os.hostname(),
           type: process.env.DOCKER_ENV ? 'docker' : 'native',
           network: process.env.DOCKER_ENV ? 'nohvex-dev-network' : 'host'
         }

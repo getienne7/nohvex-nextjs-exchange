@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
       default:
         return createErrorResponse(`Invalid action: ${action}. Supported actions: getQuote, findBestRoute, executeTrade, getSupportedTokens, getTokenPrice, estimateGas`)
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleAPIError(error)
   }
 }
@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
     }
 
     return createErrorResponse('Invalid action. Only "health" is supported for GET requests')
-  } catch (error: any) {
+  } catch (error: unknown) {
     return handleAPIError(error)
   }
 }

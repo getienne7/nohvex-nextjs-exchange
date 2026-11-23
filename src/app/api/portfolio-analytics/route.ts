@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     if (action === 'summary') {
       const queryParams = {
         walletAddress: searchParams.get('walletAddress') || '',
-        timeframe: searchParams.get('timeframe') as any || '30d',
+        timeframe: (searchParams.get('timeframe') || '30d') as '1d' | '7d' | '30d' | '90d' | '1y' | 'all',
         includeRecommendations: searchParams.get('includeRecommendations') !== 'false',
         includeAttribution: searchParams.get('includeAttribution') !== 'false'
       }

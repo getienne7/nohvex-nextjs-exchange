@@ -17,12 +17,12 @@ const generatePredictionsSchema = z.object({
 const generateRecommendationsSchema = z.object({
   walletAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid wallet address'),
   riskTolerance: z.nativeEnum(RiskLevel).default(RiskLevel.MEDIUM),
-  portfolioData: z.any().optional()
+  portfolioData: z.unknown().optional()
 })
 
 const optimizePortfolioSchema = z.object({
   walletAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid wallet address'),
-  currentPortfolio: z.any(),
+  currentPortfolio: z.unknown(),
   constraints: z.object({
     maxWeight: z.number().optional(),
     minWeight: z.number().optional(),
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
 
     if (action === 'generate-insights') {
       const { marketData } = z.object({
-        marketData: z.any().optional()
+        marketData: z.unknown().optional()
       }).parse(body)
 
       const insights = await predictiveAnalyticsEngine.generateAIInsights(marketData || {})
@@ -262,7 +262,7 @@ export async function GET(request: NextRequest) {
       )
       
       // Get sentiment for major assets
-      const sentimentData: Record<string, any> = {}
+      const sentimentData: Record<string, unknown> = {}
       for (const asset of assets) {
         const sentiment = predictiveAnalyticsEngine.getSentimentAnalysis(asset)
         if (sentiment) {
@@ -288,8 +288,8 @@ export async function GET(request: NextRequest) {
       const highImpactInsights = insights.filter(i => i.impact === 'high').length
       const immediateInsights = insights.filter(i => i.urgency === 'immediate').length
       
-      const averageSentiment = Object.values(sentimentData).reduce((sum: number, s: any) => 
-        sum + s.overallSentiment, 0) / Object.keys(sentimentData).length || 0
+      const averageSentiment = Object.values(sentimentData).reduce((sum: number, s: unknown) => 
+        sum + (s as { overallSentiment: number }).overallSentiment, 0) / Object.keys(sentimentData).length || 0
 
       return NextResponse.json({
         success: true,

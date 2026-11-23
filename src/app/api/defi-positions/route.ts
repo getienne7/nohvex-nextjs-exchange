@@ -112,8 +112,8 @@ export async function GET(request: NextRequest) {
     if (action === 'positions') {
       const queryParams = {
         walletAddress: searchParams.get('walletAddress') || '',
-        protocol: searchParams.get('protocol') as any,
-        type: searchParams.get('type') as any,
+        protocol: searchParams.get('protocol') as DeFiProtocol | undefined,
+        type: searchParams.get('type') as PositionType | undefined,
         includeInactive: searchParams.get('includeInactive') === 'true'
       }
 
@@ -162,6 +162,16 @@ export async function GET(request: NextRequest) {
       const liquidationAlerts = defiPositionTracker.getLiquidationAlerts(walletAddress)
 
       // Protocol breakdown
+      interface ProtocolBreakdown {
+        [protocol: string]: {
+          protocol: string;
+          positionCount: number;
+          totalValue: number;
+          totalYield: number;
+          averageAPY: number;
+        }
+      }
+
       const protocolBreakdown = positions.reduce((acc, pos) => {
         if (!acc[pos.protocol]) {
           acc[pos.protocol] = {
@@ -176,10 +186,10 @@ export async function GET(request: NextRequest) {
         acc[pos.protocol].totalValue += pos.metrics.totalValue
         acc[pos.protocol].totalYield += pos.metrics.dailyYield
         return acc
-      }, {} as any)
+      }, {} as ProtocolBreakdown)
 
       // Calculate average APY for each protocol
-      Object.values(protocolBreakdown).forEach((breakdown: any) => {
+      Object.values(protocolBreakdown).forEach((breakdown) => {
         const protocolPositions = positions.filter(p => p.protocol === breakdown.protocol)
         breakdown.averageAPY = protocolPositions.reduce((sum, pos) => {
           const weight = pos.metrics.totalValue / breakdown.totalValue

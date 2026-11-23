@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { 
   RocketLaunchIcon,
@@ -43,9 +43,9 @@ export default function AdvancedTradingPage() {
 
   useEffect(() => {
     loadPortfolioData()
-  }, [walletAddress])
+  }, [walletAddress, loadPortfolioData])
 
-  const loadPortfolioData = async () => {
+  const loadPortfolioData = useCallback(async () => {
     if (!walletAddress) {
       setLoading(false)
       return
@@ -62,7 +62,7 @@ export default function AdvancedTradingPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [walletAddress])
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {

@@ -27,7 +27,7 @@ import {
 
 const aggregator = new DEXAggregator()
 
-export async function handleGetQuote(params: any): Promise<NextResponse<APIResponse>> {
+export async function handleGetQuote(params: unknown): Promise<NextResponse<APIResponse>> {
   try {
     const validation = validateTradeParams(params)
     if (!validation.isValid) {
@@ -54,7 +54,7 @@ export async function handleGetQuote(params: any): Promise<NextResponse<APIRespo
   }
 }
 
-export async function handleFindBestRoute(params: any): Promise<NextResponse<APIResponse>> {
+export async function handleFindBestRoute(params: unknown): Promise<NextResponse<APIResponse>> {
   try {
     const validation = validateTradeParams(params)
     if (!validation.isValid) {
@@ -78,7 +78,7 @@ export async function handleFindBestRoute(params: any): Promise<NextResponse<API
   }
 }
 
-export async function handleExecuteTrade(params: any): Promise<NextResponse<APIResponse>> {
+export async function handleExecuteTrade(params: unknown): Promise<NextResponse<APIResponse>> {
   try {
     const validation = validateExecuteTradeParams(params)
     if (!validation.isValid) {
@@ -125,7 +125,7 @@ export async function handleExecuteTrade(params: any): Promise<NextResponse<APIR
   }
 }
 
-export async function handleGetSupportedTokens(params: any): Promise<NextResponse<APIResponse>> {
+export async function handleGetSupportedTokens(params: unknown): Promise<NextResponse<APIResponse>> {
   try {
     const validation = validateChainId(params)
     if (!validation.isValid) {
@@ -142,7 +142,7 @@ export async function handleGetSupportedTokens(params: any): Promise<NextRespons
   }
 }
 
-export async function handleGetTokenPrice(params: any): Promise<NextResponse<APIResponse>> {
+export async function handleGetTokenPrice(params: unknown): Promise<NextResponse<APIResponse>> {
   try {
     const validation = validateTokenPriceParams(params)
     if (!validation.isValid) {
@@ -159,7 +159,7 @@ export async function handleGetTokenPrice(params: any): Promise<NextResponse<API
   }
 }
 
-export async function handleEstimateGas(params: any): Promise<NextResponse<APIResponse>> {
+export async function handleEstimateGas(params: unknown): Promise<NextResponse<APIResponse>> {
   try {
     const validation = validateTradeParams(params)
     if (!validation.isValid) {
