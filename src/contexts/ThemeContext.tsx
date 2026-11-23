@@ -19,7 +19,7 @@ function getSystemTheme(): "light" | "dark" {
 
 function applyTheme(theme: Theme) {
   const root = document.documentElement;
-  let effective: "light" | "dark" = theme === "system" ? getSystemTheme() : theme;
+  const effective: "light" | "dark" = theme === "system" ? getSystemTheme() : theme;
   root.setAttribute("data-theme", effective);
 }
 
@@ -47,13 +47,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
           const resp = await fetch("/api/preferences", { cache: "no-store" });
           if (resp.ok) {
             const data = await resp.json();
-            const t: Theme | undefined = data?.preferences?.appearance?.theme ?? "system";
+            const incoming = (data?.preferences?.appearance?.theme ?? "system") as Theme;
             if (!cancelled) {
-              setThemeState(t);
-              const eff = t === "system" ? getSystemTheme() : t;
+              setThemeState(incoming);
+              const eff = incoming === "system" ? getSystemTheme() : incoming;
               setResolvedTheme(eff);
-              if (typeof window !== "undefined") applyTheme(t);
-              localStorage.setItem("appearance_theme", t);
+              if (typeof window !== "undefined") applyTheme(incoming);
+              localStorage.setItem("appearance_theme", incoming);
             }
           } else {
             // fallback
@@ -79,7 +79,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const mql = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = () => {
+  const handler = (_e?: MediaQueryListEvent) => {
       if (theme === "system") {
         const eff = getSystemTheme();
         setResolvedTheme(eff);
@@ -89,16 +89,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     try {
       mql.addEventListener("change", handler);
     } catch {
-      // Safari
-      // @ts-ignore
-      mql.addListener(handler);
+      // Safari fallback for older browsers without addEventListener on MediaQueryList
+      (mql as unknown as { addListener: (h: (ev: MediaQueryListEvent) => void) => void }).addListener(handler);
     }
     return () => {
       try {
         mql.removeEventListener("change", handler);
       } catch {
-        // @ts-ignore
-        mql.removeListener(handler);
+        (mql as unknown as { removeListener: (h: (ev: MediaQueryListEvent) => void) => void }).removeListener(handler);
       }
     };
   }, [theme]);
